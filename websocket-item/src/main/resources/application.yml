@@ -7,7 +7,11 @@ spring:
     password: cd@123.com
     type: com.alibaba.druid.pool.DruidDataSource
     # ????
-
+  servlet:
+    multipart:
+      enabled: true #开启多文件上传
+      max-file-size: 10MB #限制单个文件上传大小为10MB
+      max-request-size: 100MB #限制一次多文件上传总数据大小为100MB
 
 
 
