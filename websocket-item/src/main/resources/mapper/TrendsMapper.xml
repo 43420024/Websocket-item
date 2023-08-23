@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.websocketitem.mapper.TrendsMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Trends">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userid" column="userId" jdbcType="BIGINT"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="imgsrc" column="imgSrc" jdbcType="VARCHAR"/>
+            <result property="count" column="count" jdbcType="BIGINT"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="edittime" column="editTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,userId,content,
+        imgSrc,count,createTime,
+        editTime
+    </sql>
+    <select id="findAllByUserid" resultMap="BaseResultMap">
+        select tcd_trends.id,tcd_trends.userId,tcd_trends.content,tcd_trends.imgSrc,tcd_trends.count,
+               tcd_trends.createTime,tcd_trends.editTime from tcd_trends
+        <where>
+            <if test="userid!=null and userid!=''">
+                tcd_trends.userId=#{userid}
+            </if>
+        </where>
+        order by createTime desc
+    </select>
+</mapper>

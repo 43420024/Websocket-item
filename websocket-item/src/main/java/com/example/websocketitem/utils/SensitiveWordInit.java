@@ -38,33 +38,6 @@ public class SensitiveWordInit {
 
 	/**
 	 * 读取敏感词库，将敏感词放入HashSet中，构建一个DFA算法模型：<br>
-	 * 中 = {
-	 *      isEnd = 0
-	 *      国 = {<br>
-	 *      	 isEnd = 1
-	 *           人 = {isEnd = 0
-	 *                民 = {isEnd = 1}
-	 *                }
-	 *           男  = {
-	 *           	   isEnd = 0
-	 *           		人 = {
-	 *           			 isEnd = 1
-	 *           			}
-	 *           	}
-	 *           }
-	 *      }
-	 *  五 = {
-	 *      isEnd = 0
-	 *      星 = {
-	 *      	isEnd = 0
-	 *      	红 = {
-	 *              isEnd = 0
-	 *              旗 = {
-	 *                   isEnd = 1
-	 *                  }
-	 *              }
-	 *      	}
-	 *      }
 	 * @author wxm
 	 * @param keyWordSet  敏感词库
 	 * @version 1.0
@@ -111,9 +84,10 @@ public class SensitiveWordInit {
 	@SuppressWarnings("resource")
 	private Set<String> readSensitiveWordFile() throws Exception{
 		Set<String> set = null;
-
-		File file = new File("src/main/resources/static/word.txt");    //读取文件
+		System.out.println("测试！！！！！！！！！！！！");
+		File file = new File("websocket-item/src/main/resources/static/word.txt");    //读取文件
 		InputStreamReader read = new InputStreamReader(new FileInputStream(file),ENCODING);
+		System.out.println("久啊森岛帆高卡拉胶啊啊啊啊啊");
 		try {
 			if(file.isFile() && file.exists()){      //文件流是否存在
 				set = new HashSet<String>();

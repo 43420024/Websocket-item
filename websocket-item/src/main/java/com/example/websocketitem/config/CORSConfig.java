@@ -8,6 +8,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CORSConfig {
+    // 前端解决跨域   在每个controller层加注解@CrossOrigin即可解决跨域
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("*");
@@ -15,11 +16,12 @@ public class CORSConfig {
         corsConfiguration.addAllowedMethod("*");
         return corsConfiguration;
     }
- 
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", buildConfig());
         return new CorsFilter(source);
     }
+
 }

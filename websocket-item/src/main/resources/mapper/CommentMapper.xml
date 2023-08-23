@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.websocketitem.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.domain.Comment">
+            <id property="commentId" column="comment_id" jdbcType="INTEGER"/>
+            <result property="commentContent" column="comment_content" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="trendsId" column="article_id" jdbcType="INTEGER"/>
+            <result property="illegal" column="illegal" jdbcType="TINYINT"/>
+            <result property="parentCommentId" column="parent_comment_id" jdbcType="INTEGER"/>
+            <result property="parentCommentUserId" column="parent_comment_user_id" jdbcType="INTEGER"/>
+            <result property="replyCommentId" column="reply_comment_id" jdbcType="INTEGER"/>
+            <result property="replyCommentUserId" column="reply_comment_user_id" jdbcType="INTEGER"/>
+            <result property="commentLevel" column="comment_level" jdbcType="INTEGER"/>
+            <result property="praiseNum" column="praise_num" jdbcType="INTEGER"/>
+            <result property="topStatus" column="top_status" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        comment_id,comment_content,user_id,
+        trends_id,illegal,parent_comment_id,
+        parent_comment_user_id,reply_comment_id,reply_comment_user_id,
+        comment_level,praise_num,top_status,
+        create_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tcd_comment
+        where  comment_id = #{commentId,jdbcType=INTEGER} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tcd_comment
+        where  comment_id = #{commentId,jdbcType=INTEGER} 
+    </delete>
+    <insert id="insert" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.domain.Comment" useGeneratedKeys="true">
+        insert into tcd_comment
+        ( comment_id,comment_content,user_id
+        ,trends_id,illegal,parent_comment_id
+        ,parent_comment_user_id,reply_comment_id,reply_comment_user_id
+        ,comment_level,praise_num,top_status
+        ,create_time)
+        values (#{commentId,jdbcType=INTEGER},#{commentContent,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER}
+        ,#{trendsId,jdbcType=INTEGER},#{illegal,jdbcType=TINYINT},#{parentCommentId,jdbcType=INTEGER}
+        ,#{parentCommentUserId,jdbcType=INTEGER},#{replyCommentId,jdbcType=INTEGER},#{replyCommentUserId,jdbcType=INTEGER}
+        ,#{commentLevel,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER},#{topStatus,jdbcType=INTEGER}
+        ,#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.domain.Comment" useGeneratedKeys="true">
+        insert into tcd_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="commentId != null">comment_id,</if>
+                <if test="commentContent != null">comment_content,</if>
+                <if test="userId != null">user_id,</if>
+                <if test="trendsId != null">trends_id,</if>
+                <if test="illegal != null">illegal,</if>
+                <if test="parentCommentId != null">parent_comment_id,</if>
+                <if test="parentCommentUserId != null">parent_comment_user_id,</if>
+                <if test="replyCommentId != null">reply_comment_id,</if>
+                <if test="replyCommentUserId != null">reply_comment_user_id,</if>
+                <if test="commentLevel != null">comment_level,</if>
+                <if test="praiseNum != null">praise_num,</if>
+                <if test="topStatus != null">top_status,</if>
+                <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="commentId != null">#{commentId,jdbcType=INTEGER},</if>
+                <if test="commentContent != null">#{commentContent,jdbcType=VARCHAR},</if>
+                <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+                <if test="trendsId != null">#{trendsId,jdbcType=INTEGER},</if>
+                <if test="illegal != null">#{illegal,jdbcType=TINYINT},</if>
+                <if test="parentCommentId != null">#{parentCommentId,jdbcType=INTEGER},</if>
+                <if test="parentCommentUserId != null">#{parentCommentUserId,jdbcType=INTEGER},</if>
+                <if test="replyCommentId != null">#{replyCommentId,jdbcType=INTEGER},</if>
+                <if test="replyCommentUserId != null">#{replyCommentUserId,jdbcType=INTEGER},</if>
+                <if test="commentLevel != null">#{commentLevel,jdbcType=INTEGER},</if>
+                <if test="praiseNum != null">#{praiseNum,jdbcType=INTEGER},</if>
+                <if test="topStatus != null">#{topStatus,jdbcType=INTEGER},</if>
+                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="selectByTrendsIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_comment
+        where
+        trends_id = #{trendsId,jdbcType=NUMERIC}
+        AND comment_level = #{commentLevel,jdbcType=NUMERIC}
+        order by top_status desc , create_time desc
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_comment
+    </select>
+    <select id="selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_comment
+        where
+        parent_comment_id = #{parentCommentId,jdbcType=NUMERIC}
+        AND trends_id = #{trendsId,jdbcType=NUMERIC}
+        AND comment_level = #{commentLevel,jdbcType=NUMERIC}
+        order by create_time desc
+    </select>
+</mapper>
