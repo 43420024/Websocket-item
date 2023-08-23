@@ -6,10 +6,6 @@ spring:
     username: root
     password: cd@123.com
     type: com.alibaba.druid.pool.DruidDataSource
-    # ????
-
-
-
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.websocketitem.domain
