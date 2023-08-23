@@ -2,6 +2,8 @@ package com.example.websocketitem.service;
 
 import com.example.websocketitem.model.Album;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.websocketitem.model.ResponseMap;
+import com.example.websocketitem.model.SearchModel;
 
 /**
 * @author cd
@@ -9,5 +11,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2023-08-22 17:25:18
 */
 public interface AlbumService extends IService<Album> {
+    ResponseMap addAlbum(Album album);
 
+    ResponseMap updateAlbum(Album album);
+
+    ResponseMap listAlbum(Long userId, Integer page,Integer size);
+
+    ResponseMap deleteAlbum(Long id);
+
+    ResponseMap searchAlbum(SearchModel searchModel);
 }

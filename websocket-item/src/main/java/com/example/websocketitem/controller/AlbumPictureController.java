@@ -1,26 +1,30 @@
 package com.example.websocketitem.controller;
 
+import com.example.websocketitem.factory.EntityFactory;
+import com.example.websocketitem.model.AlbumPicture;
+import com.example.websocketitem.model.ResponseMap;
+import com.example.websocketitem.service.AlbumPictureService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
-@RequestMapping("/albumImage")
-public class AlbumImageController {
+@RequestMapping("/albumPicture")
+public class AlbumPictureController {
+    @Resource
+    AlbumPictureService albumPictureService;
+    @Resource
+    AlbumPicture albumPicture = EntityFactory.createAlbumPicture();
+
     @PostMapping(value = "/upload")
     //@RequestParam指向前端input file的name,加入HttpServletRequest请求
-    public Map<String,Object> upload(@RequestParam("uploadFile") MultipartFile[] multipartFiles, HttpServletRequest request) throws IOException {
+    public Map<String,Object> upload(@RequestParam("File") MultipartFile[] multipartFiles,@RequestParam("AlbumId") Long albumId, HttpServletRequest request) throws IOException {
         //设置当前日期
         String uploaddate= new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         //设置文件上传保存文件路径：保存在项目运行目录下的uploadFile文件夹+当前日期
@@ -47,10 +51,14 @@ public class AlbumImageController {
                 //建立新文件路径,在前端可以直接访问如http://localhost:8080/uploadFile/2021-07-16/新文件名(带后缀)
                 String filepath="/images/"+newname;
                 //写入返回参数
+                albumPicture.setAlbumId(albumId);
+                albumPicture.setPath(filepath);
+                albumPicture.setCreateTime(new Date());
+                ResponseMap responseMap = albumPictureService.addAlbumPicture(albumPicture);
                 map.put("oldname",oldname);
                 map.put("newname",newname);
                 map.put("filepath",filepath);
-                map.put("result","成功!");
+                map.put("result", responseMap.getFlag() ?"数据库写入成功":"数据库写入失败");
             }catch (IOException ex){
                 //操作失败报错并写入返回参数
                 ex.printStackTrace();
@@ -62,5 +70,20 @@ public class AlbumImageController {
         }
         //将执行结果返回
         return map;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseMap deleteAlbumPicture(@PathVariable Long id){
+        return albumPictureService.deleteAlbumPicture(id);
+    }
+    @DeleteMapping("/list")
+    public ResponseMap deleteAlbumPicture(@RequestBody List<AlbumPicture> albumPictures){
+        return albumPictureService.deleteAlbumPictureList(albumPictures);
+    }
+    @GetMapping("/{albumId}/{page}/{size}")
+    public ResponseMap listAlbumPicture(@PathVariable Long albumId,
+                                        @PathVariable Integer page,
+                                        @PathVariable Integer size){
+        return albumPictureService.listAlbumPicture(albumId,page,size);
     }
 }
