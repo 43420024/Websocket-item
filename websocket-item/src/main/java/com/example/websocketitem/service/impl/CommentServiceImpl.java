@@ -16,27 +16,30 @@ public class CommentServiceImpl implements CommentService {
     @Resource
     private CommentMapper commentMapper;
     @Override
-    public int deleteByPrimaryKey(Long id) {
+    public Result<Comment> deleteByPrimaryKey(Long id) {
         int deleteByPrimaryKey = commentMapper.deleteByPrimaryKey(id);
-        return 0;
+        if(deleteByPrimaryKey>0){
+            return Result.ok("删除成功");
+        }
+        return Result.error("删除失败");
     }
 
     @Override
-    public int insert(Comment record) {
-        commentMapper.insert(record);
-        return 0;
+    public Result<Comment> insert(Comment record) {
+        int insert = commentMapper.insert(record);
+        if(insert>0){
+            return Result.ok("添加成功");
+        }
+        return Result.error("添加失败");
     }
 
     @Override
-    public int insertSelective(Comment record) {
-        commentMapper.insertSelective(record);
-        return 0;
-    }
-
-    @Override
-    public Comment selectByPrimaryKey(Long id) {
-        commentMapper.selectByPrimaryKey(id);
-        return null;
+    public Result<Comment> insertSelective(Comment record) {
+        int insertSelective = commentMapper.insertSelective(record);
+        if (insertSelective> 0) {
+            return Result.ok("添加成功");
+        }
+        return Result.error("添加失败");
     }
 
     @Override
@@ -48,15 +51,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Result<List<Comment>> selectByArticleIdAndCommentLevel(Integer articleId, Integer commentLevel) {
-        List<Comment> commentList = this.commentMapper.selectByArticleIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(articleId, commentLevel);
+    public Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel) {
+        List<Comment> commentList = this.commentMapper.selectByTrendsIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(trendsId, commentLevel);
         return Result.ok("查询成功",commentList);
     }
 
 
     @Override
-    public Result<List<Comment>> selectByParentCommentIdAndArticleIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel) {
-        List<Comment> commentList = this.commentMapper.selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc(parentCommentId, articleId, commentLevel);
+    public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel) {
+        List<Comment> commentList = this.commentMapper.selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc(parentCommentId, trendsId, commentLevel);
         return Result.ok("查询成功",commentList);
     }
 }

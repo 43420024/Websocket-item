@@ -21,12 +21,12 @@ public class CommentController {
         return commentService.listCommentPage(pageNum,pageSize);
     }
     @GetMapping("/levelOne")
-    public Result<List<Comment>> selectByArticleIdAndCommentLevel(Integer articleId, Integer commentLevel){
-        return commentService.selectByArticleIdAndCommentLevel(articleId, commentLevel);
+    public Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel){
+        return commentService.selectByTrendsIdAndCommentLevel(trendsId, commentLevel);
     }
 
     @GetMapping("/levelTwo")
-    public Result<List<Comment>> selectByParentCommentIdAndArticleIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel){
-        return commentService.selectByParentCommentIdAndArticleIdAndCommentLevel(parentCommentId, articleId, commentLevel);
+    public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel){
+        return commentService.selectByParentCommentIdAndTrendsIdAndCommentLevel(parentCommentId, trendsId, commentLevel);
     }
 }

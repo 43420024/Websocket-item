@@ -7,16 +7,14 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface CommentService {
-    int deleteByPrimaryKey(Long id);
+    Result<Comment> deleteByPrimaryKey(Long id);
 
-    int insert(Comment record);
+    Result<Comment> insert(Comment record);
 
-    int insertSelective(Comment record);
-
-    Comment selectByPrimaryKey(Long id);
+    Result<Comment> insertSelective(Comment record);
 
     Result<PageInfo<Comment>> listCommentPage(int pageNum, int pageSize);
-    Result<List<Comment>> selectByArticleIdAndCommentLevel(Integer articleId, Integer commentLevel);
+    Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel);
 
-    Result<List<Comment>> selectByParentCommentIdAndArticleIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel);
+    Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel);
 }
