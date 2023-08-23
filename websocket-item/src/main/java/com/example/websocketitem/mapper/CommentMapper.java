@@ -1,13 +1,13 @@
 package com.example.websocketitem.mapper;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.websocketitem.domain.Comment;
-
-import java.util.List;
 
 /**
 * @author ASUS
 * @description 针对表【tcd_comment(评论表)】的数据库操作Mapper
-* @createDate 2023-08-23 09:34:54
+* @createDate 2023-08-23 16:41:45
 * @Entity com.example.websocketitem.domain.Comment
 */
 public interface CommentMapper {
@@ -20,10 +20,10 @@ public interface CommentMapper {
 
     Comment selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(Comment record);
-
-    int updateByPrimaryKey(Comment record);
-
     List<Comment> selectAll();
+    List<Comment> selectByTrendsIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(@Param("trendsId") Integer trendsId, @Param("commentLevel") Integer commentLevel);
+
+    List<Comment> selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc(@Param("parentCommentId") Integer parentCommentId, @Param("trendsId") Integer trendsId, @Param("commentLevel") Integer commentLevel);
+
 
 }

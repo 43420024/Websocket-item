@@ -53,4 +53,17 @@ public class Trends implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toString() {
+        return "Trends{" +
+                "id=" + id +
+                ", userid=" + userid +
+                ", content='" + content + '\'' +
+                ", imgsrc='" + imgsrc + '\'' +
+                ", count=" + count +
+                ", createtime=" + createtime +
+                ", edittime=" + edittime +
+                '}';
+    }
 }

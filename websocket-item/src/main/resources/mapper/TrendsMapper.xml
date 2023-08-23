@@ -19,4 +19,14 @@
         imgSrc,count,createTime,
         editTime
     </sql>
+    <select id="findAllByUserid" resultMap="BaseResultMap">
+        select tcd_trends.id,tcd_trends.userId,tcd_trends.content,tcd_trends.imgSrc,tcd_trends.count,
+               tcd_trends.createTime,tcd_trends.editTime from tcd_trends
+        <where>
+            <if test="userid!=null and userid!=''">
+                tcd_trends.userId=#{userid}
+            </if>
+        </where>
+        order by createTime desc
+    </select>
 </mapper>
