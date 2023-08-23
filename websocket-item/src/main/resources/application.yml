@@ -6,18 +6,17 @@ spring:
     username: root
     password: cd@123.com
     type: com.alibaba.druid.pool.DruidDataSource
-    # ????
-
-
-
+# mybatis默认配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.websocketitem.domain
+# 分页类默认配置
 pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+# SQL日志打印
 logging:
   level:
     com.example.websocketitem.mapper: debug

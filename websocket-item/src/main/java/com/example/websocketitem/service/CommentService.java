@@ -1,6 +1,8 @@
 package com.example.websocketitem.service;
 
 import com.example.websocketitem.domain.Comment;
+import com.example.websocketitem.utils.Result;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -13,9 +15,5 @@ public interface CommentService {
 
     Comment selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(Comment record);
-
-    int updateByPrimaryKey(Comment record);
-
-    List<Comment> selectAll();
+    Result<PageInfo<Comment>> listCommentPage(int pageNum, int pageSize);
 }
