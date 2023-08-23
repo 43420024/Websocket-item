@@ -46,4 +46,17 @@ public class CommentServiceImpl implements CommentService {
         PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
         return Result.ok("查询成功",pageInfo);
     }
+
+    @Override
+    public Result<List<Comment>> selectByArticleIdAndCommentLevel(Integer articleId, Integer commentLevel) {
+        List<Comment> commentList = this.commentMapper.selectByArticleIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(articleId, commentLevel);
+        return Result.ok("查询成功",commentList);
+    }
+
+
+    @Override
+    public Result<List<Comment>> selectByParentCommentIdAndArticleIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel) {
+        List<Comment> commentList = this.commentMapper.selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc(parentCommentId, articleId, commentLevel);
+        return Result.ok("查询成功",commentList);
+    }
 }

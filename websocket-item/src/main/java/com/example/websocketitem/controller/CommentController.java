@@ -7,6 +7,8 @@ import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/comment")
@@ -18,8 +20,13 @@ public class CommentController {
                                                     @RequestParam(defaultValue = "10") int pageSize){
         return commentService.listCommentPage(pageNum,pageSize);
     }
+    @GetMapping("/levelOne")
+    public Result<List<Comment>> selectByArticleIdAndCommentLevel(Integer articleId, Integer commentLevel){
+        return commentService.selectByArticleIdAndCommentLevel(articleId, commentLevel);
+    }
 
-    
-    
-    
+    @GetMapping("/levelTwo")
+    public Result<List<Comment>> selectByParentCommentIdAndArticleIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel){
+        return commentService.selectByParentCommentIdAndArticleIdAndCommentLevel(parentCommentId, articleId, commentLevel);
+    }
 }

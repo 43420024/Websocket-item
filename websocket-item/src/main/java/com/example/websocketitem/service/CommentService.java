@@ -16,4 +16,7 @@ public interface CommentService {
     Comment selectByPrimaryKey(Long id);
 
     Result<PageInfo<Comment>> listCommentPage(int pageNum, int pageSize);
+    Result<List<Comment>> selectByArticleIdAndCommentLevel(Integer articleId, Integer commentLevel);
+
+    Result<List<Comment>> selectByParentCommentIdAndArticleIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel);
 }
