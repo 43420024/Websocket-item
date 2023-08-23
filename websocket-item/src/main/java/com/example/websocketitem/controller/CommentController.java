@@ -29,4 +29,8 @@ public class CommentController {
     public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel){
         return commentService.selectByParentCommentIdAndTrendsIdAndCommentLevel(parentCommentId, trendsId, commentLevel);
     }
+    @PutMapping("/praise")
+    public Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum){
+        return commentService.updatePraiseNumByCommentId(commentId, praiseNum);
+    }
 }

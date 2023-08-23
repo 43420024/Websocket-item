@@ -109,4 +109,9 @@
         AND comment_level = #{commentLevel,jdbcType=NUMERIC}
         order by create_time desc
     </select>
+    <update id="updatePraiseNumByCommentId">
+        update tcd_comment
+        set praise_num = #{praiseNum,jdbcType=INTEGER}
+        where comment_id = #{commentId,jdbcType=INTEGER}
+    </update>
 </mapper>
