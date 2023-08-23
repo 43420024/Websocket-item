@@ -24,6 +24,11 @@
         from tcd_comment
         where  comment_id = #{commentId,jdbcType=INTEGER} 
     </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tcd_comment
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from tcd_comment
