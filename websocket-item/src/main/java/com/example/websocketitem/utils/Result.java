@@ -24,6 +24,41 @@ public class Result<T> {
      * 响应数据
      */
     private T data ;
+    //成功响应静态方法
+    public static <T> Result<T> success(){
+        return create(true,"成功",null);
+    }
+    //成功响应静态方法（带有数据）
+    public static <T> Result<T> success(T data){
+        return create(true,"成功",data);
+    }
+    //成功响应静态方法（带有响应结果）
+    public static <T> Result<T> success(String message){
+        return create(true,message,null);
+    }
+    // 成功静态方法
+    public static <T> Result<T> ok() {
+        return create(true,"成功",null);
+    }
+
+    // 失败静态方法
+    public static <T> Result<T> error() {
+        return create(false,"失败",null);
+    }
+
+    public Result<T> success(Boolean success){
+        this.setFlag(success);
+        return this;
+    }
+
+    public Result<T> message(String message){
+        this.setMessage(message);
+        return this;
+    }
+    public Result<T> data(T object){
+        this.setData(object);
+        return this;
+    }
     /**
      * 操作成功。
      * @param message 响应消息
