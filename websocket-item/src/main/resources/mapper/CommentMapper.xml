@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.websocketitem.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.domain.Comment">
+            <id property="commentId" column="comment_id" jdbcType="INTEGER"/>
+            <result property="commentContent" column="comment_content" jdbcType="VARCHAR"/>
+            <result property="commentator" column="commentator" jdbcType="INTEGER"/>
+            <result property="commentTarget" column="comment_target" jdbcType="VARCHAR"/>
+            <result property="illegal" column="illegal" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        comment_id,comment_content,commentator,
+        comment_target,illegal,create_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tcd_comment
+        where  comment_id = #{commentId,jdbcType=INTEGER} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tcd_comment
+        where  comment_id = #{commentId,jdbcType=INTEGER} 
+    </delete>
+    <insert id="insert" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.domain.Comment" useGeneratedKeys="true">
+        insert into tcd_comment
+        ( comment_id,comment_content,commentator
+        ,comment_target,illegal,create_time
+        )
+        values (#{commentId,jdbcType=INTEGER},#{commentContent,jdbcType=VARCHAR},#{commentator,jdbcType=INTEGER}
+        ,#{commentTarget,jdbcType=VARCHAR},#{illegal,jdbcType=TINYINT},#{createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.domain.Comment" useGeneratedKeys="true">
+        insert into tcd_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="commentId != null">comment_id,</if>
+                <if test="commentContent != null">comment_content,</if>
+                <if test="commentator != null">commentator,</if>
+                <if test="commentTarget != null">comment_target,</if>
+                <if test="illegal != null">illegal,</if>
+                <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="commentId != null">#{commentId,jdbcType=INTEGER},</if>
+                <if test="commentContent != null">#{commentContent,jdbcType=VARCHAR},</if>
+                <if test="commentator != null">#{commentator,jdbcType=INTEGER},</if>
+                <if test="commentTarget != null">#{commentTarget,jdbcType=VARCHAR},</if>
+                <if test="illegal != null">#{illegal,jdbcType=TINYINT},</if>
+                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.websocketitem.domain.Comment">
+        update tcd_comment
+        <set>
+                <if test="commentContent != null">
+                    comment_content = #{commentContent,jdbcType=VARCHAR},
+                </if>
+                <if test="commentator != null">
+                    commentator = #{commentator,jdbcType=INTEGER},
+                </if>
+                <if test="commentTarget != null">
+                    comment_target = #{commentTarget,jdbcType=VARCHAR},
+                </if>
+                <if test="illegal != null">
+                    illegal = #{illegal,jdbcType=TINYINT},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   comment_id = #{commentId,jdbcType=INTEGER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.websocketitem.domain.Comment">
+        update tcd_comment
+        set 
+            comment_content =  #{commentContent,jdbcType=VARCHAR},
+            commentator =  #{commentator,jdbcType=INTEGER},
+            comment_target =  #{commentTarget,jdbcType=VARCHAR},
+            illegal =  #{illegal,jdbcType=TINYINT},
+            create_time =  #{createTime,jdbcType=TIMESTAMP}
+        where   comment_id = #{commentId,jdbcType=INTEGER} 
+    </update>
+</mapper>
