@@ -30,7 +30,7 @@ public class GiftBackpackServiceImpl extends ServiceImpl<GiftBackpackMapper, Gif
          GiftBackpack gift = this.baseMapper.selectOne(queryWrapper);
 
         if (gift!=null){
-            gift.setNumber(gift.getNumber()+giftBackpack.getNumber());
+            gift.setQuantity(gift.getQuantity()+giftBackpack.getQuantity());
             gift.setBuyTime(LocalDateTime.now());
             final int num = this.baseMapper.updateById(gift);
             return num>0?Result.success():Result.error();
