@@ -110,6 +110,11 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
     public DataType addCount(Long id) {
         if (id!=null && id>0){
             Trends trends1 = trendsMapper.selectOne(new QueryWrapper<Trends>().eq("id", id));
+            if (trends1==null){
+                dataType.setMessage("该用户不存在");
+                dataType.setFlag(false);
+                return dataType;
+            }
             long a=trends1.getCount()+1;
             trends1.setCount(a);
             trendsMapper.updateById(trends1);

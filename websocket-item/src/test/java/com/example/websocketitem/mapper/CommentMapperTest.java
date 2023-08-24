@@ -42,7 +42,7 @@ class CommentMapperTest {
 
     @Test
     void updatePraiseNumByCommentId() {
-        int i = commentMapper.updatePraiseNumByCommentId(6, 1);
+        int i = commentMapper.updatePraiseNumByCommentId(1, 100);
         log.info("更新返回值 {}",i);
         assert i == 1;
     }
