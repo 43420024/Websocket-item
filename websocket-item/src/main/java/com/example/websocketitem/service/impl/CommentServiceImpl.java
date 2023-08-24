@@ -62,4 +62,13 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> commentList = this.commentMapper.selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc(parentCommentId, trendsId, commentLevel);
         return Result.ok("查询成功",commentList);
     }
+
+    @Override
+    public Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum) {
+        int updatePraiseNumByCommentId = commentMapper.updatePraiseNumByCommentId(commentId,praiseNum);
+        if(updatePraiseNumByCommentId>0){
+            return Result.ok("点赞成功");
+        }
+        return Result.error("点赞失败");
+    }
 }

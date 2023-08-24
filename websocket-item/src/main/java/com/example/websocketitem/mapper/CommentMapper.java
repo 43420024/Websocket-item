@@ -25,5 +25,5 @@ public interface CommentMapper {
 
     List<Comment> selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc(@Param("parentCommentId") Integer parentCommentId, @Param("trendsId") Integer trendsId, @Param("commentLevel") Integer commentLevel);
 
-
+    int updatePraiseNumByCommentId(@Param("commentId") Integer commentId, @Param("praiseNum") Integer praiseNum);
 }

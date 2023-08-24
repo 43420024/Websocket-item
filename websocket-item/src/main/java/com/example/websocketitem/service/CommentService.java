@@ -17,4 +17,6 @@ public interface CommentService {
     Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel);
 
     Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel);
+
+    Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum);
 }
