@@ -32,9 +32,18 @@ public class GiftController {
        return giftService.select(pageNum,pageSize);
     }
 
+    /**
+     * 购买礼物
+     * @param giftBackpack
+     * @return
+     */
     @PostMapping("/buy")
     public Result buyGift(@RequestBody GiftBackpack giftBackpack){
         return giftBackpackService.addGift(giftBackpack);
     }
 
+    @GetMapping("/{userId}")
+    public Result myGiftQuery(@PathVariable Long userId){
+        return giftBackpackService.select(userId);
+    }
 }

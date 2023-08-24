@@ -12,4 +12,6 @@ import com.example.websocketitem.utils.Result;
 public interface GiftBackpackService extends IService<GiftBackpack> {
 
     Result addGift(GiftBackpack giftBackpack);
+
+    Result select(Long userId);
 }
