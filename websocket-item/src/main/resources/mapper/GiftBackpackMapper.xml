@@ -9,11 +9,11 @@
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="giftId" column="gift_id" jdbcType="INTEGER"/>
             <result property="buyTime" column="buy_time" jdbcType="TIMESTAMP"/>
-            <result property="number" column="number" jdbcType="INTEGER"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_id,gift_id,
-        buy_time,number
+        buy_time,quantity
     </sql>
 </mapper>

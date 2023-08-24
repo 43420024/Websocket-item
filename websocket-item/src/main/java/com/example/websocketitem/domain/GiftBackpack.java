@@ -42,8 +42,8 @@ public class GiftBackpack implements Serializable {
     /**
      * 数量
      */
-    @TableField(value = "number")
-    private Integer number;
+    @TableField(value = "quantity")
+    private Integer quantity;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
