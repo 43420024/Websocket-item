@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
         record.setCreateTime(new Date());
         int insertSelective = commentMapper.insertSelective(record);
         if (insertSelective> 0) {
-            return Result.ok("添加成功");
+            return Result.ok("添加成功",record);
         }
         return Result.error("添加失败");
     }

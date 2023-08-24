@@ -6,6 +6,7 @@ import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,6 @@ public class CommentController {
     public Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel){
         return commentService.selectByTrendsIdAndCommentLevel(trendsId, commentLevel);
     }
-
     @GetMapping("/levelTwo")
     public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel){
         return commentService.selectByParentCommentIdAndTrendsIdAndCommentLevel(parentCommentId, trendsId, commentLevel);
@@ -38,5 +38,9 @@ public class CommentController {
     @PostMapping
     public Result<Comment> addComment(@RequestBody @Valid Comment comment){
         return commentService.insertSelective(comment);
+    }
+    @DeleteMapping("/{id}")
+    public Result<Comment> addComment(@PathVariable Long id){
+        return commentService.deleteByPrimaryKey(id);
     }
 }

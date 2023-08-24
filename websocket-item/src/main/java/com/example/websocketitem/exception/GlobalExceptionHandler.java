@@ -1,6 +1,6 @@
 package com.example.websocketitem.exception;
 
-import com.example.websocketitem.enums.ErrorCodeEnum;
+import com.example.websocketitem.enums.ErrorFlagEnum;
 import com.example.websocketitem.utils.Result;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 全局异常捕获
+ */
 @ControllerAdvice
 @ResponseBody
 public class GlobalExceptionHandler {
@@ -22,14 +25,14 @@ public class GlobalExceptionHandler {
     public Result<Object> handleException(MethodArgumentNotValidException e){
         Map<String, String> collect = e.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-        return Result.error(ErrorCodeEnum.PARAM_ERROR,collect);
+        return Result.error(ErrorFlagEnum.PARAM_ERROR,collect);
     }
     // service层数据校验异常捕获
     @ExceptionHandler
     public Result<Object> handleException(ConstraintViolationException e){
         Map<Path, String> collect = e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(ConstraintViolation::getPropertyPath, ConstraintViolation::getMessage));
-        return Result.error(ErrorCodeEnum.PARAM_ERROR,collect);
+        return Result.error(ErrorFlagEnum.PARAM_ERROR,collect);
     }
 
 }
