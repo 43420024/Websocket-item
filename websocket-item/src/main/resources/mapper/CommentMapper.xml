@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.websocketitem.mapper.CommentMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.websocketitem.domain.Comment">
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Comment">
             <id property="commentId" column="comment_id" jdbcType="INTEGER"/>
             <result property="commentContent" column="comment_content" jdbcType="VARCHAR"/>
             <result property="userId" column="user_id" jdbcType="INTEGER"/>
@@ -39,7 +39,7 @@
         delete from tcd_comment
         where  comment_id = #{commentId,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.domain.Comment" useGeneratedKeys="true">
+    <insert id="insert" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.model.Comment" useGeneratedKeys="true">
         insert into tcd_comment
         ( comment_id,comment_content,user_id
         ,trends_id,illegal,parent_comment_id
@@ -52,7 +52,7 @@
         ,#{commentLevel,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER},#{topStatus,jdbcType=INTEGER}
         ,#{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.domain.Comment" useGeneratedKeys="true">
+    <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.model.Comment" useGeneratedKeys="true">
         insert into tcd_comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="commentId != null">comment_id,</if>
