@@ -84,10 +84,8 @@ public class SensitiveWordInit {
 	@SuppressWarnings("resource")
 	private Set<String> readSensitiveWordFile() throws Exception{
 		Set<String> set = null;
-		System.out.println("测试！！！！！！！！！！！！");
 		File file = new File("websocket-item/src/main/resources/static/word.txt");    //读取文件
 		InputStreamReader read = new InputStreamReader(new FileInputStream(file),ENCODING);
-		System.out.println("久啊森岛帆高卡拉胶啊啊啊啊啊");
 		try {
 			if(file.isFile() && file.exists()){      //文件流是否存在
 				set = new HashSet<String>();
