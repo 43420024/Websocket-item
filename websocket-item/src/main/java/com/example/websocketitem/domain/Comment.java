@@ -2,6 +2,9 @@ package com.example.websocketitem.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 
 /**
@@ -13,21 +16,25 @@ public class Comment implements Serializable {
     /**
      * 评论id
      */
+    @Null
     private Integer commentId;
 
     /**
      * 评论内容
      */
+    @NotBlank
     private String commentContent;
 
     /**
      * 评论人id
      */
+    @NotBlank
     private Integer userId;
 
     /**
      * 评论的文章（动态）id
      */
+    @NotBlank
     private Integer trendsId;
 
     /**
