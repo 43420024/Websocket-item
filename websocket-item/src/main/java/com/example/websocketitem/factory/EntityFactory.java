@@ -1,6 +1,6 @@
 package com.example.websocketitem.factory;
 
-import com.example.websocketitem.model.AlbumPicture;
+import com.example.websocketitem.domain.AlbumPicture;
 
 public class EntityFactory {
     public static AlbumPicture createAlbumPicture(){

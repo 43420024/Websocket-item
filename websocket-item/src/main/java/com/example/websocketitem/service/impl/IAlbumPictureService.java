@@ -1,10 +1,8 @@
 package com.example.websocketitem.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.websocketitem.model.Album;
-import com.example.websocketitem.model.AlbumPicture;
+import com.example.websocketitem.domain.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.service.AlbumPictureService;
 import com.example.websocketitem.mapper.AlbumPictureMapper;
@@ -15,6 +13,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ import java.util.Map;
 * @createDate 2023-08-22 17:25:01
 */
 @Service
-public class AlbumPictureServiceImpl extends ServiceImpl<AlbumPictureMapper, AlbumPicture>
+public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumPicture>
     implements AlbumPictureService{
     @Resource
     ResponseMapUtil<AlbumPicture> responseMapUtil;
@@ -34,6 +33,7 @@ public class AlbumPictureServiceImpl extends ServiceImpl<AlbumPictureMapper, Alb
     WrapperUtil<AlbumPicture> wrapperUtil;
     @Override
     public ResponseMap addAlbumPicture(AlbumPicture albumPicture) {
+        albumPicture.setCreateTime(new Date());
         return responseMapUtil.addEntity(this.save(albumPicture));
     }
 

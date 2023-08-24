@@ -2,7 +2,7 @@ package com.example.websocketitem.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.websocketitem.model.Album;
+import com.example.websocketitem.domain.Album;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
 import com.example.websocketitem.service.AlbumPictureService;
@@ -14,6 +14,7 @@ import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -34,6 +35,7 @@ public class AlbumServiceImpl extends ServiceImpl<AlbumMapper, Album>
     AlbumPictureService albumPictureService;
     @Override
     public ResponseMap addAlbum(Album album) {
+        album.setCreateTime(new Date());
         return responseMapUtil.addEntity(this.save(album));
     }
 

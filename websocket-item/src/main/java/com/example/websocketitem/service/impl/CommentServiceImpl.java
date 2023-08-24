@@ -1,14 +1,16 @@
 package com.example.websocketitem.service.impl;
 
-import com.example.websocketitem.domain.Comment;
+import com.example.websocketitem.model.Comment;
 import com.example.websocketitem.mapper.CommentMapper;
 import com.example.websocketitem.service.CommentService;
 import com.example.websocketitem.utils.Result;
+import com.example.websocketitem.utils.SensitivewordUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Result<Comment> insert(Comment record) {
+        record.setCreateTime(new Date());
         int insert = commentMapper.insert(record);
         if(insert>0){
             return Result.ok("添加成功");
@@ -35,6 +38,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Result<Comment> insertSelective(Comment record) {
+        record.setCommentContent(SensitivewordUtil.replaceSensitiveWord(record.getCommentContent(), 1, "*"));
+        record.setCreateTime(new Date());
         int insertSelective = commentMapper.insertSelective(record);
         if (insertSelective> 0) {
             return Result.ok("添加成功");

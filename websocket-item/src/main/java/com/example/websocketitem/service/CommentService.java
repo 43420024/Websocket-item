@@ -1,6 +1,6 @@
 package com.example.websocketitem.service;
 
-import com.example.websocketitem.domain.Comment;
+import com.example.websocketitem.model.Comment;
 import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
 

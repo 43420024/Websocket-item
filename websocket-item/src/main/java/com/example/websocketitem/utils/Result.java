@@ -1,5 +1,6 @@
 package com.example.websocketitem.utils;
 
+import com.example.websocketitem.enums.ErrorCodeEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -95,5 +96,8 @@ public class Result<T> {
      */
     public static <T> Result<T> error(String message,T data){
         return create(false,message,data);
+    }
+    public static <T> Result<T> error(ErrorCodeEnum errorCodeEnum, T data){
+        return create(errorCodeEnum.getFlag(), errorCodeEnum.getMessage(), data);
     }
 }

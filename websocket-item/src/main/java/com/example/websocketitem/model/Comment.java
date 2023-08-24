@@ -1,9 +1,10 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 
@@ -16,7 +17,7 @@ public class Comment implements Serializable {
     /**
      * 评论id
      */
-    @Null
+    @Null(message = "djwodl")
     private Integer commentId;
 
     /**
@@ -28,13 +29,13 @@ public class Comment implements Serializable {
     /**
      * 评论人id
      */
-    @NotBlank
+    @NotNull
     private Integer userId;
 
     /**
      * 评论的文章（动态）id
      */
-    @NotBlank
+    @NotNull
     private Integer trendsId;
 
     /**

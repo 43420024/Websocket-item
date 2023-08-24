@@ -1,4 +1,4 @@
-package com.example.websocketitem.model;
+package com.example.websocketitem.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -9,18 +9,16 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * @TableName tcd_album
+ * @TableName tcd_album_picture
  */
-@TableName(value ="tcd_album")
+@TableName(value ="tcd_album_picture")
 @Data
-public class Album implements Serializable {
+public class AlbumPicture implements Serializable {
     private Long id;
 
-    private Long userId;
+    private Long albumId;
 
-    private String name;
-
-    private Integer openness;
+    private String path;
 
     private Date createTime;
 
