@@ -23,7 +23,7 @@ import java.util.Map;
 * @createDate 2023-08-22 17:25:18
 */
 @Service
-public class AlbumServiceImpl extends ServiceImpl<AlbumMapper, Album>
+public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
     implements AlbumService{
     @Resource
     ResponseMapUtil<Album> responseMapUtil;
