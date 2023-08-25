@@ -1,5 +1,6 @@
 package com.example.websocketitem.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.example.websocketitem.model.Comment;
 import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
@@ -19,4 +20,10 @@ public interface CommentService {
     Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel);
 
     Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum);
+
+    Result<PageInfo<Comment>> selectAllByUserId(Integer userId, Integer pageNum, Integer pageSize);
+
+    Result<List<Tree<Integer>>> listCommentAll();
+
+    Result<PageInfo<Comment>> selectByCreateTimeOneWeek(Integer pageNum, Integer pageSize);
 }

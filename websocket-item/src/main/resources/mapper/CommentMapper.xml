@@ -18,7 +18,6 @@
             <result property="commentLevel" column="comment_level" jdbcType="INTEGER"/>
             <result property="praiseNum" column="praise_num" jdbcType="INTEGER"/>
             <result property="topStatus" column="top_status" jdbcType="INTEGER"/>
-            <result property="report" column="report" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
@@ -27,7 +26,7 @@
         article_id,article_type,illegal,
         parent_comment_id,parent_comment_user_id,reply_comment_id,
         reply_comment_user_id,comment_level,praise_num,
-        top_status,report,create_time
+        top_status,create_time
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -47,13 +46,13 @@
         ,article_id,article_type,illegal
         ,parent_comment_id,parent_comment_user_id,reply_comment_id
         ,reply_comment_user_id,comment_level,praise_num
-        ,top_status,report,create_time
+        ,top_status,create_time
         )
         values (#{commentId,jdbcType=INTEGER},#{commentContent,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER}
         ,#{articleId,jdbcType=INTEGER},#{articleType,jdbcType=INTEGER},#{illegal,jdbcType=TINYINT}
         ,#{parentCommentId,jdbcType=INTEGER},#{parentCommentUserId,jdbcType=INTEGER},#{replyCommentId,jdbcType=INTEGER}
         ,#{replyCommentUserId,jdbcType=INTEGER},#{commentLevel,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER}
-        ,#{topStatus,jdbcType=INTEGER},#{report,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}
+        ,#{topStatus,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}
         )
     </insert>
     <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.model.Comment" useGeneratedKeys="true">
@@ -72,7 +71,6 @@
                 <if test="commentLevel != null">comment_level,</if>
                 <if test="praiseNum != null">praise_num,</if>
                 <if test="topStatus != null">top_status,</if>
-                <if test="report != null">report,</if>
                 <if test="createTime != null">create_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -89,7 +87,6 @@
                 <if test="commentLevel != null">#{commentLevel,jdbcType=INTEGER},</if>
                 <if test="praiseNum != null">#{praiseNum,jdbcType=INTEGER},</if>
                 <if test="topStatus != null">#{topStatus,jdbcType=INTEGER},</if>
-                <if test="report != null">#{report,jdbcType=INTEGER},</if>
                 <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
         </trim>
     </insert>
@@ -132,9 +129,6 @@
                 <if test="topStatus != null">
                     top_status = #{topStatus,jdbcType=INTEGER},
                 </if>
-                <if test="report != null">
-                    report = #{report,jdbcType=INTEGER},
-                </if>
                 <if test="createTime != null">
                     create_time = #{createTime,jdbcType=TIMESTAMP},
                 </if>
@@ -156,7 +150,6 @@
             comment_level =  #{commentLevel,jdbcType=INTEGER},
             praise_num =  #{praiseNum,jdbcType=INTEGER},
             top_status =  #{topStatus,jdbcType=INTEGER},
-            report =  #{report,jdbcType=INTEGER},
             create_time =  #{createTime,jdbcType=TIMESTAMP}
         where   comment_id = #{commentId,jdbcType=INTEGER} 
     </update>
@@ -189,4 +182,18 @@
         set praise_num = #{praiseNum,jdbcType=NUMERIC}
         where comment_id = #{commentId,jdbcType=NUMERIC}
     </update>
+    <select id="selectAllByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_comment
+        where
+        user_id = #{userId,jdbcType=NUMERIC}
+    </select>
+    <select id="selectByCreateTimeOneWeek" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_comment
+        where
+        create_time >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+    </select>
 </mapper>

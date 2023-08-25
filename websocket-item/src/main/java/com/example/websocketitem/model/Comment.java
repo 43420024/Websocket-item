@@ -82,12 +82,6 @@ public class Comment implements Serializable {
      * 置顶状态[ 1 置顶，0 不置顶 默认 ]
      */
     private Integer topStatus;
-
-    /**
-     * 是否被举报[0未被举报（默认），1被举报]
-     */
-    private Integer report;
-
     /**
      * 创建时间
      */

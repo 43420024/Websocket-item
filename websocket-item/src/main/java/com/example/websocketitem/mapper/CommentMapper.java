@@ -1,4 +1,5 @@
 package com.example.websocketitem.mapper;
+import java.util.Date;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
@@ -31,4 +32,8 @@ public interface CommentMapper {
     List<Comment> selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc(@Param("parentCommentId") Integer parentCommentId, @Param("articleId") Integer articleId, @Param("commentLevel") Integer commentLevel);
 
     int updatePraiseNumByCommentId(@Param("praiseNum") Integer praiseNum, @Param("commentId") Integer commentId);
+
+    List<Comment> selectAllByUserId(@Param("userId") Integer userId);
+
+    List<Comment> selectByCreateTimeOneWeek();
 }

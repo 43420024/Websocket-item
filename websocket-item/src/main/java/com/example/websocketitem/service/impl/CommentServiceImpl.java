@@ -1,5 +1,8 @@
 package com.example.websocketitem.service.impl;
 
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
+import cn.hutool.core.lang.tree.TreeUtil;
 import com.example.websocketitem.mapper.CommentMapper;
 import com.example.websocketitem.model.Comment;
 import com.example.websocketitem.service.CommentService;
@@ -8,12 +11,14 @@ import com.example.websocketitem.utils.SensitivewordUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CommentServiceImpl implements CommentService {
     @Resource
     private CommentMapper commentMapper;
@@ -78,5 +83,48 @@ public class CommentServiceImpl implements CommentService {
             return Result.ok("点赞成功");
         }
         return Result.error("点赞失败");
+    }
+
+    @Override
+    public Result<PageInfo<Comment>> selectAllByUserId(Integer userId, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Comment> commentList = commentMapper.selectAllByUserId(userId);
+        PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
+        return Result.ok("查询成功",pageInfo);
+    }
+
+    @Override
+    public Result<List<Tree<Integer>>> listCommentAll() {
+        List<Comment> commentList = commentMapper.selectAll();
+        // 创建 TreeNodeConfig 配置
+        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
+        treeNodeConfig.setWeightKey("commentId"); // 设置节点权重字段，这里使用 commentId 作为权重
+        // 构建菜单树
+        List<Tree<Integer>> treeList = TreeUtil.build(commentList, null, treeNodeConfig,
+                (treeNode, tree) -> {
+                    tree.setId(treeNode.getCommentId());
+                    tree.setParentId(treeNode.getParentCommentId());
+                    tree.setWeight(treeNode.getCommentId()); // 设置节点权重
+                    tree.setName(treeNode.getCommentContent()); // 设置节点名称
+                    tree.putExtra("userId", treeNode.getUserId());
+                    tree.putExtra("articleId", treeNode.getArticleId());
+                    tree.putExtra("praiseNum", treeNode.getPraiseNum());
+                    tree.putExtra("topStatus", treeNode.getTopStatus());
+                    tree.putExtra("parentCommentId", treeNode.getReplyCommentId());
+                    tree.putExtra("parentCommentUserId", treeNode.getParentCommentUserId());
+                    tree.putExtra("replyCommentId", treeNode.getReplyCommentId());
+                    tree.putExtra("replyCommentUserId", treeNode.getReplyCommentUserId());
+                    tree.putExtra("commentLeave", treeNode.getCommentLevel());
+                    tree.putExtra("createTime", treeNode.getCreateTime());
+                });
+        return Result.ok("查询成功",treeList);
+    }
+
+    @Override
+    public Result<PageInfo<Comment>> selectByCreateTimeOneWeek(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Comment> commentList = this.commentMapper.selectByCreateTimeOneWeek();
+        PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
+        return Result.ok("查询成功",pageInfo);
     }
 }

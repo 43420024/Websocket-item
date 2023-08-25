@@ -1,5 +1,6 @@
 package com.example.websocketitem.controller;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.example.websocketitem.model.Comment;
 import com.example.websocketitem.service.CommentService;
 import com.example.websocketitem.utils.Result;
@@ -41,5 +42,19 @@ public class CommentController {
     @DeleteMapping("/{id}")
     public Result<Comment> addComment(@PathVariable Long id){
         return commentService.deleteByPrimaryKey(id);
+    }
+    @GetMapping("/userId")
+    public Result<PageInfo<Comment>> getCommentByUserId(@RequestParam Integer userId, @RequestParam(defaultValue = "1") int pageNum,
+                                           @RequestParam(defaultValue = "10") int pageSize){
+        return commentService.selectAllByUserId(userId,pageNum,pageSize);
+    }
+    @GetMapping("/tree")
+    public Result<List<Tree<Integer>>> listCommentALlTree(){
+        return commentService.listCommentAll();
+    }
+    @GetMapping("/oneWeek")
+    public Result<PageInfo<Comment>> selectByCreateTimeOneWeek(@RequestParam(defaultValue = "1") int pageNum,
+                                                               @RequestParam(defaultValue = "10") int pageSize){
+        return commentService.selectByCreateTimeOneWeek(pageNum,pageSize);
     }
 }
