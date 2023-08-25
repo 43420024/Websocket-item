@@ -6,7 +6,6 @@ import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +23,12 @@ public class CommentController {
         return commentService.listCommentPage(pageNum,pageSize);
     }
     @GetMapping("/levelOne")
-    public Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel){
-        return commentService.selectByTrendsIdAndCommentLevel(trendsId, commentLevel);
+    public Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer articleId, Integer commentLevel){
+        return commentService.selectByArticleIdIdAndCommentLevel(articleId, commentLevel);
     }
     @GetMapping("/levelTwo")
-    public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel){
-        return commentService.selectByParentCommentIdAndTrendsIdAndCommentLevel(parentCommentId, trendsId, commentLevel);
+    public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel){
+        return commentService.selectByParentCommentIdAndArticleIdIdAndCommentLevel(parentCommentId, articleId, commentLevel);
     }
     @PutMapping("/praise")
     public Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum){

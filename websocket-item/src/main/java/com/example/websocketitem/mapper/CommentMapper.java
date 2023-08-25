@@ -1,13 +1,13 @@
 package com.example.websocketitem.mapper;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import com.example.websocketitem.model.Comment;
 
 /**
 * @author ASUS
 * @description 针对表【tcd_comment(评论表)】的数据库操作Mapper
-* @createDate 2023-08-23 16:41:45
+* @createDate 2023-08-25 14:42:48
 * @Entity com.example.websocketitem.model.Comment
 */
 public interface CommentMapper {
@@ -20,10 +20,15 @@ public interface CommentMapper {
 
     Comment selectByPrimaryKey(Long id);
 
+    int updateByPrimaryKeySelective(Comment record);
+
+    int updateByPrimaryKey(Comment record);
+
     List<Comment> selectAll();
-    List<Comment> selectByTrendsIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(@Param("trendsId") Integer trendsId, @Param("commentLevel") Integer commentLevel);
 
-    List<Comment> selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc(@Param("parentCommentId") Integer parentCommentId, @Param("trendsId") Integer trendsId, @Param("commentLevel") Integer commentLevel);
+    List<Comment> selectByArticleIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(@Param("articleId") Integer articleId, @Param("commentLevel") Integer commentLevel);
 
-    int updatePraiseNumByCommentId(@Param("commentId") Integer commentId, @Param("praiseNum") Integer praiseNum);
+    List<Comment> selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc(@Param("parentCommentId") Integer parentCommentId, @Param("articleId") Integer articleId, @Param("commentLevel") Integer commentLevel);
+
+    int updatePraiseNumByCommentId(@Param("praiseNum") Integer praiseNum, @Param("commentId") Integer commentId);
 }
