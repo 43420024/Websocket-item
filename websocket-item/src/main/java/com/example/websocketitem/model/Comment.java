@@ -1,9 +1,10 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 
@@ -20,22 +21,27 @@ public class Comment implements Serializable {
     private Integer commentId;
 
     /**
-     * 评论内容
+     * 评论内容@NotBlank
      */
     @NotBlank
     private String commentContent;
 
     /**
-     * 评论人id
+     * 评论人id@NotNull
      */
-    @NotBlank
+    @NotNull
     private Integer userId;
 
     /**
-     * 评论的文章（动态）id
+     * 在哪篇文章（动态）下评论的@NotNull
      */
-    @NotBlank
-    private Integer trendsId;
+    @NotNull
+    private Integer articleId;
+
+    /**
+     * 文章类型（0动态，1相册，2其他）
+     */
+    private Integer articleType;
 
     /**
      * 评论是否非法 1(非法)，0(合法)
@@ -76,6 +82,11 @@ public class Comment implements Serializable {
      * 置顶状态[ 1 置顶，0 不置顶 默认 ]
      */
     private Integer topStatus;
+
+    /**
+     * 是否被举报[0未被举报（默认），1被举报]
+     */
+    private Integer report;
 
     /**
      * 创建时间
