@@ -17,7 +17,7 @@ public class Comment implements Serializable {
     /**
      * 评论id
      */
-    @Null(message = "djwodl")
+    @Null
     private Integer commentId;
 
     /**

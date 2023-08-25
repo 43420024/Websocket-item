@@ -39,6 +39,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Result<Comment> insertSelective(Comment record) {
         record.setCommentContent(SensitivewordUtil.replaceSensitiveWord(record.getCommentContent(), 1, "*"));
+        if(SensitivewordUtil.illegal>0){ // 包含非法内容则设置为1（非法）
+            record.setIllegal(1);
+        }
         record.setCreateTime(new Date());
         int insertSelective = commentMapper.insertSelective(record);
         if (insertSelective> 0) {
