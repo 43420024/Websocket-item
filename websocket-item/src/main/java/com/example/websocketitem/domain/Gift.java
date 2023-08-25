@@ -46,6 +46,22 @@ public class Gift implements Serializable {
     @TableField(value = "create_time")
     private LocalDateTime createTime;
 
+    /**
+     * 礼物类型
+     */
+    @TableField(value = "type_id")
+    private Integer typeId;
+
+    /**
+     * 礼物修改时间
+     */
+    @TableField(value = "update_time")
+    private LocalDateTime updateTime;
+
+    @TableField(exist = false)
+    private GiftType giftType;
+
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
