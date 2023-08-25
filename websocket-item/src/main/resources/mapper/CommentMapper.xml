@@ -8,7 +8,8 @@
             <id property="commentId" column="comment_id" jdbcType="INTEGER"/>
             <result property="commentContent" column="comment_content" jdbcType="VARCHAR"/>
             <result property="userId" column="user_id" jdbcType="INTEGER"/>
-            <result property="trendsId" column="article_id" jdbcType="INTEGER"/>
+            <result property="articleId" column="article_id" jdbcType="INTEGER"/>
+            <result property="articleType" column="article_type" jdbcType="INTEGER"/>
             <result property="illegal" column="illegal" jdbcType="TINYINT"/>
             <result property="parentCommentId" column="parent_comment_id" jdbcType="INTEGER"/>
             <result property="parentCommentUserId" column="parent_comment_user_id" jdbcType="INTEGER"/>
@@ -17,40 +18,43 @@
             <result property="commentLevel" column="comment_level" jdbcType="INTEGER"/>
             <result property="praiseNum" column="praise_num" jdbcType="INTEGER"/>
             <result property="topStatus" column="top_status" jdbcType="INTEGER"/>
+            <result property="report" column="report" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         comment_id,comment_content,user_id,
-        trends_id,illegal,parent_comment_id,
-        parent_comment_user_id,reply_comment_id,reply_comment_user_id,
-        comment_level,praise_num,top_status,
-        create_time
+        article_id,article_type,illegal,
+        parent_comment_id,parent_comment_user_id,reply_comment_id,
+        reply_comment_user_id,comment_level,praise_num,
+        top_status,report,create_time
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from tcd_comment
-        where  comment_id = #{commentId,jdbcType=INTEGER}
+        where  comment_id = #{commentId,jdbcType=INTEGER} 
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from tcd_comment
-        where  comment_id = #{commentId,jdbcType=INTEGER}
+        where  comment_id = #{commentId,jdbcType=INTEGER} 
     </delete>
     <insert id="insert" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.model.Comment" useGeneratedKeys="true">
         insert into tcd_comment
         ( comment_id,comment_content,user_id
-        ,trends_id,illegal,parent_comment_id
-        ,parent_comment_user_id,reply_comment_id,reply_comment_user_id
-        ,comment_level,praise_num,top_status
-        ,create_time)
+        ,article_id,article_type,illegal
+        ,parent_comment_id,parent_comment_user_id,reply_comment_id
+        ,reply_comment_user_id,comment_level,praise_num
+        ,top_status,report,create_time
+        )
         values (#{commentId,jdbcType=INTEGER},#{commentContent,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER}
-        ,#{trendsId,jdbcType=INTEGER},#{illegal,jdbcType=TINYINT},#{parentCommentId,jdbcType=INTEGER}
-        ,#{parentCommentUserId,jdbcType=INTEGER},#{replyCommentId,jdbcType=INTEGER},#{replyCommentUserId,jdbcType=INTEGER}
-        ,#{commentLevel,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER},#{topStatus,jdbcType=INTEGER}
-        ,#{createTime,jdbcType=TIMESTAMP})
+        ,#{articleId,jdbcType=INTEGER},#{articleType,jdbcType=INTEGER},#{illegal,jdbcType=TINYINT}
+        ,#{parentCommentId,jdbcType=INTEGER},#{parentCommentUserId,jdbcType=INTEGER},#{replyCommentId,jdbcType=INTEGER}
+        ,#{replyCommentUserId,jdbcType=INTEGER},#{commentLevel,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER}
+        ,#{topStatus,jdbcType=INTEGER},#{report,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}
+        )
     </insert>
     <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.model.Comment" useGeneratedKeys="true">
         insert into tcd_comment
@@ -58,7 +62,8 @@
                 <if test="commentId != null">comment_id,</if>
                 <if test="commentContent != null">comment_content,</if>
                 <if test="userId != null">user_id,</if>
-                <if test="trendsId != null">trends_id,</if>
+                <if test="articleId != null">article_id,</if>
+                <if test="articleType != null">article_type,</if>
                 <if test="illegal != null">illegal,</if>
                 <if test="parentCommentId != null">parent_comment_id,</if>
                 <if test="parentCommentUserId != null">parent_comment_user_id,</if>
@@ -67,13 +72,15 @@
                 <if test="commentLevel != null">comment_level,</if>
                 <if test="praiseNum != null">praise_num,</if>
                 <if test="topStatus != null">top_status,</if>
+                <if test="report != null">report,</if>
                 <if test="createTime != null">create_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                 <if test="commentId != null">#{commentId,jdbcType=INTEGER},</if>
                 <if test="commentContent != null">#{commentContent,jdbcType=VARCHAR},</if>
                 <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
-                <if test="trendsId != null">#{trendsId,jdbcType=INTEGER},</if>
+                <if test="articleId != null">#{articleId,jdbcType=INTEGER},</if>
+                <if test="articleType != null">#{articleType,jdbcType=INTEGER},</if>
                 <if test="illegal != null">#{illegal,jdbcType=TINYINT},</if>
                 <if test="parentCommentId != null">#{parentCommentId,jdbcType=INTEGER},</if>
                 <if test="parentCommentUserId != null">#{parentCommentUserId,jdbcType=INTEGER},</if>
@@ -82,36 +89,104 @@
                 <if test="commentLevel != null">#{commentLevel,jdbcType=INTEGER},</if>
                 <if test="praiseNum != null">#{praiseNum,jdbcType=INTEGER},</if>
                 <if test="topStatus != null">#{topStatus,jdbcType=INTEGER},</if>
+                <if test="report != null">#{report,jdbcType=INTEGER},</if>
                 <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
         </trim>
     </insert>
-    <select id="selectByTrendsIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from tcd_comment
-        where
-        trends_id = #{trendsId,jdbcType=NUMERIC}
-        AND comment_level = #{commentLevel,jdbcType=NUMERIC}
-        order by top_status desc , create_time desc
-    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.websocketitem.model.Comment">
+        update tcd_comment
+        <set>
+                <if test="commentContent != null">
+                    comment_content = #{commentContent,jdbcType=VARCHAR},
+                </if>
+                <if test="userId != null">
+                    user_id = #{userId,jdbcType=INTEGER},
+                </if>
+                <if test="articleId != null">
+                    article_id = #{articleId,jdbcType=INTEGER},
+                </if>
+                <if test="articleType != null">
+                    article_type = #{articleType,jdbcType=INTEGER},
+                </if>
+                <if test="illegal != null">
+                    illegal = #{illegal,jdbcType=TINYINT},
+                </if>
+                <if test="parentCommentId != null">
+                    parent_comment_id = #{parentCommentId,jdbcType=INTEGER},
+                </if>
+                <if test="parentCommentUserId != null">
+                    parent_comment_user_id = #{parentCommentUserId,jdbcType=INTEGER},
+                </if>
+                <if test="replyCommentId != null">
+                    reply_comment_id = #{replyCommentId,jdbcType=INTEGER},
+                </if>
+                <if test="replyCommentUserId != null">
+                    reply_comment_user_id = #{replyCommentUserId,jdbcType=INTEGER},
+                </if>
+                <if test="commentLevel != null">
+                    comment_level = #{commentLevel,jdbcType=INTEGER},
+                </if>
+                <if test="praiseNum != null">
+                    praise_num = #{praiseNum,jdbcType=INTEGER},
+                </if>
+                <if test="topStatus != null">
+                    top_status = #{topStatus,jdbcType=INTEGER},
+                </if>
+                <if test="report != null">
+                    report = #{report,jdbcType=INTEGER},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   comment_id = #{commentId,jdbcType=INTEGER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.websocketitem.model.Comment">
+        update tcd_comment
+        set 
+            comment_content =  #{commentContent,jdbcType=VARCHAR},
+            user_id =  #{userId,jdbcType=INTEGER},
+            article_id =  #{articleId,jdbcType=INTEGER},
+            article_type =  #{articleType,jdbcType=INTEGER},
+            illegal =  #{illegal,jdbcType=TINYINT},
+            parent_comment_id =  #{parentCommentId,jdbcType=INTEGER},
+            parent_comment_user_id =  #{parentCommentUserId,jdbcType=INTEGER},
+            reply_comment_id =  #{replyCommentId,jdbcType=INTEGER},
+            reply_comment_user_id =  #{replyCommentUserId,jdbcType=INTEGER},
+            comment_level =  #{commentLevel,jdbcType=INTEGER},
+            praise_num =  #{praiseNum,jdbcType=INTEGER},
+            top_status =  #{topStatus,jdbcType=INTEGER},
+            report =  #{report,jdbcType=INTEGER},
+            create_time =  #{createTime,jdbcType=TIMESTAMP}
+        where   comment_id = #{commentId,jdbcType=INTEGER} 
+    </update>
     <select id="selectAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from tcd_comment
     </select>
-    <select id="selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc" resultMap="BaseResultMap">
+    <select id="selectByArticleIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_comment
+        where
+        article_id = #{articleId,jdbcType=NUMERIC}
+        AND comment_level = #{commentLevel,jdbcType=NUMERIC}
+        order by top_status desc , create_time desc
+    </select>
+    <select id="selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from tcd_comment
         where
         parent_comment_id = #{parentCommentId,jdbcType=NUMERIC}
-        AND trends_id = #{trendsId,jdbcType=NUMERIC}
+        AND article_id = #{articleId,jdbcType=NUMERIC}
         AND comment_level = #{commentLevel,jdbcType=NUMERIC}
         order by create_time desc
     </select>
     <update id="updatePraiseNumByCommentId">
         update tcd_comment
-        set praise_num = #{praiseNum,jdbcType=INTEGER}
-        where comment_id = #{commentId,jdbcType=INTEGER}
+        set praise_num = #{praiseNum,jdbcType=NUMERIC}
+        where comment_id = #{commentId,jdbcType=NUMERIC}
     </update>
 </mapper>

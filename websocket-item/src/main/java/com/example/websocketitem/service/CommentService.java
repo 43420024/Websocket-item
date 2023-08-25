@@ -14,9 +14,9 @@ public interface CommentService {
     Result<Comment> insertSelective(Comment record);
 
     Result<PageInfo<Comment>> listCommentPage(int pageNum, int pageSize);
-    Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel);
+    Result<List<Comment>> selectByArticleIdIdAndCommentLevel(Integer trendsId, Integer commentLevel);
 
-    Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel);
+    Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel);
 
     Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum);
 }

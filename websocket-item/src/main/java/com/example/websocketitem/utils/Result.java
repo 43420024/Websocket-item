@@ -1,6 +1,6 @@
 package com.example.websocketitem.utils;
 
-import com.example.websocketitem.enums.ErrorCodeEnum;
+import com.example.websocketitem.enums.ErrorFlagEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,17 +41,14 @@ public class Result<T> {
     public static <T> Result<T> ok() {
         return create(true,"成功",null);
     }
-
     // 失败静态方法
     public static <T> Result<T> error() {
         return create(false,"失败",null);
     }
-
     public Result<T> success(Boolean success){
         this.setFlag(success);
         return this;
     }
-
     public Result<T> message(String message){
         this.setMessage(message);
         return this;
@@ -97,7 +94,14 @@ public class Result<T> {
     public static <T> Result<T> error(String message,T data){
         return create(false,message,data);
     }
-    public static <T> Result<T> error(ErrorCodeEnum errorCodeEnum, T data){
-        return create(errorCodeEnum.getFlag(), errorCodeEnum.getMessage(), data);
+    /**
+     * 参数校验捕获响应结果
+     * @param errorFlagEnum 错误标志枚举
+     * @param data 响应数据
+     * @return flag
+     * @param <T> 泛型
+     */
+    public static <T> Result<T> error(ErrorFlagEnum errorFlagEnum, T data){
+        return create(errorFlagEnum.getFlag(), errorFlagEnum.getMessage(), data);
     }
 }

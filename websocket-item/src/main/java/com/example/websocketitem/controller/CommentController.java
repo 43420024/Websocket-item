@@ -23,13 +23,12 @@ public class CommentController {
         return commentService.listCommentPage(pageNum,pageSize);
     }
     @GetMapping("/levelOne")
-    public Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer trendsId, Integer commentLevel){
-        return commentService.selectByTrendsIdAndCommentLevel(trendsId, commentLevel);
+    public Result<List<Comment>> selectByTrendsIdAndCommentLevel(Integer articleId, Integer commentLevel){
+        return commentService.selectByArticleIdIdAndCommentLevel(articleId, commentLevel);
     }
-
     @GetMapping("/levelTwo")
-    public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel){
-        return commentService.selectByParentCommentIdAndTrendsIdAndCommentLevel(parentCommentId, trendsId, commentLevel);
+    public Result<List<Comment>> selectByParentCommentIdAndTrendsIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel){
+        return commentService.selectByParentCommentIdAndArticleIdIdAndCommentLevel(parentCommentId, articleId, commentLevel);
     }
     @PutMapping("/praise")
     public Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum){
@@ -38,5 +37,9 @@ public class CommentController {
     @PostMapping
     public Result<Comment> addComment(@RequestBody @Valid Comment comment){
         return commentService.insertSelective(comment);
+    }
+    @DeleteMapping("/{id}")
+    public Result<Comment> addComment(@PathVariable Long id){
+        return commentService.deleteByPrimaryKey(id);
     }
 }
