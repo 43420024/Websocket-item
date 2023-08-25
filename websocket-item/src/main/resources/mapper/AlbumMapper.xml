@@ -4,16 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.websocketitem.mapper.AlbumMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.websocketitem.domain.Album">
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Album">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="openness" column="openness" jdbcType="TINYINT"/>
+            <result property="frozenStatus" column="frozen_status" jdbcType="INTEGER"/>
+            <result property="capacity" column="capacity" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_id,name,
-        openness,create_time
+        openness,frozen_status,capacity,
+        create_time
     </sql>
 </mapper>

@@ -2,7 +2,7 @@ package com.example.websocketitem.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.websocketitem.domain.AlbumPicture;
+import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.service.AlbumPictureService;
 import com.example.websocketitem.mapper.AlbumPictureMapper;
