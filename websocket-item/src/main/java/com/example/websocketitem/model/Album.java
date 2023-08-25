@@ -9,30 +9,45 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 相册图片
- * @TableName tcd_album_picture
+ * 相册
+ * @TableName tcd_album
  */
-@TableName(value ="tcd_album_picture")
+@TableName(value ="tcd_album")
 @Data
-public class AlbumPicture implements Serializable {
+public class Album implements Serializable {
     /**
-     * 相册图片编号
+     * 相册编号
      */
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 相册图片所属相册编号
+     * 相册创建人编号
      */
-    private Long albumId;
+    private Long userId;
 
     /**
-     * 相册图片存储路径
+     * 相册名称
      */
-    private String path;
+    private String name;
 
     /**
-     * 相册图片创建时间
+     * 相册是否开放
+     */
+    private Integer openness;
+
+    /**
+     * 相册冻结状况
+     */
+    private Integer frozenStatus;
+
+    /**
+     * 相册剩余容量
+     */
+    private Integer capacity;
+
+    /**
+     * 相册创建时间
      */
     private Date createTime;
 

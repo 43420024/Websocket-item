@@ -2,7 +2,7 @@ package com.example.websocketitem.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.websocketitem.domain.Album;
+import com.example.websocketitem.model.Album;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
 import com.example.websocketitem.service.AlbumPictureService;
@@ -20,7 +20,7 @@ import java.util.Map;
 /**
 * @author cd
 * @description 针对表【tcd_album(相册)】的数据库操作Service实现
-* @createDate 2023-08-22 17:25:18
+* @createDate 2023-08-25 16:55:50
 */
 @Service
 public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
@@ -43,6 +43,7 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
     public ResponseMap updateAlbum(Album album) {
         return responseMapUtil.updateEntity(this.updateById(album));
     }
+
 
     @Override
     public ResponseMap listAlbum(Long userId,Integer page, Integer size) {
