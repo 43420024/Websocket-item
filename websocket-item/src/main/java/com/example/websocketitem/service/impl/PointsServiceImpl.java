@@ -1,5 +1,6 @@
 package com.example.websocketitem.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.example.websocketitem.mapper.PointsMapper;
 import com.example.websocketitem.model.Points;
 import com.example.websocketitem.service.PointsService;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class PointsServiceImpl implements PointsService {
+public class PointsServiceImpl<T> implements PointsService<T> {
     @Resource
     private PointsMapper pointsMapper;
     @Override
@@ -23,5 +24,59 @@ public class PointsServiceImpl implements PointsService {
         List<Points> pointsList = pointsMapper.selectAll();
         PageInfo<Points> pageInfo = new PageInfo<>(pointsList);
         return Result.ok("查询成功", pageInfo);
+    }
+
+    @Override
+    public Result<T> deleteByPrimaryKey(Long id) {
+        int deleteByPrimaryKey = this.pointsMapper.deleteByPrimaryKey(id);
+        if (deleteByPrimaryKey>0){
+            return Result.ok("删除成功");
+        }
+        return Result.error("删除失败");
+    }
+
+    @Override
+    public Result<T> insert(Points record) {
+        int insert = this.pointsMapper.insert(record);
+        if (insert>0){
+            return Result.ok("添加成功");
+        }
+        return Result.error("添加失败");
+    }
+
+    @Override
+    public Result<T> insertSelective(Points record) {
+        int insertSelective = this.pointsMapper.insertSelective(record);
+        if (insertSelective>0){
+            return Result.ok("添加成功");
+        }
+        return Result.error("添加失败");
+    }
+
+    @Override
+    public Result<Points> selectByPrimaryKey(Long id) {
+        Points selectByPrimaryKey = this.pointsMapper.selectByPrimaryKey(id);
+        if (ObjectUtil.isNotEmpty(selectByPrimaryKey)){
+            return Result.ok("查询成功", selectByPrimaryKey);
+        }
+        return Result.error("查询失败");
+    }
+
+    @Override
+    public Result<T> updateByPrimaryKeySelective(Points record) {
+        int updateByPrimaryKeySelective = this.pointsMapper.updateByPrimaryKeySelective(record);
+        if (updateByPrimaryKeySelective>0){
+            return Result.ok("修改成功");
+        }
+        return Result.error("修改失败");
+    }
+
+    @Override
+    public Result<T> updateByPrimaryKey(Points record) {
+        int updateByPrimaryKey = this.pointsMapper.updateByPrimaryKey(record);
+        if (updateByPrimaryKey>0){
+            return Result.ok("修改成功");
+        }
+        return Result.error("修改失败");
     }
 }

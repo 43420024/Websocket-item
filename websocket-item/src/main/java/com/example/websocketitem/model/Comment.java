@@ -2,6 +2,10 @@ package com.example.websocketitem.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -18,16 +22,19 @@ public class Comment implements Serializable {
     /**
      * 评论内容
      */
+    @NotBlank
     private String commentContent;
 
     /**
      * 评论人id
      */
+    @NotNull
     private Long userId;
 
     /**
      * 在哪篇文章（动态）下评论的
      */
+    @NotNull
     private Long articleId;
 
     /**
@@ -78,6 +85,7 @@ public class Comment implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     private static final long serialVersionUID = 1L;

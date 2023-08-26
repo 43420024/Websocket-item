@@ -2,6 +2,9 @@ package com.example.websocketitem.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -18,6 +21,7 @@ public class Points implements Serializable {
     /**
      * 用户id
      */
+    @NotNull
     private Long userId;
 
     /**
@@ -38,11 +42,13 @@ public class Points implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     /**
      * 最后级别更新（评定）日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLevelUpdateDate;
 
     private static final long serialVersionUID = 1L;
