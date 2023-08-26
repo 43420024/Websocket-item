@@ -14,6 +14,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Result<Comment> insert(Comment record) {
-        record.setCreateTime(new Date());
+        record.setCreateTime(LocalDateTime.now());
         int insert = commentMapper.insert(record);
         if(insert>0){
             return Result.ok("添加成功");
@@ -47,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         if(SensitivewordUtil.illegal>0){ // 包含非法内容则设置为1（非法）
             record.setIllegal(1);
         }
-        record.setCreateTime(new Date());
+        record.setCreateTime(LocalDateTime.now());
         int insertSelective = commentMapper.insertSelective(record);
         if (insertSelective> 0) {
             return Result.ok("添加成功",record);
@@ -64,20 +65,20 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Result<List<Comment>> selectByArticleIdIdAndCommentLevel(Integer articleId, Integer commentLevel) {
+    public Result<List<Comment>> selectByArticleIdIdAndCommentLevel(Long articleId, Integer commentLevel) {
         List<Comment> commentList = this.commentMapper.selectByArticleIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(articleId, commentLevel);
         return Result.ok("查询成功",commentList);
     }
 
 
     @Override
-    public Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Integer parentCommentId, Integer articleId, Integer commentLevel) {
+    public Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Long parentCommentId, Long articleId, Integer commentLevel) {
         List<Comment> commentList = this.commentMapper.selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc(parentCommentId, articleId, commentLevel);
         return Result.ok("查询成功",commentList);
     }
 
     @Override
-    public Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum) {
+    public Result<Comment> updatePraiseNumByCommentId(Long commentId, Integer praiseNum) {
         int updatePraiseNumByCommentId = commentMapper.updatePraiseNumByCommentId(praiseNum,commentId);
         if(updatePraiseNumByCommentId>0){
             return Result.ok("点赞成功");
@@ -86,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Result<PageInfo<Comment>> selectAllByUserId(Integer userId, Integer pageNum, Integer pageSize) {
+    public Result<PageInfo<Comment>> selectAllByUserId(Long userId, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum,pageSize);
         List<Comment> commentList = commentMapper.selectAllByUserId(userId);
         PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
@@ -94,13 +95,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Result<List<Tree<Integer>>> listCommentAll() {
+    public Result<List<Tree<Long>>> listCommentAll() {
         List<Comment> commentList = commentMapper.selectAll();
         // 创建 TreeNodeConfig 配置
         TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
         treeNodeConfig.setWeightKey("commentId"); // 设置节点权重字段，这里使用 commentId 作为权重
         // 构建菜单树
-        List<Tree<Integer>> treeList = TreeUtil.build(commentList, null, treeNodeConfig,
+        List<Tree<Long>> treeList = TreeUtil.build(commentList, null, treeNodeConfig,
                 (treeNode, tree) -> {
                     tree.setId(treeNode.getCommentId());
                     tree.setParentId(treeNode.getParentCommentId());

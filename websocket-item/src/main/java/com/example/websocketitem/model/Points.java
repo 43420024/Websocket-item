@@ -13,12 +13,12 @@ public class Points implements Serializable {
     /**
      * 积分id
      */
-    private Integer pointsId;
+    private Long pointsId;
 
     /**
      * 用户id
      */
-    private Integer userId;
+    private Long userId;
 
     /**
      * 总积分
@@ -31,14 +31,18 @@ public class Points implements Serializable {
     private String currentLevel;
 
     /**
-     * 则扣率
+     * 折扣率
      */
     private Integer discountRate;
 
     /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+
+    /**
      * 最后级别更新（评定）日期
      */
-
     private LocalDateTime lastLevelUpdateDate;
 
     private static final long serialVersionUID = 1L;

@@ -15,15 +15,15 @@ public interface CommentService {
     Result<Comment> insertSelective(Comment record);
 
     Result<PageInfo<Comment>> listCommentPage(int pageNum, int pageSize);
-    Result<List<Comment>> selectByArticleIdIdAndCommentLevel(Integer trendsId, Integer commentLevel);
+    Result<List<Comment>> selectByArticleIdIdAndCommentLevel(Long articleId, Integer commentLevel);
 
-    Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Integer parentCommentId, Integer trendsId, Integer commentLevel);
+    Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Long parentCommentId, Long articleId, Integer commentLevel);
 
-    Result<Comment> updatePraiseNumByCommentId(Integer commentId, Integer praiseNum);
+    Result<Comment> updatePraiseNumByCommentId(Long commentId, Integer praiseNum);
 
-    Result<PageInfo<Comment>> selectAllByUserId(Integer userId, Integer pageNum, Integer pageSize);
+    Result<PageInfo<Comment>> selectAllByUserId(Long userId, Integer pageNum, Integer pageSize);
 
-    Result<List<Tree<Integer>>> listCommentAll();
+    Result<List<Tree<Long>>> listCommentAll();
 
     Result<PageInfo<Comment>> selectByCreateTimeOneWeek(Integer pageNum, Integer pageSize);
 }

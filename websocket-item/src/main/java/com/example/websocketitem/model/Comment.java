@@ -1,11 +1,7 @@
 package com.example.websocketitem.model;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
@@ -17,26 +13,22 @@ public class Comment implements Serializable {
     /**
      * 评论id
      */
-    @Null
-    private Integer commentId;
+    private Long commentId;
 
     /**
-     * 评论内容@NotBlank
+     * 评论内容
      */
-    @NotBlank
     private String commentContent;
 
     /**
-     * 评论人id@NotNull
+     * 评论人id
      */
-    @NotNull
-    private Integer userId;
+    private Long userId;
 
     /**
-     * 在哪篇文章（动态）下评论的@NotNull
+     * 在哪篇文章（动态）下评论的
      */
-    @NotNull
-    private Integer articleId;
+    private Long articleId;
 
     /**
      * 文章类型（0动态，1相册，2其他）
@@ -51,22 +43,22 @@ public class Comment implements Serializable {
     /**
      * 父级评论id
      */
-    private Integer parentCommentId;
+    private Long parentCommentId;
 
     /**
      * 父级评论的user_id
      */
-    private Integer parentCommentUserId;
+    private Long parentCommentUserId;
 
     /**
      * 被回复的评论id
      */
-    private Integer replyCommentId;
+    private Long replyCommentId;
 
     /**
      * 被回复的评论的user_id
      */
-    private Integer replyCommentUserId;
+    private Long replyCommentUserId;
 
     /**
      * 评论等级[ 1 一级评论 默认 ，2 二级评论]
@@ -82,10 +74,11 @@ public class Comment implements Serializable {
      * 置顶状态[ 1 置顶，0 不置顶 默认 ]
      */
     private Integer topStatus;
+
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     private static final long serialVersionUID = 1L;
 }

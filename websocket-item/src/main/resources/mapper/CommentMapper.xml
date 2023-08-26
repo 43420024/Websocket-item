@@ -5,16 +5,16 @@
 <mapper namespace="com.example.websocketitem.mapper.CommentMapper">
 
     <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Comment">
-            <id property="commentId" column="comment_id" jdbcType="INTEGER"/>
+            <id property="commentId" column="comment_id" jdbcType="BIGINT"/>
             <result property="commentContent" column="comment_content" jdbcType="VARCHAR"/>
-            <result property="userId" column="user_id" jdbcType="INTEGER"/>
-            <result property="articleId" column="article_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="articleId" column="article_id" jdbcType="BIGINT"/>
             <result property="articleType" column="article_type" jdbcType="INTEGER"/>
-            <result property="illegal" column="illegal" jdbcType="TINYINT"/>
-            <result property="parentCommentId" column="parent_comment_id" jdbcType="INTEGER"/>
-            <result property="parentCommentUserId" column="parent_comment_user_id" jdbcType="INTEGER"/>
-            <result property="replyCommentId" column="reply_comment_id" jdbcType="INTEGER"/>
-            <result property="replyCommentUserId" column="reply_comment_user_id" jdbcType="INTEGER"/>
+            <result property="illegal" column="illegal" jdbcType="INTEGER"/>
+            <result property="parentCommentId" column="parent_comment_id" jdbcType="BIGINT"/>
+            <result property="parentCommentUserId" column="parent_comment_user_id" jdbcType="BIGINT"/>
+            <result property="replyCommentId" column="reply_comment_id" jdbcType="BIGINT"/>
+            <result property="replyCommentUserId" column="reply_comment_user_id" jdbcType="BIGINT"/>
             <result property="commentLevel" column="comment_level" jdbcType="INTEGER"/>
             <result property="praiseNum" column="praise_num" jdbcType="INTEGER"/>
             <result property="topStatus" column="top_status" jdbcType="INTEGER"/>
@@ -33,12 +33,12 @@
         select
         <include refid="Base_Column_List" />
         from tcd_comment
-        where  comment_id = #{commentId,jdbcType=INTEGER} 
+        where  comment_id = #{commentId,jdbcType=BIGINT} 
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from tcd_comment
-        where  comment_id = #{commentId,jdbcType=INTEGER} 
+        where  comment_id = #{commentId,jdbcType=BIGINT} 
     </delete>
     <insert id="insert" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.model.Comment" useGeneratedKeys="true">
         insert into tcd_comment
@@ -46,14 +46,12 @@
         ,article_id,article_type,illegal
         ,parent_comment_id,parent_comment_user_id,reply_comment_id
         ,reply_comment_user_id,comment_level,praise_num
-        ,top_status,create_time
-        )
-        values (#{commentId,jdbcType=INTEGER},#{commentContent,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER}
-        ,#{articleId,jdbcType=INTEGER},#{articleType,jdbcType=INTEGER},#{illegal,jdbcType=TINYINT}
-        ,#{parentCommentId,jdbcType=INTEGER},#{parentCommentUserId,jdbcType=INTEGER},#{replyCommentId,jdbcType=INTEGER}
-        ,#{replyCommentUserId,jdbcType=INTEGER},#{commentLevel,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER}
-        ,#{topStatus,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}
-        )
+        ,top_status,create_time)
+        values (#{commentId,jdbcType=BIGINT},#{commentContent,jdbcType=VARCHAR},#{userId,jdbcType=BIGINT}
+        ,#{articleId,jdbcType=BIGINT},#{articleType,jdbcType=INTEGER},#{illegal,jdbcType=INTEGER}
+        ,#{parentCommentId,jdbcType=BIGINT},#{parentCommentUserId,jdbcType=BIGINT},#{replyCommentId,jdbcType=BIGINT}
+        ,#{replyCommentUserId,jdbcType=BIGINT},#{commentLevel,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER}
+        ,#{topStatus,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" keyColumn="comment_id" keyProperty="commentId" parameterType="com.example.websocketitem.model.Comment" useGeneratedKeys="true">
         insert into tcd_comment
@@ -74,16 +72,16 @@
                 <if test="createTime != null">create_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="commentId != null">#{commentId,jdbcType=INTEGER},</if>
+                <if test="commentId != null">#{commentId,jdbcType=BIGINT},</if>
                 <if test="commentContent != null">#{commentContent,jdbcType=VARCHAR},</if>
-                <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
-                <if test="articleId != null">#{articleId,jdbcType=INTEGER},</if>
+                <if test="userId != null">#{userId,jdbcType=BIGINT},</if>
+                <if test="articleId != null">#{articleId,jdbcType=BIGINT},</if>
                 <if test="articleType != null">#{articleType,jdbcType=INTEGER},</if>
-                <if test="illegal != null">#{illegal,jdbcType=TINYINT},</if>
-                <if test="parentCommentId != null">#{parentCommentId,jdbcType=INTEGER},</if>
-                <if test="parentCommentUserId != null">#{parentCommentUserId,jdbcType=INTEGER},</if>
-                <if test="replyCommentId != null">#{replyCommentId,jdbcType=INTEGER},</if>
-                <if test="replyCommentUserId != null">#{replyCommentUserId,jdbcType=INTEGER},</if>
+                <if test="illegal != null">#{illegal,jdbcType=INTEGER},</if>
+                <if test="parentCommentId != null">#{parentCommentId,jdbcType=BIGINT},</if>
+                <if test="parentCommentUserId != null">#{parentCommentUserId,jdbcType=BIGINT},</if>
+                <if test="replyCommentId != null">#{replyCommentId,jdbcType=BIGINT},</if>
+                <if test="replyCommentUserId != null">#{replyCommentUserId,jdbcType=BIGINT},</if>
                 <if test="commentLevel != null">#{commentLevel,jdbcType=INTEGER},</if>
                 <if test="praiseNum != null">#{praiseNum,jdbcType=INTEGER},</if>
                 <if test="topStatus != null">#{topStatus,jdbcType=INTEGER},</if>
@@ -97,28 +95,28 @@
                     comment_content = #{commentContent,jdbcType=VARCHAR},
                 </if>
                 <if test="userId != null">
-                    user_id = #{userId,jdbcType=INTEGER},
+                    user_id = #{userId,jdbcType=BIGINT},
                 </if>
                 <if test="articleId != null">
-                    article_id = #{articleId,jdbcType=INTEGER},
+                    article_id = #{articleId,jdbcType=BIGINT},
                 </if>
                 <if test="articleType != null">
                     article_type = #{articleType,jdbcType=INTEGER},
                 </if>
                 <if test="illegal != null">
-                    illegal = #{illegal,jdbcType=TINYINT},
+                    illegal = #{illegal,jdbcType=INTEGER},
                 </if>
                 <if test="parentCommentId != null">
-                    parent_comment_id = #{parentCommentId,jdbcType=INTEGER},
+                    parent_comment_id = #{parentCommentId,jdbcType=BIGINT},
                 </if>
                 <if test="parentCommentUserId != null">
-                    parent_comment_user_id = #{parentCommentUserId,jdbcType=INTEGER},
+                    parent_comment_user_id = #{parentCommentUserId,jdbcType=BIGINT},
                 </if>
                 <if test="replyCommentId != null">
-                    reply_comment_id = #{replyCommentId,jdbcType=INTEGER},
+                    reply_comment_id = #{replyCommentId,jdbcType=BIGINT},
                 </if>
                 <if test="replyCommentUserId != null">
-                    reply_comment_user_id = #{replyCommentUserId,jdbcType=INTEGER},
+                    reply_comment_user_id = #{replyCommentUserId,jdbcType=BIGINT},
                 </if>
                 <if test="commentLevel != null">
                     comment_level = #{commentLevel,jdbcType=INTEGER},
@@ -133,25 +131,25 @@
                     create_time = #{createTime,jdbcType=TIMESTAMP},
                 </if>
         </set>
-        where   comment_id = #{commentId,jdbcType=INTEGER} 
+        where   comment_id = #{commentId,jdbcType=BIGINT} 
     </update>
     <update id="updateByPrimaryKey" parameterType="com.example.websocketitem.model.Comment">
         update tcd_comment
         set 
             comment_content =  #{commentContent,jdbcType=VARCHAR},
-            user_id =  #{userId,jdbcType=INTEGER},
-            article_id =  #{articleId,jdbcType=INTEGER},
+            user_id =  #{userId,jdbcType=BIGINT},
+            article_id =  #{articleId,jdbcType=BIGINT},
             article_type =  #{articleType,jdbcType=INTEGER},
-            illegal =  #{illegal,jdbcType=TINYINT},
-            parent_comment_id =  #{parentCommentId,jdbcType=INTEGER},
-            parent_comment_user_id =  #{parentCommentUserId,jdbcType=INTEGER},
-            reply_comment_id =  #{replyCommentId,jdbcType=INTEGER},
-            reply_comment_user_id =  #{replyCommentUserId,jdbcType=INTEGER},
+            illegal =  #{illegal,jdbcType=INTEGER},
+            parent_comment_id =  #{parentCommentId,jdbcType=BIGINT},
+            parent_comment_user_id =  #{parentCommentUserId,jdbcType=BIGINT},
+            reply_comment_id =  #{replyCommentId,jdbcType=BIGINT},
+            reply_comment_user_id =  #{replyCommentUserId,jdbcType=BIGINT},
             comment_level =  #{commentLevel,jdbcType=INTEGER},
             praise_num =  #{praiseNum,jdbcType=INTEGER},
             top_status =  #{topStatus,jdbcType=INTEGER},
             create_time =  #{createTime,jdbcType=TIMESTAMP}
-        where   comment_id = #{commentId,jdbcType=INTEGER} 
+        where   comment_id = #{commentId,jdbcType=BIGINT} 
     </update>
     <select id="selectAll" resultMap="BaseResultMap">
         select

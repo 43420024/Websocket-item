@@ -6,7 +6,7 @@ import com.example.websocketitem.model.Points;
 /**
 * @author ASUS
 * @description 针对表【tcd_points(积分表)】的数据库操作Mapper
-* @createDate 2023-08-26 11:07:03
+* @createDate 2023-08-26 15:21:32
 * @Entity com.example.websocketitem.model.Points
 */
 public interface PointsMapper {
@@ -24,4 +24,5 @@ public interface PointsMapper {
     int updateByPrimaryKey(Points record);
 
     List<Points> selectAll();
+
 }
