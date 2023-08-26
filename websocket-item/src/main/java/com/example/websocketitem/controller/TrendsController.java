@@ -1,6 +1,7 @@
 package com.example.websocketitem.controller;
 
 
+import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.Trends;
 import com.example.websocketitem.service.TrendsService;
 import com.example.websocketitem.utils.DataType;
@@ -84,7 +85,6 @@ public class TrendsController {
     @PostMapping("addOrEdit")
     @ResponseBody
     public DataType trendsSave(@RequestBody Trends trends) {
-        System.out.println(trends+"!!!!!!!!!");
         return trendsService.savaTrends(trends);
     }
 
@@ -102,6 +102,14 @@ public class TrendsController {
     public DataType allQueryTrends(@PathVariable("userid") Long userid){
         return trendsService.allQueryTrends(userid);
     }
+
+    //个人动态分页查询
+    @GetMapping("/userList/{page}/{size}/{userid}")
+    @ResponseBody
+    public ResponseMap userListPage(@PathVariable int page, @PathVariable int size, @PathVariable("userid") Long userid){
+        return trendsService.userListTrends(page,size,userid);
+    }
+
 
 
     //动态点赞（一人点赞一次还是可以点赞多次）

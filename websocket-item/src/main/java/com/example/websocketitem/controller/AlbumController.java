@@ -1,6 +1,6 @@
 package com.example.websocketitem.controller;
 
-import com.example.websocketitem.domain.Album;
+import com.example.websocketitem.model.Album;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
 import com.example.websocketitem.service.AlbumService;

@@ -38,11 +38,18 @@ public class WrapperUtil<T> {
     public QueryWrapper<T> wrapperUserId(Long userId){
         QueryWrapper<T> wrapper = this.wrapperTimeDesc();
         wrapper.eq("user_id",userId);
+        wrapper.eq("frozen_status",0);
         return wrapper;
     }
     public QueryWrapper<T> wrapperAlbumId(Long albumId){
         QueryWrapper<T> wrapper = this.wrapperTimeDesc();
         wrapper.eq("album_id",albumId);
+        return wrapper;
+    }
+
+    public QueryWrapper<T> wrapperAlbumFrozen(){
+        QueryWrapper<T> wrapper = this.wrapperTimeDesc();
+
         return wrapper;
     }
 }

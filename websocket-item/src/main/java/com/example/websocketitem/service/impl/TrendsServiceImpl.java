@@ -2,14 +2,15 @@ package com.example.websocketitem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.factory.DateTypeFactory;
+import com.example.websocketitem.model.AlbumPicture;
+import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.Trends;
 import com.example.websocketitem.service.TrendsService;
 import com.example.websocketitem.mapper.TrendsMapper;
-import com.example.websocketitem.utils.DataType;
-import com.example.websocketitem.utils.ImageUtil;
-import com.example.websocketitem.utils.SensitivewordUtil;
+import com.example.websocketitem.utils.*;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,12 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
     DataType dataType= DateTypeFactory.create();
     @Resource
     TrendsMapper trendsMapper;
+    @Resource
+    ResponseMapUtil<Trends> responseMapUtil;
+    @Resource
+    PageUtil<Trends> pageUtil;
+    @Resource
+    WrapperUtil<Trends> wrapperUtil;
 
     @Override
     public DataType savaTrends(Trends trends) {
@@ -126,6 +133,13 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
             dataType.setFlag(false);
         }
         return dataType;
+    }
+
+    @Override
+    public ResponseMap userListTrends(int page, int size, Long userid) {
+        Page<Trends> trendsPage=this.page(pageUtil.getModelPage(page,size),wrapperUtil.wrapperUserId(userid));
+        Map<String,Object> map=pageUtil.getModelMap(trendsPage);
+        return responseMapUtil.getPageList(trendsPage,map);
     }
 }
 
