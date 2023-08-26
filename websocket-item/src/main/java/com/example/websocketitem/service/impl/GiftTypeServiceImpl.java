@@ -10,6 +10,7 @@ import com.example.websocketitem.utils.Result;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
 * @author cd
@@ -28,7 +29,7 @@ public class GiftTypeServiceImpl extends ServiceImpl<GiftTypeMapper, GiftType>
         if (exists){
             return Result.error("类型名称已存在！");
         }
-        giftType.setCreateTime(LocalDateTime.now());
+        giftType.setCreateTime(new Date());
         final int insert = this.baseMapper.insert(giftType);
         return insert>0?Result.success("添加成功"):Result.error("添加失败");
     }
@@ -45,7 +46,7 @@ public class GiftTypeServiceImpl extends ServiceImpl<GiftTypeMapper, GiftType>
                 return Result.error("礼物名称已存在！");
             }
         }
-        giftType.setCreateTime(LocalDateTime.now());
+        giftType.setCreateTime(new Date());
         int update = this.baseMapper.updateById(giftType);
         return update > 0 ? Result.success("修改成功！") : Result.error("修改失败！");
     }

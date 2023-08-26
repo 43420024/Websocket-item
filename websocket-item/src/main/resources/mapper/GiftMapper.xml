@@ -12,10 +12,11 @@
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="typeId" column="type_id" jdbcType="INTEGER"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,name,path,
-        price,create_time,type_id ,update_time
+        price,create_time,type_id ,update_time,status
     </sql>
 </mapper>

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -31,7 +33,7 @@ public class GiftType implements Serializable {
      * 创建时间
      */
     @TableField(value = "create_time")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

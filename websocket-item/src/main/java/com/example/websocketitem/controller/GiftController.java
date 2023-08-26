@@ -37,10 +37,12 @@ public class GiftController {
     @GetMapping("/list")
     public Result query(
             @RequestParam(required = false) Integer type,
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) String name,
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) {
-        return giftService.select(pageNum, pageSize, type);
+        return giftService.select(pageNum, pageSize, type,status,name);
     }
 
     /**
@@ -74,6 +76,11 @@ public class GiftController {
     @PutMapping("/update")
     public Result update(@RequestBody Gift gift) {
         return giftService.updateGift(gift);
+    }
+
+    @PutMapping("/updateStatus")
+    public Result updateStatus(@RequestBody Gift gift) {
+        return giftService.updateStatus(gift);
     }
 
     /**

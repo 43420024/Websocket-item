@@ -11,11 +11,13 @@ import com.example.websocketitem.utils.Result;
 */
 public interface GiftService extends IService<Gift> {
 
-    Result select(Integer pageNum, Integer pageSize,Integer type);
+    Result select(Integer pageNum, Integer pageSize,Integer type,Integer status,String name);
 
     Result addGift(Gift gift);
 
     Result updateGift(Gift gift);
 
     Result queryOne(Integer id);
+
+    Result updateStatus(Gift gift);
 }
