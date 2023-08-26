@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -44,7 +46,7 @@ public class Gift implements Serializable {
      * 礼物创建时间
      */
     @TableField(value = "create_time")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 礼物类型
@@ -56,7 +58,13 @@ public class Gift implements Serializable {
      * 礼物修改时间
      */
     @TableField(value = "update_time")
-    private LocalDateTime updateTime;
+    private Date updateTime;
+
+    /**
+     * 礼物状态1：上架 0：下架
+     */
+    @TableField(value = "status")
+    private Integer status;
 
     @TableField(exist = false)
     private GiftType giftType;

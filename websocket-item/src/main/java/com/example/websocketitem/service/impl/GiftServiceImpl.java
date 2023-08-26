@@ -13,6 +13,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author cd
@@ -27,10 +28,16 @@ public class GiftServiceImpl extends ServiceImpl<GiftMapper, Gift>
     private GiftTypeService giftTypeService;
 
     @Override
-    public Result select(Integer pageNum, Integer pageSize, Integer type) {
+    public Result select(Integer pageNum, Integer pageSize, Integer type, Integer status, String name) {
         QueryWrapper<Gift> wrapper = new QueryWrapper<>();
         if (type != null) {
             wrapper.eq("type", type);
+        }
+        if (status != null) {
+            wrapper.eq("status", status);
+        }
+        if (name != null) {
+            wrapper.like("name", name);
         }
         Page<Gift> giftPage = new Page<>(pageNum, pageSize);
         Page<Gift> page = this.baseMapper.selectPage(giftPage, wrapper);
@@ -50,8 +57,8 @@ public class GiftServiceImpl extends ServiceImpl<GiftMapper, Gift>
         if (exists) {
             return Result.error("礼物名称已存在！");
         }
-        gift.setCreateTime(LocalDateTime.now());
-        gift.setUpdateTime(LocalDateTime.now());
+        gift.setCreateTime(new Date());
+        gift.setUpdateTime(new Date());
         int insert = this.baseMapper.insert(gift);
         return insert > 0 ? Result.success("添加礼物成功！") : Result.error("添加礼物失败！");
     }
@@ -68,7 +75,7 @@ public class GiftServiceImpl extends ServiceImpl<GiftMapper, Gift>
                 return Result.error("礼物名称已存在！");
             }
         }
-        gift.setUpdateTime(LocalDateTime.now());
+        gift.setUpdateTime(new Date());
         int update = this.baseMapper.updateById(gift);
         return update > 0 ? Result.success("修改成功！") : Result.error("修改失败！");
     }
@@ -79,6 +86,18 @@ public class GiftServiceImpl extends ServiceImpl<GiftMapper, Gift>
         GiftType giftType = giftTypeService.getById(gift.getTypeId());
         gift.setGiftType(giftType);
         return Result.success(gift);
+    }
+
+    @Override
+    public Result updateStatus(Gift gift) {
+        if (gift.getStatus() == 0) {
+            gift.setStatus(1);
+            int update = this.baseMapper.updateById(gift);
+            return update > 0 ? Result.success("修改成功！") : Result.error("修改失败！");
+        }
+        gift.setStatus(0);
+        int updateById = this.baseMapper.updateById(gift);
+        return updateById > 0 ? Result.success("修改成功！") : Result.error("修改失败！");
     }
 }
 
