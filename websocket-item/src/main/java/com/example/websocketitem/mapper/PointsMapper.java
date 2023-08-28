@@ -1,4 +1,5 @@
 package com.example.websocketitem.mapper;
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 import com.example.websocketitem.model.Points;
@@ -24,5 +25,9 @@ public interface PointsMapper {
     int updateByPrimaryKey(Points record);
 
     List<Points> selectAll();
+
+    Points selectOneByUserId(@Param("userId") Long userId);
+
+    int updateTotalPointsByUserId(@Param("totalPoints") Integer totalPoints, @Param("userId") Long userId);
 
 }

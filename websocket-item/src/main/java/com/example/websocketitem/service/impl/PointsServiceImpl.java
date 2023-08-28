@@ -1,5 +1,6 @@
 package com.example.websocketitem.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.websocketitem.mapper.PointsMapper;
 import com.example.websocketitem.model.Points;
@@ -11,7 +12,9 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -78,5 +81,24 @@ public class PointsServiceImpl<T> implements PointsService<T> {
             return Result.ok("修改成功");
         }
         return Result.error("修改失败");
+    }
+
+    @Override
+    public Result<Object> updateTotalPointsByUserId(Long userId, Integer addPoints) {
+        Points oneByUserId = this.pointsMapper.selectOneByUserId(userId);
+        if(ObjectUtil.isNull(oneByUserId)){
+            return Result.error("用户不存在");
+        }
+        Integer totalPoints = oneByUserId.getTotalPoints();
+        totalPoints = totalPoints+addPoints;
+        oneByUserId.setTotalPoints(totalPoints);
+
+        Map<String, Object> points = MapUtil.builder(new HashMap<String, Object>()).put("userId", userId)
+                .put("totalPoints", totalPoints).build();
+        int updateTotalPointsByUserId = this.pointsMapper.updateTotalPointsByUserId(totalPoints, userId);
+        if (updateTotalPointsByUserId>0){
+            return Result.ok("积分添加成功",points);
+        }
+        return Result.error("积分添加失败");
     }
 }
