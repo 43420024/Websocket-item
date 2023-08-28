@@ -46,7 +46,6 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
             //进行新闻的修改
             Trends trends1 = trendsMapper.selectOne(new QueryWrapper<Trends>().eq("id", trends.getId()));
             trends.setId(trends1.getId());
-            trends.setCount(trends1.getCount());
             trends.setCreatetime(trends1.getCreatetime());
             trends.setEdittime(new Date());
             String content = trends.getContent();
