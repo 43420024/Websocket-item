@@ -29,9 +29,9 @@ public class WrapperUtil<T> {
             wrapper.between("create_time", start, end);
         }
         wrapper.like(StringUtils.hasLength(search), "name", search)
-                .or().like(StringUtils.hasLength(search), "type", search)
-                .or().like(StringUtils.hasLength(search), "amount", search)
-                .or().like(StringUtils.hasLength(search), "director", search);
+                .or().like(StringUtils.hasLength(search), "reporter_id", search)
+                .or().like(StringUtils.hasLength(search), "status", search)
+                .or().like(StringUtils.hasLength(search), "reporter_id", search);
         wrapper.orderByDesc("create_time");
         return wrapper;
     }
@@ -50,6 +50,29 @@ public class WrapperUtil<T> {
     public QueryWrapper<T> wrapperAlbumFrozen(){
         QueryWrapper<T> wrapper = this.wrapperTimeDesc();
 
+        return wrapper;
+    }
+    public QueryWrapper<T> wrapperReport(String search, String startTime, String endTime) {
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        if (StringUtils.hasLength(startTime) && StringUtils.hasLength(endTime)){
+            LocalDateTime start = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime end = LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            wrapper.between("create_time", start, end);
+        }
+        wrapper.like(StringUtils.hasLength(search), "informer_id", search)
+                .or().like(StringUtils.hasLength(search), "reporter_id", search)
+                .or().like(StringUtils.hasLength(search), "type", search)
+                .or().like(StringUtils.hasLength(search), "description", search)
+                .or().like(StringUtils.hasLength(search), "status", search);
+        wrapper.orderByDesc("create_time");
+        return wrapper;
+    }
+
+    public QueryWrapper<T> countReport(Long reporterId) {
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("reporter_id",reporterId);
+        wrapper.eq("status",1);
+        wrapper.groupBy("content_id");
         return wrapper;
     }
 }

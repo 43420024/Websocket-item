@@ -52,7 +52,7 @@ public class Report implements Serializable {
     private String descriptionImagePath;
 
     /**
-     * 处理状态
+     * 处理状态:0.未处理1.已处理(违规)2.已处理(未违规)
      */
     private Integer status;
 
