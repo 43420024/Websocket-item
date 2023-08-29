@@ -1,6 +1,6 @@
 package com.example.websocketitem.service;
 
-import com.example.websocketitem.domain.Gift;
+import com.example.websocketitem.model.Gift;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.websocketitem.utils.Result;
 

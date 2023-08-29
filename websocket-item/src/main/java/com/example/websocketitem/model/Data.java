@@ -1,4 +1,4 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
 @lombok.Data
 public class Data {

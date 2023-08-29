@@ -1,22 +1,17 @@
 package com.example.websocketitem.service.impl;
 
 
-import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.mapper.PointsMapper;
 import com.example.websocketitem.model.Album;
-import com.example.websocketitem.domain.UserInfo;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.model.Points;
 import com.example.websocketitem.service.AlbumService;
-import com.example.websocketitem.service.PointsService;
 import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.utils.Result;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.websocketitem.mapper.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.websocketitem.domain.User">
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.User">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR"/>
             <result property="chatLogin" column="chat_login" jdbcType="VARCHAR"/>
