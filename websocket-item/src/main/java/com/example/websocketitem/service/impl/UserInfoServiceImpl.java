@@ -1,6 +1,7 @@
 package com.example.websocketitem.service.impl;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -42,10 +43,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
         int insert = this.baseMapper.insert(userInfo);
         if(insert>0){
-            Points points = new Points();
-            points.setUserId(userInfo.getUserId());
-            points.setCreateTime(LocalDateTime.now());
-            pointsMapper.insert(points);
+            if(ObjectUtil.equals(1,userInfo.getGender())){
+                Points points = new Points();
+                points.setUserId(userInfo.getUserId());
+                points.setCreateTime(LocalDateTime.now());
+                pointsMapper.insert(points);
+            }
         }
         return insert > 0 ? Result.success() : Result.error();
     }
