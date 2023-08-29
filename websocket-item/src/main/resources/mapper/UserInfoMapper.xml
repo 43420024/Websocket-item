@@ -17,13 +17,13 @@
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-            <result property="integral" column="integral" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         info_id,gender,labels,
         head_path,birthday,job_title,
         region,introduction,like_number,
-        description,user_id,nickname,integral
+        description,user_id,nickname,create_time
     </sql>
 </mapper>

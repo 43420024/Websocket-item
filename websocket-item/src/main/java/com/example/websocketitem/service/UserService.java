@@ -17,4 +17,6 @@ public interface UserService extends IService<User> {
     Result selectPage(Integer pageNum, Integer pageSize, Integer gender, Integer phoneNumber, Integer nickname);
 
     Result updateUser(Data data);
+
+   // Result queryInfo(Long userId);
 }
