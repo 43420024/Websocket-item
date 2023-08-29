@@ -12,4 +12,6 @@ import com.example.websocketitem.utils.Result;
 public interface UserInfoService extends IService<UserInfo> {
 
     Result add(UserInfo userInfo);
+
+    Result queryInfo(Long userId);
 }

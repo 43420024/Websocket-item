@@ -48,12 +48,21 @@ public class UserController {
         return userService.selectPage(pageNum,pageSize,gender,phoneNumber,nickname);
     }
 
+    /**
+     * 根据用户id查用户信息
+     * @param userId
+     * @return
+     */
+    @GetMapping("/query/{userId}")
+    public Result query(@PathVariable Long userId){
+        return userInfoService.queryInfo(userId);
+    }
+
     @Transactional
     @PutMapping("/update")
     public Result update(@RequestBody Data data){
         return userService.updateUser(data);
     }
-
 
 
 

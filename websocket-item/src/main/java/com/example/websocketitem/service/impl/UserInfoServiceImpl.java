@@ -3,6 +3,7 @@ package com.example.websocketitem.service.impl;
 
 import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.domain.UserInfo;
 import com.example.websocketitem.service.UserInfoService;
@@ -14,22 +15,29 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.stereotype.Service;
 
 /**
-* @author cd
-* @description 针对表【tcd_user_info】的数据库操作Service实现
-* @createDate 2023-08-26 11:05:58
-*/
+ * @author cd
+ * @description 针对表【tcd_user_info】的数据库操作Service实现
+ * @createDate 2023-08-26 11:05:58
+ */
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
-    implements UserInfoService{
+        implements UserInfoService {
 
 
     @Override
     public Result add(UserInfo userInfo) {
 
         userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
-        final int insert = this.baseMapper.insert(userInfo);
+        int insert = this.baseMapper.insert(userInfo);
+        return insert > 0 ? Result.success() : Result.error();
+    }
 
-        return insert>0?Result.success():Result.error();
+    @Override
+    public Result queryInfo(Long userId) {
+        final QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
+        return Result.success(userInfo);
     }
 }
 
