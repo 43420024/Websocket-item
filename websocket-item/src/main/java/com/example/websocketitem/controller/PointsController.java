@@ -6,6 +6,7 @@ import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,10 @@ public class PointsController<T> {
     @DeleteMapping("/{id}")
     public Result<T> deletePoints(@PathVariable Long id) {
         return pointsService.deleteByPrimaryKey(id);
+    }
+    @PutMapping("/addPoints")
+    public Result<Object> addPoints(@RequestParam Long userId,@RequestParam Integer addPoints){
+        return pointsService.updateTotalPointsByUserId(userId,addPoints);
     }
 
 }

@@ -101,4 +101,16 @@
         <include refid="Base_Column_List"/>
         from tcd_points
     </select>
+    <select id="selectOneByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_points
+        where
+        user_id = #{userId,jdbcType=NUMERIC}
+    </select>
+    <update id="updateTotalPointsByUserId">
+        update tcd_points
+        set total_points = #{totalPoints,jdbcType=NUMERIC}
+        where user_id = #{userId,jdbcType=NUMERIC}
+    </update>
 </mapper>
