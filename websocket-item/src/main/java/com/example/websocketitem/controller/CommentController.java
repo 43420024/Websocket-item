@@ -7,7 +7,9 @@ import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class CommentController {
         return commentService.selectByParentCommentIdAndArticleIdIdAndCommentLevel(parentCommentId, articleId, commentLevel);
     }
     @PutMapping("/praise")
-    public Result<Comment> updatePraiseNumByCommentId(Long commentId, Integer praiseNum){
+    public Result<Comment> updatePraiseNumByCommentId(Long commentId,Integer praiseNum){
         return commentService.updatePraiseNumByCommentId(commentId, praiseNum);
     }
     @PostMapping

@@ -1,6 +1,6 @@
 package com.example.websocketitem.utils;
 
-import com.example.websocketitem.enums.ErrorFlagEnum;
+import com.example.websocketitem.enums.ResponseStatusEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,6 +76,12 @@ public class Result<T> {
     public static <T> Result<T> ok(String message, T data){
         return create(true,message,data);
     }
+    public static <T> Result<T> ok(ResponseStatusEnum responseStatusEnum, T data){
+        return create(responseStatusEnum.getFlag(), responseStatusEnum.getMessage(), data);
+    }
+    public static <T> Result<T> ok(ResponseStatusEnum errorFlagEnum){
+        return create(errorFlagEnum.getFlag(), errorFlagEnum.getMessage(),null);
+    }
     /**
      * 操作失败。
      * @param message 响应消息
@@ -86,22 +92,16 @@ public class Result<T> {
         return create(false,message,null);
     }
     /**
-     * 操作失败。
-     * @param message 响应消息
-     * @param data 响应数据
-     * @return flag 状态码
-     */
-    public static <T> Result<T> error(String message,T data){
-        return create(false,message,data);
-    }
-    /**
      * 参数校验捕获响应结果
-     * @param errorFlagEnum 错误标志枚举
+     * @param responseStatusEnum 错误标志枚举
      * @param data 响应数据
      * @return flag
      * @param <T> 泛型
      */
-    public static <T> Result<T> error(ErrorFlagEnum errorFlagEnum, T data){
-        return create(errorFlagEnum.getFlag(), errorFlagEnum.getMessage(), data);
+    public static <T> Result<T> error(ResponseStatusEnum responseStatusEnum, T data){
+        return create(responseStatusEnum.getFlag(), responseStatusEnum.getMessage(), data);
+    }
+    public static <T> Result<T> error(ResponseStatusEnum responseStatusEnum){
+        return create(responseStatusEnum.getFlag(), responseStatusEnum.getMessage(),null);
     }
 }

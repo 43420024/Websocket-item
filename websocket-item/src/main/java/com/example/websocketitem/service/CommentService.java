@@ -4,9 +4,12 @@ import cn.hutool.core.lang.tree.Tree;
 import com.example.websocketitem.model.Comment;
 import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-
+@Validated
 public interface CommentService {
     Result<Comment> deleteByPrimaryKey(Long id);
 
@@ -19,7 +22,7 @@ public interface CommentService {
 
     Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Long parentCommentId, Long articleId, Integer commentLevel);
 
-    Result<Comment> updatePraiseNumByCommentId(Long commentId, Integer praiseNum);
+    Result<Comment> updatePraiseNumByCommentId(Long commentId,@Min(value = 0,message = "点赞量不能为负数") Integer praiseNum);
 
     Result<PageInfo<Comment>> selectAllByUserId(Long userId, Integer pageNum, Integer pageSize);
 
