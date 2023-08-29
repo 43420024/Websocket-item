@@ -3,6 +3,8 @@ package com.example.websocketitem.service.impl;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.example.websocketitem.enums.ResponseStatusEnum;
 import com.example.websocketitem.mapper.CommentMapper;
 import com.example.websocketitem.model.Comment;
 import com.example.websocketitem.service.CommentService;
@@ -15,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,9 +28,9 @@ public class CommentServiceImpl implements CommentService {
     public Result<Comment> deleteByPrimaryKey(Long id) {
         int deleteByPrimaryKey = commentMapper.deleteByPrimaryKey(id);
         if(deleteByPrimaryKey>0){
-            return Result.ok("删除成功");
+            return Result.ok(ResponseStatusEnum.DELETE_SUCCESS);
         }
-        return Result.error("删除失败");
+        return Result.error(ResponseStatusEnum.DELETE_FAILURE);
     }
 
     @Override
@@ -37,13 +38,25 @@ public class CommentServiceImpl implements CommentService {
         record.setCreateTime(LocalDateTime.now());
         int insert = commentMapper.insert(record);
         if(insert>0){
-            return Result.ok("添加成功");
+            return Result.ok(ResponseStatusEnum.ADD_SUCCESS);
         }
-        return Result.error("添加失败");
+        return Result.error(ResponseStatusEnum.ADD_FAILURE);
     }
 
     @Override
     public Result<Comment> insertSelective(Comment record) {
+        if(!ObjectUtil.contains(commentMapper.selectAllUserId(),record.getUserId())){
+            return Result.error(ResponseStatusEnum.USER_NOT_EXIST);
+        }
+        if (ObjectUtil.equals(0,record.getArticleType())|| ObjectUtil.isNull(record.getArticleType())){
+            if (!ObjectUtil.contains(commentMapper.selectAllTrendsId(),record.getArticleId())){
+                return Result.error(ResponseStatusEnum.ARTICLE_NOT_EXIST);
+            }
+        }else if(ObjectUtil.equals(1,record.getArticleType())){
+            if(!ObjectUtil.contains(commentMapper.selectAllPhotoAlbumId(),record.getArticleId())){
+                return Result.error(ResponseStatusEnum.ARTICLE_NOT_EXIST);
+            }
+        }
         record.setCommentContent(SensitivewordUtil.replaceSensitiveWord(record.getCommentContent(), 1, "*"));
         if(SensitivewordUtil.illegal>0){ // 包含非法内容则设置为1（非法）
             record.setIllegal(1);
@@ -51,9 +64,9 @@ public class CommentServiceImpl implements CommentService {
         record.setCreateTime(LocalDateTime.now());
         int insertSelective = commentMapper.insertSelective(record);
         if (insertSelective> 0) {
-            return Result.ok("添加成功",record);
+            return Result.ok(ResponseStatusEnum.ADD_SUCCESS,record);
         }
-        return Result.error("添加失败");
+        return Result.error(ResponseStatusEnum.ADD_FAILURE);
     }
 
     @Override
@@ -61,37 +74,40 @@ public class CommentServiceImpl implements CommentService {
         PageHelper.startPage(pageNum,pageSize);
         List<Comment> commentList = commentMapper.selectAll();
         PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
-        return Result.ok("查询成功",pageInfo);
+        return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,pageInfo);
     }
 
     @Override
     public Result<List<Comment>> selectByArticleIdIdAndCommentLevel(Long articleId, Integer commentLevel) {
         List<Comment> commentList = this.commentMapper.selectByArticleIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(articleId, commentLevel);
-        return Result.ok("查询成功",commentList);
+        return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,commentList);
     }
 
 
     @Override
     public Result<List<Comment>> selectByParentCommentIdAndArticleIdIdAndCommentLevel(Long parentCommentId, Long articleId, Integer commentLevel) {
         List<Comment> commentList = this.commentMapper.selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc(parentCommentId, articleId, commentLevel);
-        return Result.ok("查询成功",commentList);
+        return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,commentList);
     }
 
     @Override
     public Result<Comment> updatePraiseNumByCommentId(Long commentId, Integer praiseNum) {
         int updatePraiseNumByCommentId = commentMapper.updatePraiseNumByCommentId(praiseNum,commentId);
         if(updatePraiseNumByCommentId>0){
-            return Result.ok("点赞成功");
+            return Result.ok(ResponseStatusEnum.PRAISE_SUCCESS);
         }
-        return Result.error("点赞失败");
+        return Result.error(ResponseStatusEnum.PRAISE_FAILURE);
     }
 
     @Override
     public Result<PageInfo<Comment>> selectAllByUserId(Long userId, Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<Comment> commentList = commentMapper.selectAllByUserId(userId);
-        PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
-        return Result.ok("查询成功",pageInfo);
+        if (ObjectUtil.contains(commentMapper.selectAllUserId(),userId)){
+            PageHelper.startPage(pageNum,pageSize);
+            List<Comment> commentList = commentMapper.selectAllByUserId(userId);
+            PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
+            return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,pageInfo);
+        }
+        return Result.error(ResponseStatusEnum.USER_NOT_EXIST);
     }
 
     @Override
@@ -118,7 +134,7 @@ public class CommentServiceImpl implements CommentService {
                     tree.putExtra("commentLeave", treeNode.getCommentLevel());
                     tree.putExtra("createTime", treeNode.getCreateTime());
                 });
-        return Result.ok("查询成功",treeList);
+        return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,treeList);
     }
 
     @Override
@@ -126,6 +142,7 @@ public class CommentServiceImpl implements CommentService {
         PageHelper.startPage(pageNum,pageSize);
         List<Comment> commentList = this.commentMapper.selectByCreateTimeOneWeek();
         PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
-        return Result.ok("查询成功",pageInfo);
+        return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,pageInfo);
     }
+
 }

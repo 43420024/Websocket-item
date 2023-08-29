@@ -7,7 +7,9 @@ import com.example.websocketitem.utils.Result;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class CommentController {
         return commentService.selectByParentCommentIdAndArticleIdIdAndCommentLevel(parentCommentId, articleId, commentLevel);
     }
     @PutMapping("/praise")
-    public Result<Comment> updatePraiseNumByCommentId(Long commentId, Integer praiseNum){
+    public Result<Comment> updatePraiseNumByCommentId(Long commentId,Integer praiseNum){
         return commentService.updatePraiseNumByCommentId(commentId, praiseNum);
     }
     @PostMapping
@@ -44,8 +46,9 @@ public class CommentController {
         return commentService.deleteByPrimaryKey(id);
     }
     @GetMapping("/userId")
-    public Result<PageInfo<Comment>> getCommentByUserId(@RequestParam Long userId, @RequestParam(defaultValue = "1") int pageNum,
-                                           @RequestParam(defaultValue = "10") int pageSize){
+    public Result<PageInfo<Comment>> getCommentByUserId(@RequestParam Long userId,
+                                                        @RequestParam(defaultValue = "1") int pageNum,
+                                                        @RequestParam(defaultValue = "10") int pageSize){
         return commentService.selectAllByUserId(userId,pageNum,pageSize);
     }
     @GetMapping("/tree")
