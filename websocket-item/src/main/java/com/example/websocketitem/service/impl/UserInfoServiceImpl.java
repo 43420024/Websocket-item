@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -40,6 +41,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
         userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
         int insert = this.baseMapper.insert(userInfo);
+        if(insert>0){
+            Points points = new Points();
+            points.setUserId(userInfo.getUserId());
+            points.setCreateTime(LocalDateTime.now());
+            pointsMapper.insert(points);
+        }
         return insert > 0 ? Result.success() : Result.error();
     }
 

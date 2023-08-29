@@ -46,8 +46,9 @@ public class CommentController {
         return commentService.deleteByPrimaryKey(id);
     }
     @GetMapping("/userId")
-    public Result<PageInfo<Comment>> getCommentByUserId(@RequestParam Long userId, @RequestParam(defaultValue = "1") int pageNum,
-                                           @RequestParam(defaultValue = "10") int pageSize){
+    public Result<PageInfo<Comment>> getCommentByUserId(@RequestParam Long userId,
+                                                        @RequestParam(defaultValue = "1") int pageNum,
+                                                        @RequestParam(defaultValue = "10") int pageSize){
         return commentService.selectAllByUserId(userId,pageNum,pageSize);
     }
     @GetMapping("/tree")

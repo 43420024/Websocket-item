@@ -34,7 +34,7 @@ public class AopLog {
         Object[] array=pjp.getArgs();
         ObjectMapper mapper=new ObjectMapper();
 
-        logger.info("调用前：{}：{}，传递的参数为：{}",className,methodName,mapper.writeValueAsString(array));
+//        logger.info("调用前：{}：{}，传递的参数为：{}",className,methodName,mapper.writeValueAsString(array));
         logger.info("URL:{}",request.getRequestURL().toString());
         logger.info("IP地址:{}",request.getRemoteAddr());
 

@@ -29,4 +29,5 @@ public interface CommentService {
     Result<List<Tree<Long>>> listCommentAll();
 
     Result<PageInfo<Comment>> selectByCreateTimeOneWeek(Integer pageNum, Integer pageSize);
+
 }
