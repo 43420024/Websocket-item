@@ -74,6 +74,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
        return  bool?Result.success("修改成功！"):Result.error("修改失败！");
 
     }
+
+//    @Override
+//    public Result queryInfo(Long userId) {
+//
+//        User user = this.baseMapper.selectById(userId);
+//        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("user_id", userId);
+//        UserInfo userInfo = this.userInfoService.getOne(queryWrapper);
+//        user.setUserInfo(userInfo);
+//        return Result.success(userInfo);
+//    }
 }
 
 

@@ -58,6 +58,7 @@ public class UserController {
         return userInfoService.queryInfo(userId);
     }
 
+
     @Transactional
     @PutMapping("/update")
     public Result update(@RequestBody Data data){

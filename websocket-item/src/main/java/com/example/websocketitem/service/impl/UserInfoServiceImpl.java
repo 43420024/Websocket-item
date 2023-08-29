@@ -5,14 +5,22 @@ import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.websocketitem.mapper.PointsMapper;
+import com.example.websocketitem.model.Album;
 import com.example.websocketitem.domain.UserInfo;
+import com.example.websocketitem.model.Points;
+import com.example.websocketitem.service.AlbumService;
+import com.example.websocketitem.service.PointsService;
 import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.utils.Result;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author cd
@@ -23,7 +31,10 @@ import org.springframework.stereotype.Service;
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
 
-
+    @Resource
+    private AlbumService albumService;
+    @Resource
+    private PointsMapper pointsMapper;
     @Override
     public Result add(UserInfo userInfo) {
 
@@ -34,9 +45,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public Result queryInfo(Long userId) {
-        final QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        //用户基本信息
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
         UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
+        //相册
+         QueryWrapper<Album> wrapper = new QueryWrapper<>();
+         wrapper.eq("user_id",userId);
+         List<Album> list = albumService.list(wrapper);
+        userInfo.setAlbums(list);
+         //积分
+         Points points = pointsMapper.selectOneByUserId(userId);
+         userInfo.setPoints(points);
         return Result.success(userInfo);
     }
 }
