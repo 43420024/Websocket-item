@@ -1,5 +1,6 @@
 package com.example.websocketitem.model;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -115,7 +116,7 @@ public class UserInfo implements Serializable {
     //用于接收数组，在数据表中并不存在
     @TableField(exist = false)
     @JsonProperty(value ="labelsArray")
-    private String[] labelsArray;
+    private JSONArray labelsArray;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

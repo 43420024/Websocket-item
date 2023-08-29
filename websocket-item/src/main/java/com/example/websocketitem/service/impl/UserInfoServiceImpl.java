@@ -2,7 +2,6 @@ package com.example.websocketitem.service.impl;
 
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,6 +17,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,17 +33,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     private AlbumService albumService;
     @Resource
     private PointsMapper pointsMapper;
+
     @Override
     public Result add(UserInfo userInfo) {
-
+        //数组转string
         userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
+        userInfo.setCreateTime(new Date());
         int insert = this.baseMapper.insert(userInfo);
-        if(insert>0){
-            if(ObjectUtil.equals(1,userInfo.getGender())){
+        if (insert > 0) {
+            if (ObjectUtil.equals(1, userInfo.getGender())) {
                 Points points = new Points();
                 points.setUserId(userInfo.getUserId());
                 points.setCreateTime(LocalDateTime.now());
-                pointsMapper.insert(points);
+                pointsMapper.insertSelective(points);
             }
         }
         return insert > 0 ? Result.success() : Result.error();
@@ -55,14 +57,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
         UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
+        //string转json数组
+        userInfo.setLabelsArray(JSON.parseArray(userInfo.getLabels()));
         //相册
-         QueryWrapper<Album> wrapper = new QueryWrapper<>();
-         wrapper.eq("user_id",userId);
-         List<Album> list = albumService.list(wrapper);
+        QueryWrapper<Album> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
+        List<Album> list = albumService.list(wrapper);
         userInfo.setAlbums(list);
-         //积分
-         Points points = pointsMapper.selectOneByUserId(userId);
-         userInfo.setPoints(points);
+        //积分
+        Points points = pointsMapper.selectOneByUserId(userId);
+        userInfo.setPoints(points);
         return Result.success(userInfo);
     }
 }
