@@ -14,12 +14,11 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -147,6 +146,10 @@ public class WebSocketServer {
 
         BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("dd"+userId);
         userTest.rightPush(messages);
+        final List<Object> range = userTest.range(0, userTest.size());
+        for (Object o : range) {
+            System.out.println(o);
+        }
         // 插入一条string数据类型
 //        stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
 //        // 读取一条string数据类型
