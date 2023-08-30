@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.websocketitem.mapper.AdministratorsMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Administrators">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="manageAccounts" column="manage_accounts" jdbcType="BIGINT"/>
+            <result property="passwords" column="passwords" jdbcType="VARCHAR"/>
+            <result property="limitation" column="limitation" jdbcType="INTEGER"/>
+            <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,manage_accounts,passwords,
+        limitation,login_time
+    </sql>
+</mapper>
