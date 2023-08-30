@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.example.websocketitem.model.Message;
 import com.example.websocketitem.service.MasterSlaveService;
 import com.example.websocketitem.utils.ApplicationContextRegister;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,9 +14,11 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,10 +30,17 @@ public class WebSocketServer {
      * 记录当前在线连接数
      */
     public static final Map<String, Session> sessionMap = new ConcurrentHashMap<>();
-    private static StringRedisTemplate stringRedisTemplate;
+//    private static StringRedisTemplate stringRedisTemplate;
+//    @Autowired
+//    public void setStringRedisTemplate(StringRedisTemplate template) {
+//        WebSocketServer.stringRedisTemplate = template;
+//    }
+
+
+    private static RedisTemplate<Object,Object> redisTemplate;
     @Autowired
-    public void setStringRedisTemplate(StringRedisTemplate template) {
-        WebSocketServer.stringRedisTemplate = template;
+    public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
+        WebSocketServer.redisTemplate = redisTemplate;
     }
 
 
@@ -74,6 +84,8 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("username") String username) throws JsonProcessingException {
+         Message messages = new Message();
+         Long from = Long.valueOf(username);
         username = StrUtil.trim(username);
         log.info("服务端收到用户username={}的消息:{}", username, message);
         JSONObject obj = JSONUtil.parseObj(message);
@@ -92,6 +104,11 @@ public class WebSocketServer {
             String parentToUsername = parentId.toString();
             Session parentToSession = sessionMap.get(parentToUsername);
             sendOneMessage(username,parentToSession,text,image,video,emo,audio,parentToUsername);
+
+            messages.setSender(parentId);
+            messages.setRole(2);
+        }else {
+            messages.setRole(1);
         }
         if(ObjectUtil.isNotEmpty(fromUsername)){ // 当from字段不为空时（主号id通过from字段直接指定是哪个虚拟账号（10个账号中的）发给用户的），
             Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
@@ -103,17 +120,48 @@ public class WebSocketServer {
         }
         // TODO 聊天数据持久化存储
         obj.set("from", username);
+        messages.setTo(userId);
+        messages.setFrom(from);
+        messages.setCreateTime(new Date());
+        if (ObjectUtil.isNotEmpty(text)) {
+            messages.setMessage(text);
+             messages.setType(1);
+        }
+        if (ObjectUtil.isNotEmpty(image)){
+            messages.setMessage(image);
+            messages.setType(2);
+        }
+        if (ObjectUtil.isNotEmpty(video)){
+            messages.setMessage(video);
+            messages.setType(3);
+        }
+        if (ObjectUtil.isNotEmpty(emo)){
+            messages.setMessage(emo);
+            messages.setType(4);
+        }
+        if (ObjectUtil.isNotEmpty(audio)){
+            messages.setMessage(audio);
+            messages.setType(5);
+        }
+
+        BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("dd"+userId);
+        userTest.rightPush(messages);
+        final List<Object> range = userTest.range(0, userTest.size());
+        for (Object o : range) {
+            System.out.println(o);
+        }
         // 插入一条string数据类型
-        stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
-        // 读取一条string数据类型
-        Object name = stringRedisTemplate.opsForList().range("chat", 0, -1);
-        log.info("存入redis消息 {}",name);
+//        stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
+//        // 读取一条string数据类型
+//        Object name = stringRedisTemplate.opsForList().range("chat", 0, -1);
+//        log.info("存入redis消息 {}",name);
     }
 
     private void sendOneMessage(String username, Session toSession, String text, String image, String video, String emo, String audio, String toUsername) {
         if (toSession != null) {
             // 服务器端 再把消息组装一下，组装后的消息包含发送人和发送的文本内容
             // {"from": "zhang", "text": "hello"}
+
             JSONObject jsonObject = new JSONObject();
             jsonObject.set("from", username);  // from 是 zhang
             // 判断消息类型并组装好后转发给别人
