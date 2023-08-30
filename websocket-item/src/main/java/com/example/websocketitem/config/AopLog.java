@@ -27,6 +27,7 @@ public class AopLog {
         startTime.set(System.currentTimeMillis());
         ServletRequestAttributes attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert attributes != null;
+
         HttpServletRequest request=attributes.getRequest();
         String className=pjp.getSignature().getDeclaringTypeName();
         String methodName=pjp.getSignature().getName();
