@@ -107,7 +107,7 @@ public class WebSocketServer {
         stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
         // 读取一条string数据类型
         Object name = stringRedisTemplate.opsForList().range("chat", 0, -1);
-        log.info("存入redis消息 {}"+name);
+        log.info("存入redis消息 {}",name);
     }
 
     private void sendOneMessage(String username, Session toSession, String text, String image, String video, String emo, String audio, String toUsername) {
