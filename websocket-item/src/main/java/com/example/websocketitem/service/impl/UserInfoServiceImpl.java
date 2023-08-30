@@ -5,11 +5,15 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.websocketitem.factory.EntityFactory;
 import com.example.websocketitem.mapper.PointsMapper;
 import com.example.websocketitem.model.Album;
 import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.model.Points;
+import com.example.websocketitem.model.Relationship;
 import com.example.websocketitem.service.AlbumService;
+import com.example.websocketitem.service.PointsService;
+import com.example.websocketitem.service.RelationshipService;
 import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.utils.Result;
@@ -33,6 +37,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     private AlbumService albumService;
     @Resource
     private PointsMapper pointsMapper;
+    @Resource
+    RelationshipService relationshipService;
+
+    Relationship relationship = EntityFactory.createRelationship();
 
     @Override
     public Result add(UserInfo userInfo) {
@@ -48,6 +56,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
                 pointsMapper.insertSelective(points);
             }
         }
+        relationship.setOwnerId(userInfo.getInfoId());
+        relationship.setFriendId(1L);
+        relationshipService.addRelationship(relationship);
         return insert > 0 ? Result.success() : Result.error();
     }
 
