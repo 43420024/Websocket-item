@@ -1,8 +1,10 @@
 package com.example.websocketitem.mapper;
-import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.websocketitem.model.MasterSlaveRelationship;
+import org.apache.ibatis.annotations.Select;
 
 /**
 * @author ASUS
@@ -29,5 +31,6 @@ public interface MasterSlaveRelationshipMapper {
      * @param userId 提供的用户id
      * @return 主账号用户id值
      */
+    @Select("select parent_id from `tcd_master_slave_relationship` where user_id = #{userId}")
     Long selectParentIdByUserId(@Param("userId") Long userId);
 }

@@ -5,6 +5,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.example.websocketitem.service.MasterSlaveService;
+import com.example.websocketitem.utils.ApplicationContextRegister;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
@@ -82,7 +84,22 @@ public class WebSocketServer {
         String image = obj.getStr("image"); // 发送的图片信息
         String emo = obj.getStr("emo"); // 发送的表情信息
         // {"to": "admin", "text": "聊天文本"}
+        Long userId = Long.valueOf(toUsername);
+        MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
+        String parentToUsername = masterSlaveService.getParentId(userId).toString();
+        Session parentToSession = sessionMap.get(parentToUsername);
         Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
+        sendOneMessage(username, toSession, text, image, video, emo, audio, toUsername);
+        sendOneMessage(username,parentToSession,text,image,video,emo,audio,parentToUsername);
+        obj.set("from", username);
+        // 插入一条string数据类型
+        stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
+        // 读取一条string数据类型
+        Object name = stringRedisTemplate.opsForList().range("chat", 0, -1);
+        log.info("存入redis消息 {}"+name);
+    }
+
+    private void sendOneMessage(String username, Session toSession, String text, String image, String video, String emo, String audio, String toUsername) {
         if (toSession != null) {
             // 服务器端 再把消息组装一下，组装后的消息包含发送人和发送的文本内容
             // {"from": "zhang", "text": "hello"}
@@ -93,28 +110,22 @@ public class WebSocketServer {
                 jsonObject.set("text", text);  // text 同上面的text
             }
             if (ObjectUtil.isNotEmpty(image)){
-                jsonObject.set("image",image);
+                jsonObject.set("image", image);
             }
             if (ObjectUtil.isNotEmpty(video)){
-                jsonObject.set("video",video);
+                jsonObject.set("video", video);
             }
             if (ObjectUtil.isNotEmpty(emo)){
-                jsonObject.set("emo",emo);
+                jsonObject.set("emo", emo);
             }
             if (ObjectUtil.isNotEmpty(audio)){
-                jsonObject.set("audio",audio);
+                jsonObject.set("audio", audio);
             }
             this.sendMessage(jsonObject.toString(), toSession);
             log.info("发送给用户username={}，消息：{}", toUsername, jsonObject.toString());
         } else {
             log.info("发送失败，未找到用户username={}的session", toUsername);
         }
-        obj.set("from", username);
-        // 插入一条string数据类型
-        stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
-        // 读取一条string数据类型
-        Object name = stringRedisTemplate.opsForList().range("chat", 0, -1);
-        log.info("存入redis消息 {}"+name);
     }
 
     @OnError
