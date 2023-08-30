@@ -12,10 +12,11 @@
             <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,phone_number,chat_login,
-        password,nickname,create_time,status
+        password,nickname,create_time,status,parent_id
     </sql>
 </mapper>
