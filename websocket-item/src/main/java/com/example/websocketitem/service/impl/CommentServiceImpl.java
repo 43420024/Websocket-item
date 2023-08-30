@@ -101,10 +101,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Result<PageInfo<Comment>> selectAllByUserId(Long userId, Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<Comment> commentList = commentMapper.selectAllByUserId(userId);
-        PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
-        return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,pageInfo);
+        if (ObjectUtil.contains(commentMapper.selectAllUserId(),userId)){
+            PageHelper.startPage(pageNum,pageSize);
+            List<Comment> commentList = commentMapper.selectAllByUserId(userId);
+            PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
+            return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,pageInfo);
+        }
+        return Result.error(ResponseStatusEnum.USER_NOT_EXIST);
     }
 
     @Override
@@ -141,4 +144,5 @@ public class CommentServiceImpl implements CommentService {
         PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
         return Result.ok(ResponseStatusEnum.QUERY_SUCCESS,pageInfo);
     }
+
 }

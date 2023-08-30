@@ -1,4 +1,4 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

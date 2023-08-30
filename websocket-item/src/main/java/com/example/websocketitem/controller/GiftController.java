@@ -1,7 +1,7 @@
 package com.example.websocketitem.controller;
 
-import com.example.websocketitem.domain.Gift;
-import com.example.websocketitem.domain.GiftType;
+import com.example.websocketitem.model.Gift;
+import com.example.websocketitem.model.GiftType;
 import com.example.websocketitem.service.GiftService;
 import com.example.websocketitem.service.GiftTypeService;
 import com.example.websocketitem.utils.Result;

@@ -1,7 +1,7 @@
 package com.example.websocketitem.service;
 
-import com.example.websocketitem.domain.Data;
-import com.example.websocketitem.domain.User;
+import com.example.websocketitem.model.Data;
+import com.example.websocketitem.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.websocketitem.utils.Result;
 

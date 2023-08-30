@@ -1,8 +1,8 @@
 package com.example.websocketitem.controller;
 
-import com.example.websocketitem.domain.Data;
-import com.example.websocketitem.domain.User;
-import com.example.websocketitem.domain.UserInfo;
+import com.example.websocketitem.model.Data;
+import com.example.websocketitem.model.User;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.service.UserService;
 import com.example.websocketitem.utils.Result;

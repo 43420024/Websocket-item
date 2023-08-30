@@ -3,8 +3,8 @@ package com.example.websocketitem.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.websocketitem.domain.Gift;
-import com.example.websocketitem.domain.GiftType;
+import com.example.websocketitem.model.Gift;
+import com.example.websocketitem.model.GiftType;
 import com.example.websocketitem.service.GiftService;
 import com.example.websocketitem.mapper.GiftMapper;
 import com.example.websocketitem.service.GiftTypeService;
@@ -12,7 +12,6 @@ import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
