@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.websocketitem.mapper.MessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Message">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="role" column="role" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="from" column="from" jdbcType="BIGINT"/>
+            <result property="to" column="to" jdbcType="BIGINT"/>
+            <result property="sender" column="sender" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,role,type,
+        message,from,to,
+        sender,create_time
+    </sql>
+</mapper>
