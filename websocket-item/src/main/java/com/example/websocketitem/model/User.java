@@ -60,11 +60,6 @@ public class User implements Serializable {
     @TableField(value = "status")
     private Integer status;
 
-    /**
-     * 该账号的父账号
-     */
-    @TableField(value = "parent_id")
-    private Long parentId;
 
     @TableField(exist = false)
     private UserInfo userInfo;
