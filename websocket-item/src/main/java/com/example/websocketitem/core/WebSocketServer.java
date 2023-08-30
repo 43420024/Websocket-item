@@ -83,14 +83,25 @@ public class WebSocketServer {
         String audio = obj.getStr("audio"); // 发送的音频信息
         String image = obj.getStr("image"); // 发送的图片信息
         String emo = obj.getStr("emo"); // 发送的表情信息
+        String fromUsername = obj.getStr("from"); // from表示消息来自哪。
         // {"to": "admin", "text": "聊天文本"}
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
-        String parentToUsername = masterSlaveService.getParentId(userId).toString();
-        Session parentToSession = sessionMap.get(parentToUsername);
-        Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
-        sendOneMessage(username, toSession, text, image, video, emo, audio, toUsername);
-        sendOneMessage(username,parentToSession,text,image,video,emo,audio,parentToUsername);
+        Long parentId = masterSlaveService.getParentId(userId);
+        if(ObjectUtil.isNotNull(parentId)){ // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
+            String parentToUsername = parentId.toString();
+            Session parentToSession = sessionMap.get(parentToUsername);
+            sendOneMessage(username,parentToSession,text,image,video,emo,audio,parentToUsername);
+        }
+        if(ObjectUtil.isNotEmpty(fromUsername)){ // 当from字段不为空时（主号id通过from字段直接指定是哪个虚拟账号（10个账号中的）发给用户的），
+            Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
+            sendOneMessage(fromUsername, toSession, text, image, video, emo, audio, toUsername);
+        }else {
+            // 当发的from为空，即为一般的用户发送的消息传给服务器，服务器再转发给虚拟10个账号中具体的账号
+            Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
+            sendOneMessage(username, toSession, text, image, video, emo, audio, toUsername);
+        }
+        // TODO 聊天数据持久化存储
         obj.set("from", username);
         // 插入一条string数据类型
         stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
