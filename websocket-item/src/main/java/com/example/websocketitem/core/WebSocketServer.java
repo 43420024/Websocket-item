@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-@ServerEndpoint(value = "/imserver/{username}")
+@ServerEndpoint(value = "/chongdong/{username}")
 @Component
 public class WebSocketServer {
     /**
