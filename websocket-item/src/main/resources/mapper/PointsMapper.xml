@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.websocketitem.mapper.PointsMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Points">
+            <id property="pointsId" column="points_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="totalPoints" column="total_points" jdbcType="INTEGER"/>
+            <result property="currentLevel" column="current_level" jdbcType="VARCHAR"/>
+            <result property="discountRate" column="discount_rate" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="lastLevelUpdateDate" column="last_level_update_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        points_id,user_id,total_points,
+        current_level,discount_rate,create_time,
+        last_level_update_date
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tcd_points
+        where  points_id = #{pointsId,jdbcType=BIGINT} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tcd_points
+        where  points_id = #{pointsId,jdbcType=BIGINT} 
+    </delete>
+    <insert id="insert" keyColumn="points_id" keyProperty="pointsId" parameterType="com.example.websocketitem.model.Points" useGeneratedKeys="true">
+        insert into tcd_points
+        ( points_id,user_id,total_points
+        ,current_level,discount_rate,create_time
+        ,last_level_update_date)
+        values (#{pointsId,jdbcType=BIGINT},#{userId,jdbcType=BIGINT},#{totalPoints,jdbcType=INTEGER}
+        ,#{currentLevel,jdbcType=VARCHAR},#{discountRate,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}
+        ,#{lastLevelUpdateDate,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="points_id" keyProperty="pointsId" parameterType="com.example.websocketitem.model.Points" useGeneratedKeys="true">
+        insert into tcd_points
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="pointsId != null">points_id,</if>
+                <if test="userId != null">user_id,</if>
+                <if test="totalPoints != null">total_points,</if>
+                <if test="currentLevel != null">current_level,</if>
+                <if test="discountRate != null">discount_rate,</if>
+                <if test="createTime != null">create_time,</if>
+                <if test="lastLevelUpdateDate != null">last_level_update_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="pointsId != null">#{pointsId,jdbcType=BIGINT},</if>
+                <if test="userId != null">#{userId,jdbcType=BIGINT},</if>
+                <if test="totalPoints != null">#{totalPoints,jdbcType=INTEGER},</if>
+                <if test="currentLevel != null">#{currentLevel,jdbcType=VARCHAR},</if>
+                <if test="discountRate != null">#{discountRate,jdbcType=INTEGER},</if>
+                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+                <if test="lastLevelUpdateDate != null">#{lastLevelUpdateDate,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.websocketitem.model.Points">
+        update tcd_points
+        <set>
+                <if test="userId != null">
+                    user_id = #{userId,jdbcType=BIGINT},
+                </if>
+                <if test="totalPoints != null">
+                    total_points = #{totalPoints,jdbcType=INTEGER},
+                </if>
+                <if test="currentLevel != null">
+                    current_level = #{currentLevel,jdbcType=VARCHAR},
+                </if>
+                <if test="discountRate != null">
+                    discount_rate = #{discountRate,jdbcType=INTEGER},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="lastLevelUpdateDate != null">
+                    last_level_update_date = #{lastLevelUpdateDate,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   points_id = #{pointsId,jdbcType=BIGINT} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.websocketitem.model.Points">
+        update tcd_points
+        set 
+            user_id =  #{userId,jdbcType=BIGINT},
+            total_points =  #{totalPoints,jdbcType=INTEGER},
+            current_level =  #{currentLevel,jdbcType=VARCHAR},
+            discount_rate =  #{discountRate,jdbcType=INTEGER},
+            create_time =  #{createTime,jdbcType=TIMESTAMP},
+            last_level_update_date =  #{lastLevelUpdateDate,jdbcType=TIMESTAMP}
+        where   points_id = #{pointsId,jdbcType=BIGINT} 
+    </update>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_points
+    </select>
+    <select id="selectOneByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tcd_points
+        where
+        user_id = #{userId,jdbcType=NUMERIC}
+    </select>
+    <update id="updateTotalPointsByUserId">
+        update tcd_points
+        set total_points = #{totalPoints,jdbcType=NUMERIC}
+        where user_id = #{userId,jdbcType=NUMERIC}
+    </update>
+</mapper>

@@ -2,14 +2,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://192.168.0.177:3306/websocket_item?useUnicode=true&characterEncoding=utf-8&useSSL=true
-#    username: root
-#    password: cd@123.com
-#    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql:///websocket_item?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://192.168.0.177:3306/websocket_item?useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
-    password: root
-
+    password: cd@123.com
+    type: com.alibaba.druid.pool.DruidDataSource
 # mybatis默认配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml

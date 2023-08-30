@@ -1,13 +1,16 @@
 package com.example.websocketitem.mapper;
-import java.util.List;
+import java.time.LocalDateTime;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.websocketitem.model.Comment;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author ASUS
 * @description 针对表【tcd_comment(评论表)】的数据库操作Mapper
-* @createDate 2023-08-23 16:41:45
+* @createDate 2023-08-26 15:23:03
 * @Entity com.example.websocketitem.model.Comment
 */
 public interface CommentMapper {
@@ -20,10 +23,25 @@ public interface CommentMapper {
 
     Comment selectByPrimaryKey(Long id);
 
+    int updateByPrimaryKeySelective(Comment record);
+
+    int updateByPrimaryKey(Comment record);
+
     List<Comment> selectAll();
-    List<Comment> selectByTrendsIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(@Param("trendsId") Integer trendsId, @Param("commentLevel") Integer commentLevel);
 
-    List<Comment> selectByParentCommentIdAndTrendsIdAndCommentLevelOrderByCreateTimeDesc(@Param("parentCommentId") Integer parentCommentId, @Param("trendsId") Integer trendsId, @Param("commentLevel") Integer commentLevel);
+    List<Comment> selectByArticleIdAndCommentLevelOrderByTopStatusDescAndCreateTimeDesc(@Param("articleId") Long articleId, @Param("commentLevel") Integer commentLevel);
 
-    int updatePraiseNumByCommentId(@Param("commentId") Integer commentId, @Param("praiseNum") Integer praiseNum);
+    List<Comment> selectByParentCommentIdAndArticleIdAndCommentLevelOrderByCreateTimeDesc(@Param("parentCommentId") Long parentCommentId, @Param("articleId") Long articleId, @Param("commentLevel") Integer commentLevel);
+
+    int updatePraiseNumByCommentId(@Param("praiseNum") Integer praiseNum, @Param("commentId") Long commentId);
+
+    List<Comment> selectAllByUserId(@Param("userId") Long userId);
+
+    List<Comment> selectByCreateTimeOneWeek();
+    @Select("SELECT id FROM `tcd_trends`")
+    List<Long> selectAllTrendsId();
+    @Select("SELECT id FROM `tcd_user`")
+    List<Long> selectAllUserId();
+    @Select("select id from `tcd_album`")
+    List<Long> selectAllPhotoAlbumId();
 }

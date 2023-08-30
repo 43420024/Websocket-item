@@ -27,6 +27,7 @@ public class AopLog {
         startTime.set(System.currentTimeMillis());
         ServletRequestAttributes attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert attributes != null;
+
         HttpServletRequest request=attributes.getRequest();
         String className=pjp.getSignature().getDeclaringTypeName();
         String methodName=pjp.getSignature().getName();
@@ -34,13 +35,13 @@ public class AopLog {
         Object[] array=pjp.getArgs();
         ObjectMapper mapper=new ObjectMapper();
 
-        logger.info("调用前：{}：{}，传递的参数为：{}",className,methodName,mapper.writeValueAsString(array));
+//        logger.info("调用前：{}：{}，传递的参数为：{}",className,methodName,mapper.writeValueAsString(array));
         logger.info("URL:{}",request.getRequestURL().toString());
         logger.info("IP地址:{}",request.getRemoteAddr());
 
         Object obj=pjp.proceed();
-
-        logger.info("调用后：{}：{}，返回值为：{}",className,methodName,mapper.writeValueAsString(obj));
+// 解决：Java 8 date/time type `java.time.LocalDateTime` not supported by default: add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable handling (through reference chain: com.example.websocketitem.utils.Result["data"]->com.github.pagehelper.PageInfo["list"]->com.github.pagehelper.Page[0]->com.example.websocketitem.model.Comment["createTime"])
+//        logger.info("调用后：{}：{}，返回值为：{}",className,methodName,mapper.writeValueAsString(obj));
         logger.info("耗时：{}ms",System.currentTimeMillis()- startTime.get());
         return obj;
 

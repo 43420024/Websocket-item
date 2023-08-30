@@ -1,11 +1,12 @@
 package com.example.websocketitem.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.Data;
 
 /**
@@ -17,8 +18,7 @@ public class Comment implements Serializable {
     /**
      * 评论id
      */
-    @Null(message = "djwodl")
-    private Integer commentId;
+    private Long commentId;
 
     /**
      * 评论内容
@@ -30,13 +30,18 @@ public class Comment implements Serializable {
      * 评论人id
      */
     @NotNull
-    private Integer userId;
+    private Long userId;
 
     /**
-     * 评论的文章（动态）id
+     * 在哪篇文章（动态）下评论的
      */
     @NotNull
-    private Integer trendsId;
+    private Long articleId;
+
+    /**
+     * 文章类型（0动态，1相册，2其他）
+     */
+    private Integer articleType;
 
     /**
      * 评论是否非法 1(非法)，0(合法)
@@ -46,22 +51,22 @@ public class Comment implements Serializable {
     /**
      * 父级评论id
      */
-    private Integer parentCommentId;
+    private Long parentCommentId;
 
     /**
      * 父级评论的user_id
      */
-    private Integer parentCommentUserId;
+    private Long parentCommentUserId;
 
     /**
      * 被回复的评论id
      */
-    private Integer replyCommentId;
+    private Long replyCommentId;
 
     /**
      * 被回复的评论的user_id
      */
-    private Integer replyCommentUserId;
+    private Long replyCommentUserId;
 
     /**
      * 评论等级[ 1 一级评论 默认 ，2 二级评论]
@@ -81,7 +86,8 @@ public class Comment implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
 
     private static final long serialVersionUID = 1L;
 }

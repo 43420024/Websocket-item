@@ -1,4 +1,4 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -44,7 +45,29 @@ public class Gift implements Serializable {
      * 礼物创建时间
      */
     @TableField(value = "create_time")
-    private LocalDateTime createTime;
+    private Date createTime;
+
+    /**
+     * 礼物类型
+     */
+    @TableField(value = "type_id")
+    private Integer typeId;
+
+    /**
+     * 礼物修改时间
+     */
+    @TableField(value = "update_time")
+    private Date updateTime;
+
+    /**
+     * 礼物状态1：上架 0：下架
+     */
+    @TableField(value = "status")
+    private Integer status;
+
+    @TableField(exist = false)
+    private GiftType giftType;
+
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

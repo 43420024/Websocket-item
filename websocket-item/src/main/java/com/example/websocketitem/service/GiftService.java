@@ -1,6 +1,6 @@
 package com.example.websocketitem.service;
 
-import com.example.websocketitem.domain.Gift;
+import com.example.websocketitem.model.Gift;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.websocketitem.utils.Result;
 
@@ -11,5 +11,13 @@ import com.example.websocketitem.utils.Result;
 */
 public interface GiftService extends IService<Gift> {
 
-    Result select(Integer pageNum, Integer pageSize);
+    Result select(Integer pageNum, Integer pageSize,Integer type,Integer status,String name);
+
+    Result addGift(Gift gift);
+
+    Result updateGift(Gift gift);
+
+    Result queryOne(Integer id);
+
+    Result updateStatus(Gift gift);
 }

@@ -1,7 +1,7 @@
 package com.example.websocketitem.controller;
 
 import com.example.websocketitem.factory.EntityFactory;
-import com.example.websocketitem.domain.AlbumPicture;
+import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.service.AlbumPictureService;
 import jakarta.annotation.Resource;
@@ -49,11 +49,15 @@ public class AlbumPictureController {
                 //建立新文件路径,在前端可以直接访问如http://localhost:8080/uploadFile/2021-07-16/新文件名(带后缀)
                 String filepath="/images/"+newname;
                 //写入返回参数
-
+                AlbumPicture albumPicture = EntityFactory.createAlbumPicture();
+                albumPicture.setAlbumId(albumId);
+                albumPicture.setPath(filepath);
+                albumPicture.setCreateTime(new Date());
+                ResponseMap responseMap = albumPictureService.addAlbumPicture(albumPicture);
                 map.put("oldname",oldname);
                 map.put("newname",newname);
                 map.put("filepath",filepath);
-                map.put("result", true ?"数据库写入成功":"数据库写入失败");
+                map.put("result", responseMap.getFlag() ?"图片上传成功,数据库写入成功":"图片上传成功,数据库写入失败");
             }catch (IOException ex){
                 //操作失败报错并写入返回参数
                 ex.printStackTrace();

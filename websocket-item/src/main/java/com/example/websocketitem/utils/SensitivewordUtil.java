@@ -18,6 +18,8 @@ public class SensitivewordUtil {
 	public static int minMatchTYpe = 1;      //最小匹配规则
 	public static int maxMatchType = 2;      //最大匹配规则
 
+	public static Integer illegal = 0; // 内容是否非法（0合法，1非法）
+
 	/**
 	 * 构造函数，初始化敏感词库
 	 */
@@ -60,6 +62,7 @@ public class SensitivewordUtil {
 			if(length > 0){    //存在,加入list中
 				sensitiveWordList.add(txt.substring(i, i+length));
 				i = i + length - 1;    //减1的原因，是因为for会自增
+				illegal = 1;
 			}
 		}
 
