@@ -1,6 +1,7 @@
 package com.example.websocketitem.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.websocketitem.model.Relationship;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -73,6 +74,19 @@ public class WrapperUtil<T> {
         wrapper.eq("reporter_id",reporterId);
         wrapper.eq("status",1);
         wrapper.groupBy("content_id");
+        return wrapper;
+    }
+
+    public QueryWrapper<T> getRelationship(Relationship relationship){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("owner_id",relationship.getOwnerId());
+        wrapper.eq("friend_id",relationship.getFriendId());
+        return wrapper;
+    }
+
+    public QueryWrapper<T> listRelationship(Long ownerId){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("owner_id",ownerId);
         return wrapper;
     }
 }
