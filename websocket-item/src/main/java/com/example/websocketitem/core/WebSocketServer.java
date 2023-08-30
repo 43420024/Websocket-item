@@ -158,6 +158,7 @@ public class WebSocketServer {
         if (toSession != null) {
             // 服务器端 再把消息组装一下，组装后的消息包含发送人和发送的文本内容
             // {"from": "zhang", "text": "hello"}
+
             JSONObject jsonObject = new JSONObject();
             jsonObject.set("from", username);  // from 是 zhang
             // 判断消息类型并组装好后转发给别人
