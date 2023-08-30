@@ -27,10 +27,10 @@ public class Message implements Serializable {
     private Integer id;
 
     /**
-     * 角色
+     * 角色1,普通用户，2：特殊用户
      */
     @TableField(value = "role")
-    private String role;
+    private Integer role;
 
     /**
      * 消息类型：文字，图片、语音、视频

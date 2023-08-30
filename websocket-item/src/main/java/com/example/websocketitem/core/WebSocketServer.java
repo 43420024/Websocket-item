@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.example.websocketitem.model.Message;
 import com.example.websocketitem.service.MasterSlaveService;
 import com.example.websocketitem.utils.ApplicationContextRegister;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,9 +14,11 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,10 +30,18 @@ public class WebSocketServer {
      * 记录当前在线连接数
      */
     public static final Map<String, Session> sessionMap = new ConcurrentHashMap<>();
-    private static StringRedisTemplate stringRedisTemplate;
+//    private static StringRedisTemplate stringRedisTemplate;
+//    @Autowired
+//    public void setStringRedisTemplate(StringRedisTemplate template) {
+//        WebSocketServer.stringRedisTemplate = template;
+//    }
+
+
+    private static RedisTemplate<Object, Object> redisTemplate;
+
     @Autowired
-    public void setStringRedisTemplate(StringRedisTemplate template) {
-        WebSocketServer.stringRedisTemplate = template;
+    public void setRedisTemplate(RedisTemplate<Object, Object> redisTemplate) {
+        WebSocketServer.redisTemplate = redisTemplate;
     }
 
 
@@ -70,6 +81,7 @@ public class WebSocketServer {
      * 后台收到客户端发送过来的消息
      * onMessage 是一个消息的中转站
      * 接受 浏览器端 socket.send 发送过来的 json数据
+     *
      * @param message 客户端发送过来的消息
      */
     @OnMessage
@@ -88,56 +100,89 @@ public class WebSocketServer {
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
         Long parentId = masterSlaveService.getParentId(userId);
-        if(ObjectUtil.isNotNull(parentId)){ // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
+        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
             String parentToUsername = parentId.toString();
             Session parentToSession = sessionMap.get(parentToUsername);
-            sendOneMessage(username,parentToSession,text,image,video,emo,audio,parentToUsername);
+            sendOneMessage(username, parentToSession, text, image, video, emo, audio, parentToUsername);
         }
-        if(ObjectUtil.isNotEmpty(fromUsername)){ // 当from字段不为空时（主号id通过from字段直接指定是哪个虚拟账号（10个账号中的）发给用户的），
+        if (ObjectUtil.isNotEmpty(fromUsername)) { // 当from字段不为空时（主号id通过from字段直接指定是哪个虚拟账号（10个账号中的）发给用户的），
             Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
             sendOneMessage(fromUsername, toSession, text, image, video, emo, audio, toUsername);
-        }else {
+        } else {
             // 当发的from为空，即为一般的用户发送的消息传给服务器，服务器再转发给虚拟10个账号中具体的账号
             Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
             sendOneMessage(username, toSession, text, image, video, emo, audio, toUsername);
         }
         // TODO 聊天数据持久化存储
         obj.set("from", username);
+
         // 插入一条string数据类型
-        stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
-        // 读取一条string数据类型
-        Object name = stringRedisTemplate.opsForList().range("chat", 0, -1);
-        log.info("存入redis消息 {}",name);
+//        stringRedisTemplate.opsForList().leftPush("chat", obj.toString());
+//        // 读取一条string数据类型
+//        Object name = stringRedisTemplate.opsForList().range("chat", 0, -1);
+//        log.info("存入redis消息 {}",name);
     }
 
     private void sendOneMessage(String username, Session toSession, String text, String image, String video, String emo, String audio, String toUsername) {
+        Message messages = new Message();
+        Long from = Long.valueOf(username);
+
+        Long userId = Long.valueOf(toUsername);
+        MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
+        Long parentId = masterSlaveService.getParentId(userId);
+        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
+            messages.setSender(parentId);
+            messages.setRole(2);
+        } else {
+            messages.setRole(1);
+            messages.setSender(from);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.set("from", username);  // from 是 zhang
+        // 判断消息类型并组装好后转发给别人
+        if (ObjectUtil.isNotEmpty(text)) {
+            jsonObject.set("text", text);  // text 同上面的text
+            messages.setMessage(text);
+            messages.setType(1);
+        }
+        if (ObjectUtil.isNotEmpty(image)) {
+            jsonObject.set("image", image);
+            messages.setMessage(image);
+            messages.setType(2);
+        }
+        if (ObjectUtil.isNotEmpty(video)) {
+            jsonObject.set("video", video);
+            messages.setMessage(video);
+            messages.setType(3);
+        }
+        if (ObjectUtil.isNotEmpty(emo)) {
+            jsonObject.set("emo", emo);
+            messages.setMessage(emo);
+            messages.setType(4);
+        }
+        if (ObjectUtil.isNotEmpty(audio)) {
+            jsonObject.set("audio", audio);
+            messages.setMessage(audio);
+            messages.setType(5);
+        }
+        messages.setTo(userId);
+        messages.setFrom(from);
+        messages.setCreateTime(new Date());
         if (toSession != null) {
             // 服务器端 再把消息组装一下，组装后的消息包含发送人和发送的文本内容
             // {"from": "zhang", "text": "hello"}
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.set("from", username);  // from 是 zhang
-            // 判断消息类型并组装好后转发给别人
-            if (ObjectUtil.isNotEmpty(text)) {
-                jsonObject.set("text", text);  // text 同上面的text
-            }
-            if (ObjectUtil.isNotEmpty(image)){
-                jsonObject.set("image", image);
-            }
-            if (ObjectUtil.isNotEmpty(video)){
-                jsonObject.set("video", video);
-            }
-            if (ObjectUtil.isNotEmpty(emo)){
-                jsonObject.set("emo", emo);
-            }
-            if (ObjectUtil.isNotEmpty(audio)){
-                jsonObject.set("audio", audio);
-            }
+
+            BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("read" + userId);
+            userTest.rightPush(messages);
             this.sendMessage(jsonObject.toString(), toSession);
             log.info("发送给用户username={}，消息：{}", toUsername, jsonObject.toString());
         } else {
+            BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("unread" + userId);
+            userTest.rightPush(messages);
             log.info("发送失败，未找到用户username={}的session", toUsername);
         }
     }
+
 
     @OnError
     public void onError(Session session, Throwable error) {

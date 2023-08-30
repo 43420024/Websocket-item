@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.example.websocketitem.model.Message">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="role" column="role" jdbcType="VARCHAR"/>
+            <result property="role" column="role" jdbcType="INTEGER"/>
             <result property="type" column="type" jdbcType="INTEGER"/>
             <result property="message" column="message" jdbcType="VARCHAR"/>
             <result property="from" column="from" jdbcType="BIGINT"/>
