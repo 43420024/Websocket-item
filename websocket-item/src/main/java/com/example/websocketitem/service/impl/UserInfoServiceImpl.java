@@ -43,7 +43,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     Relationship relationship = EntityFactory.createRelationship();
 
     @Override
-    public Result add(UserInfo userInfo) {
+    public Result addInfo(UserInfo userInfo) {
         //数组转string
         userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
         userInfo.setCreateTime(new Date());
@@ -79,6 +79,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         Points points = pointsMapper.selectOneByUserId(userId);
         userInfo.setPoints(points);
         return Result.success(userInfo);
+    }
+
+    @Override
+    public Result updateInfo(UserInfo userInfo) {
+        userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
+        int update = this.baseMapper.updateById(userInfo);
+        return update > 0 ? Result.success() : Result.error();
     }
 }
 
