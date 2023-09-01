@@ -47,14 +47,14 @@ public class Message implements Serializable {
     /**
      * 消息发送者
      */
-    @TableField(value = "from")
-    private Long from;
+    @TableField(value = "come_from")
+    private Long comeFrom;
 
     /**
      * 消息接收者
      */
-    @TableField(value = "to")
-    private Long to;
+    @TableField(value = "from_to")
+    private Long fromTo;
 
     /**
      * 消息真实发送者

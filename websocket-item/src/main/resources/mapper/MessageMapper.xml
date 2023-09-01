@@ -9,15 +9,15 @@
             <result property="role" column="role" jdbcType="INTEGER"/>
             <result property="type" column="type" jdbcType="INTEGER"/>
             <result property="message" column="message" jdbcType="VARCHAR"/>
-            <result property="from" column="from" jdbcType="BIGINT"/>
-            <result property="to" column="to" jdbcType="BIGINT"/>
+            <result property="comeFrom" column="come_from" jdbcType="BIGINT"/>
+            <result property="fromTo" column="from_to" jdbcType="BIGINT"/>
             <result property="sender" column="sender" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,role,type,
-        message,from,to,
+        message,come_from,from_to,
         sender,create_time
     </sql>
 </mapper>

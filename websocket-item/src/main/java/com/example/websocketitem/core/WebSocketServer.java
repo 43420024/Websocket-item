@@ -129,7 +129,7 @@ public class WebSocketServer {
 
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
-        Long parentId = masterSlaveService.getParentId(userId);
+        Long parentId = masterSlaveService.getParentId(from);
         if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
             messages.setSender(parentId);
             messages.setRole(2);
@@ -165,8 +165,8 @@ public class WebSocketServer {
             messages.setMessage(audio);
             messages.setType(5);
         }
-        messages.setTo(userId);
-        messages.setFrom(from);
+        messages.setFromTo(userId);
+        messages.setComeFrom(from);
         messages.setCreateTime(new Date());
         if (toSession != null) {
             // 服务器端 再把消息组装一下，组装后的消息包含发送人和发送的文本内容
