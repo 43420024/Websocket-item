@@ -14,6 +14,8 @@ import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * @author cd
  * @description 针对表【tcd_user(用户表)】的数据库操作Service实现
@@ -64,17 +66,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public Result updateUser(Data data) {
-         int update = this.baseMapper.updateById(data.getUser());
-         boolean bool = false;
-        if (update>0){
-            if (data.getUserInfo().getLabelsArray()!=null){
+        int update = this.baseMapper.updateById(data.getUser());
+        boolean bool = false;
+        if (update > 0) {
+            if (data.getUserInfo().getLabelsArray() != null) {
                 data.getUserInfo().setLabels(JSON.toJSONString(data.getUserInfo().getLabelsArray()));
                 bool = this.userInfoService.updateById(data.getUserInfo());
             }
         }
-       return  bool?Result.success("修改成功！"):Result.error("修改失败！");
+        return bool ? Result.success("修改成功！") : Result.error("修改失败！");
 
     }
+
+    @Override
+    public Result addUser(User user) {
+        user.setCreateTime(new Date());
+        final int insert = this.baseMapper.insert(user);
+        return insert > 0 ? Result.success() : Result.error();
+    }
+
+    @Override
+    public Result add(Data data) {
+        data.getUser().setCreateTime(new Date());
+        data.getUserInfo().setCreateTime(new Date());
+        int insert = this.baseMapper.insert(data.getUser());
+        boolean save = false;
+        if (insert > 0) {
+            data.getUserInfo().setUserId(data.getUser().getId());
+            data.getUserInfo().setLabels(JSON.toJSONString(data.getUserInfo().getLabelsArray()));
+            save = userInfoService.save(data.getUserInfo());
+        }
+        return save ? Result.success() : Result.error();
+    }
+
 
 //    @Override
 //    public Result queryInfo(Long userId) {
