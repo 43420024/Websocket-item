@@ -12,6 +12,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
 * @author cd
@@ -49,6 +50,14 @@ public class SystemTelephoneServiceImpl extends ServiceImpl<SystemTelephoneMappe
     public Result systemTelephoneDelete(Integer id) {
         boolean b = super.removeById(id);
         return b?Result.ok():Result.error();
+    }
+    /**
+     * 查询所有电话
+     * */
+    @Override
+    public Result systemTelephoneAll() {
+        List<SystemTelephone> list = super.list();
+        return Result.ok().data(list);
     }
 }
 

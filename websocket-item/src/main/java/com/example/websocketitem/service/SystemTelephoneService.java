@@ -12,4 +12,5 @@ import com.example.websocketitem.utils.Result;
 public interface SystemTelephoneService extends IService<SystemTelephone> {
     Result systemTelephoneAdd(SystemTelephone systemTelephone);
     Result systemTelephoneDelete(Integer id);
+    Result systemTelephoneAll();
 }

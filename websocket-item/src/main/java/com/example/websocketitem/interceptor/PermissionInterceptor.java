@@ -1,20 +1,32 @@
 package com.example.websocketitem.interceptor;
 
-/*@Component
+/*import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.websocketitem.mapper.AdministratorsMapper;
+import com.example.websocketitem.model.Administrators;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+@Component
 public class PermissionInterceptor implements HandlerInterceptor {
     @Resource
-    private UserMapper userMapper;
+    private AdministratorsMapper administratorsMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String userNumber = request.getHeader("userNumber");
-        return this.userNumberAll(Long.parseLong(userNumber));
+        String manageAccounts = request.getHeader("manageAccounts");
+        return this.AdministratorsNumberAll(manageAccounts);
     }
-    public boolean userNumberAll(Long userNumber){
-        if(userMapper.user(userNumber)==null){
-            return false;
-        }else {
+
+    public boolean AdministratorsNumberAll(String manageAccounts){
+        QueryWrapper<Administrators> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("manage_accounts",manageAccounts);
+        Administrators administrators = administratorsMapper.selectOne(queryWrapper);
+        if(administrators!=null){
             return true;
         }
+        return false;
     }
 }*/
