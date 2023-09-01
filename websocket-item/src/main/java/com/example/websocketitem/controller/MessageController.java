@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.websocketitem.model.Data;
 import com.example.websocketitem.model.Message;
-import com.example.websocketitem.service.MessageService;
 import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.BoundListOperations;
@@ -22,8 +21,6 @@ public class MessageController {
     @Resource
     private RedisTemplate<Object, Object> redisTemplate;
 
-    @Resource
-    private MessageService messageService;
 
     @GetMapping("/{userId}")
     public Result read(@PathVariable Long userId, @RequestParam Long from) {
@@ -60,12 +57,7 @@ public class MessageController {
         messageList.addAll(collect);
 
         //排序
-        Collections.sort(messageList, new Comparator<Message>() {
-            @Override
-            public int compare(Message o1, Message o2) {
-                return o1.getCreateTime().compareTo(o1.getCreateTime());
-            }
-        });
+        Collections.sort(messageList, (o1, o2) -> o1.getCreateTime().compareTo(o1.getCreateTime()));
 
         //我发给对方未读消息
         List<Object> object = otherUnread.range(0, otherUnread.size());
@@ -80,11 +72,4 @@ public class MessageController {
         return Result.success(data);
     }
 
-
-    @PostMapping
-    public Result add(@RequestBody Message message){
-        messageService.save(message);
-
-        return Result.success();
-    }
 }
