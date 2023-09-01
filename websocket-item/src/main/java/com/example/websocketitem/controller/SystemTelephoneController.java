@@ -26,5 +26,11 @@ public class SystemTelephoneController {
     public Result systemTelephoneDelete(@RequestParam Integer id){
         return systemTelephoneService.systemTelephoneDelete(id);
     }
-
+    /**
+     * 查询
+     * */
+    @GetMapping("/systemTelephoneAll")
+    public Result systemTelephoneAll(){
+        return systemTelephoneService.systemTelephoneAll();
+    }
 }

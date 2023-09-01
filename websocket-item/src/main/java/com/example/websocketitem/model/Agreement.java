@@ -9,12 +9,12 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 管理员表
- * @TableName tcd_administrators
+ * 协议表
+ * @TableName tcd_agreement
  */
-@TableName(value ="tcd_administrators")
+@TableName(value ="tcd_agreement")
 @Data
-public class Administrators implements Serializable {
+public class Agreement implements Serializable {
     /**
      * 主键
      */
@@ -22,30 +22,29 @@ public class Administrators implements Serializable {
     private Integer id;
 
     /**
-     * 管理员账号
+     * 协议标题
      */
-    @TableField(value = "manage_accounts")
-    private Long manageAccounts;
+    @TableField(value = "title")
+    private String title;
 
     /**
-     * 密码
+     * 协议内容
      */
-    @TableField(value = "passwords")
-    private String passwords;
+    @TableField(value = "content")
+    private String content;
 
     /**
-     * 权限
+     * 创建id
      */
-    @TableField(value = "limitation")
-    private Integer limitation;
+    @TableField(value = "administrators_id")
+    private Integer administratorsId;
 
     /**
-     * 登录时间
+     * 创建时间
      */
-    @TableField(value = "login_time")
-    private Date loginTime;
+    @TableField(value = "create_time")
+    private Date createTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
 }

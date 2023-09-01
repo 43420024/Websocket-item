@@ -12,4 +12,7 @@ import com.example.websocketitem.utils.Result;
 public interface FeedbackService extends IService<Feedback> {
     Result feedbackAdd(Feedback feedback);
     Result feedbackDelete(Integer id);
+    Result feedbackById(Integer id);
+    Result feedbackByAll(Integer pageNum,Integer pageSize);
+    Result feedbackDeleteAll(Integer[] id);
 }

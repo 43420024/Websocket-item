@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("administrators")
+@RequestMapping("/administrators")
 public class AdministratorsController {
     @Resource
     private AdministratorsService administratorsService;
@@ -17,4 +17,5 @@ public class AdministratorsController {
     public Result userLogon(@RequestParam Long manageAccounts,@RequestParam String passwords){
         return administratorsService.userLogon(manageAccounts, passwords);
     }
+
 }

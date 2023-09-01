@@ -21,11 +21,29 @@ public class FeedbackController {
     /**
      * 删除一个反馈意见
      * */
-
-
-
     @DeleteMapping("/feedbackDelete")
     public Result feedbackDelete(@RequestParam Integer id){
         return feedbackService.feedbackDelete(id);
+    }
+    /**
+    * 删除多个
+    * */
+    @DeleteMapping("/feedbackDeleteAll")
+    public Result feedbackDeleteAll(@RequestParam Integer[] id){
+        return feedbackService.feedbackDeleteAll(id);
+    }
+    /**
+     * 查询单个反馈意见
+     * */
+    @GetMapping("/feedbackById")
+    public Result feedbackById(@RequestParam Integer id){
+        return feedbackService.feedbackById(id);
+    }
+    /**
+     * 查询全部反馈意见
+     * */
+    @GetMapping("/feedbackByAll")
+    public Result feedbackByAll(@RequestParam Integer pageNum,@RequestParam Integer pageSize){
+        return feedbackService.feedbackByAll(pageNum,pageSize);
     }
 }

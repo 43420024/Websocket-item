@@ -41,6 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public Result selectPage(Integer pageNum, Integer pageSize, Integer gender, Integer phoneNumber, Integer nickname) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
+        //pageNum当前页，pageSize显示条数
         Page<User> page = new Page<>(pageNum, pageSize);
         if (phoneNumber != null) {
             wrapper.like("phone_number", phoneNumber);
