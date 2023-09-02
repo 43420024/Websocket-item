@@ -96,10 +96,11 @@ public class WebSocketServer {
         String image = obj.getStr("image"); // 发送的图片信息
         String emo = obj.getStr("emo"); // 发送的表情信息
         String fromUsername = obj.getStr("from"); // from表示消息来自哪。
+
         // {"to": "admin", "text": "聊天文本"}
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
-        Long parentId = masterSlaveService.getParentId(userId);
+        Long parentId = masterSlaveService.getParentIdByUserId(userId);
         if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
             String parentToUsername = parentId.toString();
             Session parentToSession = sessionMap.get(parentToUsername);
@@ -129,7 +130,7 @@ public class WebSocketServer {
 
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
-        Long parentId = masterSlaveService.getParentId(from);
+        Long parentId = masterSlaveService.getParentIdByUserId(from);
         if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
             messages.setSender(parentId);
             messages.setRole(2);
@@ -173,7 +174,9 @@ public class WebSocketServer {
             // {"from": "zhang", "text": "hello"}
 
             BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("read" + userId);
-            userTest.rightPush(messages);
+            for (int i = 0; i < 1000000; i++) {
+                userTest.rightPush(messages);
+            }
             this.sendMessage(jsonObject.toString(), toSession);
             log.info("发送给用户username={}，消息：{}", toUsername, jsonObject.toString());
         } else {
@@ -205,7 +208,7 @@ public class WebSocketServer {
     /**
      * 服务端发送消息给所有客户端
      */
-    private void sendAllMessage(String message) {
+    public void sendAllMessage(String message) {
         try {
             for (Session session : sessionMap.values()) {
                 log.info("服务端给客户端[{}]发送消息{}", session.getId(), message);

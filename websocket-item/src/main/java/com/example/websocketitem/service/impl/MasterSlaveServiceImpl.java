@@ -10,7 +10,7 @@ public class MasterSlaveServiceImpl implements MasterSlaveService {
     @Resource
     private MasterSlaveRelationshipMapper masterSlaveRelationshipMapper;
     @Override
-    public Long getParentId(Long userId) {
+    public Long getParentIdByUserId(Long userId) {
         return masterSlaveRelationshipMapper.selectParentIdByUserId(userId);
     }
 }

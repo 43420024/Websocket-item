@@ -65,5 +65,8 @@ public class User implements Serializable {
     private UserInfo userInfo;
 
     @TableField(exist = false)
+    private Integer unreadMessageNumber;
+
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
