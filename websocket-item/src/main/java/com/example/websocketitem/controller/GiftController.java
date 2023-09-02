@@ -42,7 +42,7 @@ public class GiftController {
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) {
-        return giftService.select(pageNum, pageSize, type,status,name);
+        return giftService.select(pageNum, pageSize, type, status, name);
     }
 
     /**
@@ -80,6 +80,7 @@ public class GiftController {
 
     /**
      * 礼物上架下架
+     *
      * @param gift
      * @return
      */
@@ -126,6 +127,7 @@ public class GiftController {
 
     /**
      * 礼物类型无分页遍历
+     *
      * @return
      */
     @GetMapping("/queryList")
@@ -136,14 +138,16 @@ public class GiftController {
 
     /**
      * 删除礼物类型
+     *
      * @param id
      * @return
      */
     @DeleteMapping("/deleteType/{id}")
-    public Result deleteType(@PathVariable Integer id){
-         boolean type = giftTypeService.removeById(id);
-        return type?Result.success("删除成功！"):Result.error("删除失败！");
+    public Result deleteType(@PathVariable Integer id) {
+        boolean type = giftTypeService.removeById(id);
+        return type ? Result.success("删除成功！") : Result.error("删除失败！");
     }
+
     /**
      * 上传图片
      *

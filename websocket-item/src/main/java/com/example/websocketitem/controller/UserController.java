@@ -42,8 +42,8 @@ public class UserController {
     @GetMapping("/list")
     public Result list(
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                @RequestParam(required = false) Integer gender,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false) Integer gender,
             @RequestParam(required = false) Integer phoneNumber,
             @RequestParam(required = false) Integer nickname
     ) {
@@ -76,6 +76,7 @@ public class UserController {
 
     /**
      * 修改用户基本消息
+     *
      * @param userInfo
      * @return
      */
@@ -87,6 +88,7 @@ public class UserController {
 
     /**
      * 添加基本消息
+     *
      * @param userInfo
      * @return
      */
@@ -97,6 +99,7 @@ public class UserController {
 
     /**
      * 添加用户
+     *
      * @param user
      * @return
      */
@@ -107,6 +110,7 @@ public class UserController {
 
     /**
      * 添加用户及基本消息
+     *
      * @param data
      * @return
      */
