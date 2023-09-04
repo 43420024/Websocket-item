@@ -2,6 +2,7 @@ package com.example.websocketitem.service;
 
 import com.example.websocketitem.model.Rule;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.websocketitem.utils.DataType;
 
 /**
 * @author cd
@@ -10,4 +11,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RuleService extends IService<Rule> {
 
+    DataType selectOneRule(Integer type);
+
+    DataType deleteRule(Integer id);
+
+    DataType addOrEditOne(Rule rule);
 }

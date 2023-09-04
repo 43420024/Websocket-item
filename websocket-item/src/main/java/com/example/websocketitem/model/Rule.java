@@ -24,7 +24,7 @@ public class Rule implements Serializable {
     private Long id;
 
     /**
-     * 会员等级
+     * 会员规则适用类型（0：女，1：男）
      */
     private Integer type;
 
