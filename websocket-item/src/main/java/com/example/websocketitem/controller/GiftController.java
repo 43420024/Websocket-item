@@ -154,29 +154,29 @@ public class GiftController {
      * @param file
      * @return
      */
-    @PostMapping("/file")
-    public Result uploadFile(@RequestParam(value = "file") MultipartFile file, HttpServletRequest req) {
-        String realPath = req.getSession().getServletContext().getRealPath("/uploadFile/");
-        File folder = new File(realPath);
-        if (!folder.isDirectory()) {
-            if (!folder.mkdirs()) {
-                return Result.error("文件夹创建失败");
-            }
-        }
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String oldName = file.getOriginalFilename();
-        String type = oldName.substring(oldName.lastIndexOf("."));
-        if (!".jpg".equals(type) && !".png".equals(type) && !".jpeg".equals(type) && !".gif".equals(type)) {
-            return Result.error("文件类型错误");
-        }
-        String newName = uuid + type;
-        try {
-            file.transferTo(new File(folder, newName));
-            String filePath = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/uploadFile/" + newName;
-            return Result.success(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Result.error("上传失败!");
-    }
+//    @PostMapping("/file")
+//    public Result uploadFile(@RequestParam(value = "file") MultipartFile file, HttpServletRequest req) {
+//        String realPath = req.getSession().getServletContext().getRealPath("/uploadFile/");
+//        File folder = new File(realPath);
+//        if (!folder.isDirectory()) {
+//            if (!folder.mkdirs()) {
+//                return Result.error("文件夹创建失败");
+//            }
+//        }
+//        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+//        String oldName = file.getOriginalFilename();
+//        String type = oldName.substring(oldName.lastIndexOf("."));
+//        if (!".jpg".equals(type) && !".png".equals(type) && !".jpeg".equals(type) && !".gif".equals(type)) {
+//            return Result.error("文件类型错误");
+//        }
+//        String newName = uuid + type;
+//        try {
+//            file.transferTo(new File(folder, newName));
+//            String filePath = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/uploadFile/" + newName;
+//            return Result.success(filePath);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return Result.error("上传失败!");
+//    }
 }

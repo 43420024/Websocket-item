@@ -39,7 +39,7 @@ public class Task {
     /**
      * 定时存储到数据库
      */
-    //  @Scheduled(cron = "0/2 * * * * ?")
+      //@Scheduled(cron = "0/2 * * * * ?")
     //每隔三天的凌晨4点0分执行
     // @Scheduled(cron = "* * 4 1/3 * ?")
     public void RedisToMysql() {
@@ -48,13 +48,14 @@ public class Task {
         for (User user : list) {
             BoundListOperations<Object, Object> listOps = redisTemplate.boundListOps("read" + user.getId());
             int size = listOps.size().intValue();
-            for (int i = 0; i < size; i++) {
-                Object o = listOps.leftPop();
-                final Message message1 = JSON.parseObject(JSON.toJSONString(o), Message.class);
-                messageService.save(message1);
-                // 写入成功
-                resultCount++;
-            }
+            if (size > 20)
+                for (int i = 0; i < size - 20; i++) {
+                    Object o = listOps.leftPop();
+                    final Message message1 = JSON.parseObject(JSON.toJSONString(o), Message.class);
+                    messageService.save(message1);
+                    // 写入成功
+                    resultCount++;
+                }
         }
         log.info(resultCount + "条聊天记录，已写入数据库");
     }
