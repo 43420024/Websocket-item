@@ -57,7 +57,7 @@ public class Message implements Serializable {
     private Long fromTo;
 
     /**
-     * 消息真实发送者
+     * 消息真实接收者
      */
     @TableField(value = "sender")
     private Long sender;
