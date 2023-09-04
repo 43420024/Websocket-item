@@ -42,6 +42,11 @@ public class Trends implements Serializable {
     private Long count;
 
     /**
+     * 状态：0未通过，1待审核，2通过
+     */
+    private Integer status;
+
+    /**
      * 创建时间
      */
     private Date createtime;
