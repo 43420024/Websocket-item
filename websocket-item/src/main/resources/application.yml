@@ -2,10 +2,15 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.200:3306/websocket_item?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://192.168.0.177:3306/websocket_item?useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
-    password: 123456
+    password: cd2023
     type: com.alibaba.druid.pool.DruidDataSource
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 3
 # mybatis默认配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml

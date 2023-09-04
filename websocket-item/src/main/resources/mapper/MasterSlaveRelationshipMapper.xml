@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.websocketitem.mapper.MasterSlaveRelationshipMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.MasterSlaveRelationship">
+            <id property="masterSlaveId" column="master_slave_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        master_slave_id,user_id,parent_id,
+        create_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tcd_master_slave_relationship
+        where  master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tcd_master_slave_relationship
+        where  master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
+    </delete>
+    <insert id="insert" keyColumn="master_slave_id" keyProperty="masterSlaveId" parameterType="com.example.websocketitem.model.MasterSlaveRelationship" useGeneratedKeys="true">
+        insert into tcd_master_slave_relationship
+        ( master_slave_id,user_id,parent_id
+        ,create_time)
+        values (#{masterSlaveId,jdbcType=BIGINT},#{userId,jdbcType=BIGINT},#{parentId,jdbcType=BIGINT}
+        ,#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="master_slave_id" keyProperty="masterSlaveId" parameterType="com.example.websocketitem.model.MasterSlaveRelationship" useGeneratedKeys="true">
+        insert into tcd_master_slave_relationship
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="masterSlaveId != null">master_slave_id,</if>
+                <if test="userId != null">user_id,</if>
+                <if test="parentId != null">parent_id,</if>
+                <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="masterSlaveId != null">#{masterSlaveId,jdbcType=BIGINT},</if>
+                <if test="userId != null">#{userId,jdbcType=BIGINT},</if>
+                <if test="parentId != null">#{parentId,jdbcType=BIGINT},</if>
+                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.example.websocketitem.model.MasterSlaveRelationship">
+        update tcd_master_slave_relationship
+        <set>
+                <if test="userId != null">
+                    user_id = #{userId,jdbcType=BIGINT},
+                </if>
+                <if test="parentId != null">
+                    parent_id = #{parentId,jdbcType=BIGINT},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.example.websocketitem.model.MasterSlaveRelationship">
+        update tcd_master_slave_relationship
+        set 
+            user_id =  #{userId,jdbcType=BIGINT},
+            parent_id =  #{parentId,jdbcType=BIGINT},
+            create_time =  #{createTime,jdbcType=TIMESTAMP}
+        where   master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
+    </update>
+</mapper>

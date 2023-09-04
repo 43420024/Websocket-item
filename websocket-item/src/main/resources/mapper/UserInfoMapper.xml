@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.websocketitem.mapper.UserInfoMapper">
 
-    <resultMap id="BaseResultMap" type="com.example.websocketitem.domain.UserInfo">
+    <resultMap id="BaseResultMap" type="com.example.websocketitem.model.UserInfo">
             <id property="infoId" column="info_id" jdbcType="BIGINT"/>
             <result property="gender" column="gender" jdbcType="INTEGER"/>
             <result property="labels" column="labels" jdbcType="VARCHAR"/>
@@ -17,13 +17,13 @@
             <result property="description" column="description" jdbcType="VARCHAR"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-            <result property="integral" column="integral" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         info_id,gender,labels,
         head_path,birthday,job_title,
         region,introduction,like_number,
-        description,user_id,nickname,integral
+        description,user_id,nickname,create_time
     </sql>
 </mapper>

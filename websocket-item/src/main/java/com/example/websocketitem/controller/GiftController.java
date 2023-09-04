@@ -1,7 +1,7 @@
 package com.example.websocketitem.controller;
 
-import com.example.websocketitem.domain.Gift;
-import com.example.websocketitem.domain.GiftType;
+import com.example.websocketitem.model.Gift;
+import com.example.websocketitem.model.GiftType;
 import com.example.websocketitem.service.GiftService;
 import com.example.websocketitem.service.GiftTypeService;
 import com.example.websocketitem.utils.Result;
@@ -42,7 +42,7 @@ public class GiftController {
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
     ) {
-        return giftService.select(pageNum, pageSize, type,status,name);
+        return giftService.select(pageNum, pageSize, type, status, name);
     }
 
     /**
@@ -78,6 +78,12 @@ public class GiftController {
         return giftService.updateGift(gift);
     }
 
+    /**
+     * 礼物上架下架
+     *
+     * @param gift
+     * @return
+     */
     @PutMapping("/updateStatus")
     public Result updateStatus(@RequestBody Gift gift) {
         return giftService.updateStatus(gift);
@@ -121,6 +127,7 @@ public class GiftController {
 
     /**
      * 礼物类型无分页遍历
+     *
      * @return
      */
     @GetMapping("/queryList")
@@ -129,11 +136,18 @@ public class GiftController {
         return Result.success(list);
     }
 
+    /**
+     * 删除礼物类型
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("/deleteType/{id}")
-    public Result deleteType(@PathVariable Integer id){
-        final boolean type = giftTypeService.removeById(id);
-        return type?Result.success("删除成功！"):Result.error("删除失败！");
+    public Result deleteType(@PathVariable Integer id) {
+        boolean type = giftTypeService.removeById(id);
+        return type ? Result.success("删除成功！") : Result.error("删除失败！");
     }
+
     /**
      * 上传图片
      *
@@ -155,8 +169,6 @@ public class GiftController {
         if (!".jpg".equals(type) && !".png".equals(type) && !".jpeg".equals(type) && !".gif".equals(type)) {
             return Result.error("文件类型错误");
         }
-
-
         String newName = uuid + type;
         try {
             file.transferTo(new File(folder, newName));

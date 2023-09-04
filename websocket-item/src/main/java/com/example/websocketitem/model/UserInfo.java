@@ -1,5 +1,6 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,7 +8,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.sql.Array;
 import java.util.Date;
+import java.util.List;
 
+import com.example.websocketitem.model.Album;
+import com.example.websocketitem.model.Points;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -90,16 +94,29 @@ public class UserInfo implements Serializable {
     @TableField(value = "nickname")
     private String nickname;
 
+
+    /**
+     * 创建时间
+     */
+    @TableField(value = "create_time")
+    private Date createTime;
+
+    /**
+     * 相册
+     */
+    @TableField(exist = false)
+    private List<Album> albums;
+
     /**
      * 积分
      */
-    @TableField(value = "integral")
-    private Integer integral;
+    @TableField(exist = false)
+    private Points points;
 
     //用于接收数组，在数据表中并不存在
     @TableField(exist = false)
     @JsonProperty(value ="labelsArray")
-    private String[] labelsArray;
+    private JSONArray labelsArray;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

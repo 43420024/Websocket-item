@@ -1,6 +1,6 @@
 package com.example.websocketitem.exception;
 
-import com.example.websocketitem.enums.ErrorFlagEnum;
+import com.example.websocketitem.enums.ResponseStatusEnum;
 import com.example.websocketitem.utils.Result;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -25,14 +25,14 @@ public class GlobalExceptionHandler {
     public Result<Object> handleException(MethodArgumentNotValidException e){
         Map<String, String> collect = e.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-        return Result.error(ErrorFlagEnum.PARAM_ERROR,collect);
+        return Result.error(ResponseStatusEnum.PARAM_ERROR,collect);
     }
     // service层数据校验异常捕获
     @ExceptionHandler
     public Result<Object> handleException(ConstraintViolationException e){
         Map<Path, String> collect = e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(ConstraintViolation::getPropertyPath, ConstraintViolation::getMessage));
-        return Result.error(ErrorFlagEnum.PARAM_ERROR,collect);
+        return Result.error(ResponseStatusEnum.PARAM_ERROR,collect);
     }
 
 }

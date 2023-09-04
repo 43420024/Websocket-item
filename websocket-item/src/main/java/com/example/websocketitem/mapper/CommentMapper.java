@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.websocketitem.model.Comment;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -37,4 +38,10 @@ public interface CommentMapper {
     List<Comment> selectAllByUserId(@Param("userId") Long userId);
 
     List<Comment> selectByCreateTimeOneWeek();
+    @Select("SELECT id FROM `tcd_trends`")
+    List<Long> selectAllTrendsId();
+    @Select("SELECT id FROM `tcd_user`")
+    List<Long> selectAllUserId();
+    @Select("select id from `tcd_album`")
+    List<Long> selectAllPhotoAlbumId();
 }

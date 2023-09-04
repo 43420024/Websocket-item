@@ -27,6 +27,7 @@ public class AopLog {
         startTime.set(System.currentTimeMillis());
         ServletRequestAttributes attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert attributes != null;
+
         HttpServletRequest request=attributes.getRequest();
         String className=pjp.getSignature().getDeclaringTypeName();
         String methodName=pjp.getSignature().getName();
@@ -34,7 +35,7 @@ public class AopLog {
         Object[] array=pjp.getArgs();
         ObjectMapper mapper=new ObjectMapper();
 
-        logger.info("调用前：{}：{}，传递的参数为：{}",className,methodName,mapper.writeValueAsString(array));
+//        logger.info("调用前：{}：{}，传递的参数为：{}",className,methodName,mapper.writeValueAsString(array));
         logger.info("URL:{}",request.getRequestURL().toString());
         logger.info("IP地址:{}",request.getRemoteAddr());
 

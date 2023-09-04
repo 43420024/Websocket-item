@@ -1,8 +1,9 @@
 package com.example.websocketitem.service;
 
-import com.example.websocketitem.domain.Data;
-import com.example.websocketitem.domain.User;
+import com.example.websocketitem.model.Data;
+import com.example.websocketitem.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.utils.Result;
 
 /**
@@ -17,4 +18,10 @@ public interface UserService extends IService<User> {
     Result selectPage(Integer pageNum, Integer pageSize, Integer gender, Integer phoneNumber, Integer nickname);
 
     Result updateUser(Data data);
+
+    Result addUser(User user);
+
+    Result add(Data data);
+
+    // Result queryInfo(Long userId);
 }

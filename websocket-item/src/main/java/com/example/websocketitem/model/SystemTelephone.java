@@ -1,39 +1,46 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
- * 
- * @TableName tcd_gift_type
+ * 系统电话表
+ * @TableName tcd_system_telephone
  */
-@TableName(value ="tcd_gift_type")
+@TableName(value ="tcd_system_telephone")
 @Data
-public class GiftType implements Serializable {
+public class SystemTelephone implements Serializable {
     /**
-     * 礼物类型编号
+     * 电话主键
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 礼物类型名称
+     * 号码
      */
-    @TableField(value = "type_name")
-    private String typeName;
+    @TableField(value = "phone_number")
+    @Pattern(regexp = "^1[3456789]\\d{9}$",message = "电话有误")
+    private String phoneNumber;
 
     /**
      * 创建时间
      */
     @TableField(value = "create_time")
     private Date createTime;
+
+    /**
+     * 备注
+     */
+    @TableField(value = "remarks")
+    private String remarks;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

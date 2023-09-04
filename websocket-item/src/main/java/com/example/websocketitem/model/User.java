@@ -1,18 +1,21 @@
-package com.example.websocketitem.domain;
+package com.example.websocketitem.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * 用户表
+ *
  * @TableName tcd_user
  */
-@TableName(value ="tcd_user")
+@TableName(value = "tcd_user")
 @Data
 public class User implements Serializable {
     /**
@@ -57,8 +60,12 @@ public class User implements Serializable {
     @TableField(value = "status")
     private Integer status;
 
+
     @TableField(exist = false)
     private UserInfo userInfo;
+
+    @TableField(exist = false)
+    private Integer unreadMessageNumber;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

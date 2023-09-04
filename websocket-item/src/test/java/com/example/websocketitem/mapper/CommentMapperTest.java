@@ -64,4 +64,14 @@ class CommentMapperTest {
         List<Comment> commentList = commentMapper.selectByCreateTimeOneWeek();
         commentList.forEach(comment -> log.info("{}",comment.toString()));
     }
+    @Test
+    void testSelectAllTrends(){
+        List<Long> longList = commentMapper.selectAllTrendsId();
+        log.info("{}",longList);
+    }
+    @Test
+    void testSelectAllUserId(){
+        List<Long> longList = commentMapper.selectAllUserId();
+        log.info("{}",longList);
+    }
 }
