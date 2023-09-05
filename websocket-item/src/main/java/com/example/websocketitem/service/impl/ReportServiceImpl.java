@@ -34,30 +34,41 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     @Resource
     WrapperUtil<Report> wrapperUtil;
 
-
+    /**
+     * 添加举报信息
+     * */
     @Override
     public ResponseMap addReport(Report report) {
         report.setCreateTime(new Date());
         return responseMapUtil.addEntity(this.save(report));
     }
+    /**
+     * 跟新举报信息处理状态
+     * */
     //TODO 更改状态后通知检举人举报信息处理结果
     @Override
     public ResponseMap updateReport(Report report) {
         return responseMapUtil.updateEntity(this.updateById(report));
     }
-
+    /**
+     * 举报信息分页列表获取
+     * */
     @Override
     public ResponseMap listReport(Integer page, Integer size) {
         Page<Report> pageList = this.page(pageUtil.getModelPage(page, size));
         Map<String, Object> modelMap = pageUtil.getModelMap(pageList);
         return responseMapUtil.getPageList(pageList,modelMap);
     }
-
+    /**
+     * 删除举报信息(用户撤销举报
+     * */
     @Override
     public ResponseMap deleteReport(Long id) {
         return responseMapUtil.deleteList(this.removeById(id));
     }
-
+    /**
+     * 全字段模糊查询+按时间获取举报信息列表
+     * */
     @Override
     public ResponseMap searchReport(SearchModel searchModel) {
         Page<Report> pageList = this.page(pageUtil.getModelPage(searchModel.getPage(), searchModel.getSize()),
@@ -65,11 +76,12 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         Map<String, Object> modelMap = pageUtil.getModelMap(pageList);
         return responseMapUtil.getPageList(pageList,modelMap);
     }
-
+    /**
+     * 获取被举报人举报信息统计
+     * */
     @Override
     public ResponseMap countReport(Long reporterId) {
-        List<Report> list = this.list(wrapperUtil.countReport(reporterId));
-        return null;
+        return responseMapUtil.countNumber(this.list(wrapperUtil.countReport(reporterId)).size());
     }
 }
 

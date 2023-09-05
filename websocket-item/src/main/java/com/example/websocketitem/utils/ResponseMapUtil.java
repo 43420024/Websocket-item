@@ -103,7 +103,9 @@ public class ResponseMapUtil<T>{
         }
         return responseMap;
     }
-
+    /**
+     * 列表统计返回结果
+     * */
     public ResponseMap countList(BigDecimal countAmount){
         if (countAmount!=null){
             responseMap.setFlag(true);
@@ -116,7 +118,9 @@ public class ResponseMapUtil<T>{
         }
         return responseMap;
     }
-
+    /**
+     * 数据校验返回结果
+     * */
     public ResponseMap getBindingResult(BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             bindingResult.getAllErrors().forEach(e ->{
@@ -131,7 +135,9 @@ public class ResponseMapUtil<T>{
         }
         return responseMap;
     }
-
+    /**
+     * 删除列表返回结果
+     * */
     public ResponseMap deleteList(Boolean removeListResult){
         if (removeListResult){
             responseMap.setFlag(true);
@@ -141,6 +147,33 @@ public class ResponseMapUtil<T>{
             responseMap.setFlag(false);
             responseMap.setData(null);
             responseMap.setMessage("删除列表失败");
+        }
+        return responseMap;
+    }
+    /**
+     * 相册图片数量返回结果
+     * */
+    public ResponseMap countNumber(Integer count){
+        if (count!=null){
+            responseMap.setFlag(true);
+            responseMap.setData(count);
+            responseMap.setMessage("统计成功");
+        }else {
+            responseMap.setFlag(false);
+            responseMap.setData(null);
+            responseMap.setMessage("统计失败");
+        }
+        return responseMap;
+    }
+    public ResponseMap returnMap(Map map){
+        if (map.size()!=0){
+            responseMap.setFlag(true);
+            responseMap.setData(map);
+            responseMap.setMessage("统计成功");
+        }else {
+            responseMap.setFlag(false);
+            responseMap.setData(null);
+            responseMap.setMessage("统计失败");
         }
         return responseMap;
     }

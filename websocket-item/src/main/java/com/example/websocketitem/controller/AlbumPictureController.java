@@ -4,6 +4,7 @@ import com.example.websocketitem.factory.EntityFactory;
 import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.service.AlbumPictureService;
+import com.example.websocketitem.service.AlbumService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,11 @@ import java.util.*;
 public class AlbumPictureController {
     @Resource
     AlbumPictureService albumPictureService;
-
+    @Resource
+    AlbumService albumService;
+    /**
+     * 相册图片上传
+     * */
     @PostMapping(value = "/upload")
     //@RequestParam指向前端input file的name,加入HttpServletRequest请求
     public Map<String,Object> upload(@RequestParam("File") MultipartFile[] multipartFiles,@RequestParam("AlbumId") Long albumId, HttpServletRequest request) throws IOException {
@@ -37,6 +42,7 @@ public class AlbumPictureController {
         Map<String,Object> map=new HashMap<>();
         //建立一个循环分别接收多文件
         for(MultipartFile file:multipartFiles){
+            albumService.capacityReduce(albumId);
             //重命名上传的文件,为避免重复,我们使用UUID对文件分别进行命名
             String oldname=file.getOriginalFilename();//getOriginalFilename()获取文件名带后缀
             //UUID去掉中间的"-",并将原文件后缀名加入新文件
@@ -49,6 +55,7 @@ public class AlbumPictureController {
                 //建立新文件路径,在前端可以直接访问如http://localhost:8080/uploadFile/2021-07-16/新文件名(带后缀)
                 String filepath="/images/"+newname;
                 //写入返回参数
+
                 AlbumPicture albumPicture = EntityFactory.createAlbumPicture();
                 albumPicture.setAlbumId(albumId);
                 albumPicture.setPath(filepath);
@@ -70,19 +77,32 @@ public class AlbumPictureController {
         //将执行结果返回
         return map;
     }
-
+    /**
+     * 删除单个相册图片
+     * */
     @DeleteMapping("/{id}")
     public ResponseMap deleteAlbumPicture(@PathVariable Long id){
         return albumPictureService.deleteAlbumPicture(id);
     }
+    /**
+     * 删除多个相册图片
+     * */
     @DeleteMapping("/list")
     public ResponseMap deleteAlbumPicture(@RequestBody List<AlbumPicture> albumPictures){
         return albumPictureService.deleteAlbumPictureList(albumPictures);
     }
-    @GetMapping("/{albumId}/{page}/{size}")
-    public ResponseMap listAlbumPicture(@PathVariable Long albumId,
-                                        @PathVariable Integer page,
-                                        @PathVariable Integer size){
-        return albumPictureService.listAlbumPicture(albumId,page,size);
+    /**
+     * 根据相册编号获取相册图片
+     * */
+    @GetMapping("/album/{albumId}")
+    public ResponseMap listAlbumPicture(@PathVariable Long albumId){
+        return albumPictureService.getAlbumPicture(albumId);
+    }
+    /**
+     * 根据相册编号统计相册图片数量
+     * */
+    @GetMapping("/count/{albumId}")
+    public ResponseMap countAlbumPicture(@PathVariable Long albumId){
+        return albumPictureService.countAlbumPicture(albumId);
     }
 }

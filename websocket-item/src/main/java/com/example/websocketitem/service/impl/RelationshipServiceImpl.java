@@ -28,7 +28,9 @@ public class RelationshipServiceImpl extends ServiceImpl<RelationshipMapper, Rel
     WrapperUtil<Relationship> wrapperUtil;
 
     Relationship anotherRelationship = EntityFactory.createRelationship();
-
+    /**
+     * 添加好友信息(双向添加
+     * */
     @Override
     public ResponseMap addRelationship(Relationship relationship) {
         relationship.setCreateTime(new Date());
@@ -37,7 +39,9 @@ public class RelationshipServiceImpl extends ServiceImpl<RelationshipMapper, Rel
         anotherRelationship.setCreateTime(relationship.getCreateTime());
         return responseMapUtil.addEntity(this.save(relationship) && this.save(anotherRelationship));
     }
-
+    /**
+     * 删除好友信息(双向删除
+     * */
     @Override
     public ResponseMap deleteRelationship(Relationship relationship) {
         anotherRelationship.setOwnerId(relationship.getFriendId());
@@ -45,7 +49,9 @@ public class RelationshipServiceImpl extends ServiceImpl<RelationshipMapper, Rel
         return responseMapUtil.deleteEntity(this.removeById(this.getOne(wrapperUtil.getRelationship(relationship)).getId())
         && this.removeById(this.getOne(wrapperUtil.getRelationship(anotherRelationship)).getId()));
     }
-
+    /**
+     * 根据用户编号获取好友列表
+     * */
     @Override
     public ResponseMap listRelationship(Long ownerId) {
         return responseMapUtil.getList(this.list(wrapperUtil.listRelationship(ownerId)));
