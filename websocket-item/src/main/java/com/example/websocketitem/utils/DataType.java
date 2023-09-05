@@ -17,4 +17,7 @@ public class DataType {
 
     //响应数据
     private Object data;
+
+
+
 }

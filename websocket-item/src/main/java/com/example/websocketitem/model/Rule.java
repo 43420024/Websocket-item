@@ -4,17 +4,19 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
+
 /**
- * 用户动态表
- * @TableName tcd_trends
+ * 会员规则表
+ * @TableName tcd_rule
  */
-@TableName(value ="tcd_trends")
+@TableName(value ="tcd_rule")
 @Data
-public class Trends implements Serializable {
+public class Rule implements Serializable {
     /**
      * 主键id
      */
@@ -22,29 +24,14 @@ public class Trends implements Serializable {
     private Long id;
 
     /**
-     * 动态所属人id
+     * 会员规则适用类型（0：女，1：男）
      */
-    private Long userid;
+    private Integer type;
 
     /**
-     * 动态文字描述
+     * 规则描述
      */
     private String content;
-
-    /**
-     * 动态图片
-     */
-    private String imgsrc;
-
-    /**
-     * 点赞数
-     */
-    private Long count;
-
-    /**
-     * 状态：0未通过，1待审核，2通过
-     */
-    private Integer status;
 
     /**
      * 创建时间
@@ -52,7 +39,7 @@ public class Trends implements Serializable {
     private Date createtime;
 
     /**
-     * 编辑时间
+     * 修改时间
      */
     private Date edittime;
 
@@ -61,12 +48,10 @@ public class Trends implements Serializable {
 
     @Override
     public String toString() {
-        return "Trends{" +
+        return "Rule{" +
                 "id=" + id +
-                ", userid=" + userid +
+                ", type=" + type +
                 ", content='" + content + '\'' +
-                ", imgsrc='" + imgsrc + '\'' +
-                ", count=" + count +
                 ", createtime=" + createtime +
                 ", edittime=" + edittime +
                 '}';
