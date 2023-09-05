@@ -11,17 +11,23 @@ import org.springframework.web.bind.annotation.*;
 public class RelationshipController {
     @Resource
     RelationshipService relationshipService;
-
+    /**
+     * 根据用户编号获取好友列表
+     * */
     @GetMapping("/list/{ownerId}")
     public ResponseMap listRelationship(@PathVariable Long ownerId){
         return relationshipService.listRelationship(ownerId);
     }
-
+    /**
+     * 删除好友信息(双向删除
+     * */
     @DeleteMapping
     public ResponseMap deleteRelationship(@RequestBody Relationship relationship){
         return relationshipService.deleteRelationship(relationship);
     }
-
+    /**
+     * 添加好友信息(双向添加
+     * */
     @PostMapping
     public ResponseMap addRelationship(@RequestBody Relationship relationship){
         return relationshipService.addRelationship(relationship);

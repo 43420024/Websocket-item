@@ -8,15 +8,15 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="openness" column="openness" jdbcType="TINYINT"/>
-            <result property="frozenStatus" column="frozen_status" jdbcType="INTEGER"/>
+            <result property="openness" column="openness" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
             <result property="capacity" column="capacity" jdbcType="INTEGER"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_id,name,
-        openness,frozen_status,capacity,
+        openness,status,capacity,
         create_time
     </sql>
 </mapper>

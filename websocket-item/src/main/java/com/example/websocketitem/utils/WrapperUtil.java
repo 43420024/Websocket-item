@@ -24,22 +24,28 @@ public class WrapperUtil<T> {
      * */
     public QueryWrapper<T> wrapperNormal(String search, String startTime, String endTime) {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
-        if (StringUtils.hasLength(startTime) && StringUtils.hasLength(endTime)){
-            LocalDateTime start = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            LocalDateTime end = LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            wrapper.between("create_time", start, end);
+        String start = null;
+        String end = null;
+        if (startTime!=null  && !startTime.equals("") && endTime!=null && !endTime.equals("")){
+            start = startTime.contains("/") ? startTime.replaceAll("/", "-") : startTime;
+            end = endTime.contains("/") ? endTime.replaceAll("/", "-") : endTime;
         }
-        wrapper.like(StringUtils.hasLength(search), "name", search)
-                .or().like(StringUtils.hasLength(search), "reporter_id", search)
-                .or().like(StringUtils.hasLength(search), "status", search)
-                .or().like(StringUtils.hasLength(search), "reporter_id", search);
-        wrapper.orderByDesc("create_time");
+        wrapper.apply(start!=null,"UNIX_TIMESTAMP(update_time) >= UNIX_TIMESTAMP('" + start + "')");
+        wrapper.apply(end!=null,"UNIX_TIMESTAMP(update_time) <= UNIX_TIMESTAMP('" + end + "')");
+        if (search != null && !search.equals("")) {
+            wrapper.and(QueryWrapper->QueryWrapper.like( "name", search)
+                    .or().like("type", search)
+                    .or().like( "total", search)
+                    .or().like("director", search));
+        }
+
+        wrapper.orderByDesc("update_time");
         return wrapper;
     }
     public QueryWrapper<T> wrapperUserId(Long userId){
         QueryWrapper<T> wrapper = this.wrapperTimeDesc();
         wrapper.eq("user_id",userId);
-        wrapper.eq("frozen_status",0);
+        wrapper.eq("status",0);
         return wrapper;
     }
     public QueryWrapper<T> wrapperAlbumId(Long albumId){
@@ -89,4 +95,11 @@ public class WrapperUtil<T> {
         wrapper.eq("owner_id",ownerId);
         return wrapper;
     }
+
+    public QueryWrapper<T> groupById(){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.select("user_id").eq("status",0).groupBy("user_id");
+        return wrapper;
+    }
+
 }

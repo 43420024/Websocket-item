@@ -10,9 +10,16 @@ import com.example.websocketitem.model.ResponseMap;
 * @createDate 2023-08-29 16:18:39
 */
 public interface RelationshipService extends IService<Relationship> {
+    /**
+     * 添加好友信息(双向添加
+     * */
     ResponseMap addRelationship(Relationship relationship);
-
+    /**
+     * 删除好友信息(双向删除
+     * */
     ResponseMap deleteRelationship(Relationship relationship);
-
+    /**
+     * 根据用户编号获取好友列表
+     * */
     ResponseMap listRelationship(Long ownerId);
 }

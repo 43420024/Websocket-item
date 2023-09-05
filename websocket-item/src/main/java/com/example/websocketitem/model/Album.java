@@ -37,12 +37,12 @@ public class Album implements Serializable {
     private Integer openness;
 
     /**
-     * 相册冻结状况
+     * 相册状态0:未审核(给看1:审核通过(给看2:审核不通过(冻结
      */
-    private Integer frozenStatus;
+    private Integer status;
 
     /**
-     * 相册剩余容量
+     * 相册总容量
      */
     private Integer capacity;
 

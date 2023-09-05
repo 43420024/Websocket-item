@@ -1,6 +1,5 @@
 package com.example.websocketitem.service.impl;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
@@ -11,11 +10,11 @@ import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author cd
@@ -31,25 +30,34 @@ public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumP
     PageUtil<AlbumPicture> pageUtil;
     @Resource
     WrapperUtil<AlbumPicture> wrapperUtil;
+
+    /**
+     * 添加相册图片
+     * */
     @Override
     public ResponseMap addAlbumPicture(AlbumPicture albumPicture) {
         albumPicture.setCreateTime(new Date());
         return responseMapUtil.addEntity(this.save(albumPicture));
     }
-
-
+    /**
+     * 删除相册图片同时删除服务器上图片
+     * */
     @Override
+    @Transactional
     public ResponseMap deleteAlbumPicture(Long id) {
         AlbumPicture albumPicture = this.getById(id);
         File file = new File("."+albumPicture.getPath());
-        Boolean flag = false;
+        boolean flag = false;
         if(file.isFile()&&file.exists()){
             flag = file.delete();
         }
         return responseMapUtil.deleteEntity(this.removeById(id) && flag);
     }
-
+    /**
+     * 多相册图片删除
+     * */
     @Override
+    @Transactional
     public ResponseMap deleteAlbumPictureList(List<AlbumPicture> albumPictures) {
         for (AlbumPicture albumPicture:albumPictures){
             File file = new File("."+albumPicture.getPath());
@@ -59,15 +67,19 @@ public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumP
         }
         return responseMapUtil.deleteList(this.removeBatchByIds(albumPictures));
     }
-
+    /**
+     * 根据相册编号获取相册图片
+     * */
     @Override
-    public ResponseMap listAlbumPicture(Long albumId, Integer page, Integer size) {
-        Page<AlbumPicture> pageList = this.page(pageUtil.getModelPage(page, size),wrapperUtil.wrapperAlbumId(albumId));
-        Map<String, Object> modelMap = pageUtil.getModelMap(pageList);
-        return responseMapUtil.getPageList(pageList,modelMap);
+    public ResponseMap getAlbumPicture(Long albumId) {
+        List<AlbumPicture> albumPictureList = this.list(wrapperUtil.wrapperAlbumId(albumId));
+        return responseMapUtil.getList(albumPictureList);
     }
-
+    /**
+     * 根据相册编号删除相册
+     * */
     @Override
+    @Transactional
     public ResponseMap deleteAlbumPictureWithAlbumId(Long albumId) {
         List<AlbumPicture> list = this.list(wrapperUtil.wrapperAlbumId(albumId));
         for (AlbumPicture albumPicture:list){
@@ -77,6 +89,13 @@ public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumP
             }
         }
         return responseMapUtil.deleteList(this.remove(wrapperUtil.wrapperAlbumId(albumId)));
+    }
+    /**
+     * 根据相册编号统计相册图片数量
+     * */
+    @Override
+    public ResponseMap countAlbumPicture(Long albumId) {
+        return responseMapUtil.countNumber(this.list(wrapperUtil.wrapperAlbumId(albumId)).size());
     }
 }
 
