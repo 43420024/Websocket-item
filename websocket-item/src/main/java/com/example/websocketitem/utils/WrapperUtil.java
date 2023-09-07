@@ -1,7 +1,10 @@
 package com.example.websocketitem.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.websocketitem.factory.EntityFactory;
+import com.example.websocketitem.factory.MapFactory;
 import com.example.websocketitem.model.Relationship;
+import com.example.websocketitem.model.ResponseMap;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -14,32 +17,10 @@ import java.util.Date;
 
 @Service
 public class WrapperUtil<T> {
+
     public QueryWrapper<T> wrapperTimeDesc(){
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc("create_time");
-        return wrapper;
-    }
-    /**
-     * 搜索通用
-     * */
-    public QueryWrapper<T> wrapperNormal(String search, String startTime, String endTime) {
-        QueryWrapper<T> wrapper = new QueryWrapper<>();
-        String start = null;
-        String end = null;
-        if (startTime!=null  && !startTime.equals("") && endTime!=null && !endTime.equals("")){
-            start = startTime.contains("/") ? startTime.replaceAll("/", "-") : startTime;
-            end = endTime.contains("/") ? endTime.replaceAll("/", "-") : endTime;
-        }
-        wrapper.apply(start!=null,"UNIX_TIMESTAMP(update_time) >= UNIX_TIMESTAMP('" + start + "')");
-        wrapper.apply(end!=null,"UNIX_TIMESTAMP(update_time) <= UNIX_TIMESTAMP('" + end + "')");
-        if (search != null && !search.equals("")) {
-            wrapper.and(QueryWrapper->QueryWrapper.like( "name", search)
-                    .or().like("type", search)
-                    .or().like( "total", search)
-                    .or().like("director", search));
-        }
-
-        wrapper.orderByDesc("update_time");
         return wrapper;
     }
     public QueryWrapper<T> wrapperUserId(Long userId){
@@ -54,32 +35,36 @@ public class WrapperUtil<T> {
         return wrapper;
     }
 
-    public QueryWrapper<T> wrapperAlbumFrozen(){
-        QueryWrapper<T> wrapper = this.wrapperTimeDesc();
-
+    public QueryWrapper<T> wrapperOpennessAlbum(){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("openness",1).between("status",0,1);
         return wrapper;
     }
     public QueryWrapper<T> wrapperReport(String search, String startTime, String endTime) {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
-        if (StringUtils.hasLength(startTime) && StringUtils.hasLength(endTime)){
-            LocalDateTime start = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            LocalDateTime end = LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            wrapper.between("create_time", start, end);
+        String start = null;
+        String end = null;
+        if (startTime!=null  && !startTime.equals("") && endTime!=null && !endTime.equals("")){
+            start = startTime.contains("/") ? startTime.replaceAll("/", "-") : startTime;
+            end = endTime.contains("/") ? endTime.replaceAll("/", "-") : endTime;
         }
-        wrapper.like(StringUtils.hasLength(search), "informer_id", search)
-                .or().like(StringUtils.hasLength(search), "reporter_id", search)
-                .or().like(StringUtils.hasLength(search), "type", search)
-                .or().like(StringUtils.hasLength(search), "description", search)
-                .or().like(StringUtils.hasLength(search), "status", search);
+        wrapper.apply(start!=null,"UNIX_TIMESTAMP(create_time) >= UNIX_TIMESTAMP('" + start + "')");
+        wrapper.apply(end!=null,"UNIX_TIMESTAMP(create_time) <= UNIX_TIMESTAMP('" + end + "')");
+        if (search != null && !search.equals("")) {
+            wrapper.and(QueryWrapper->QueryWrapper.like( "informer_id", search)
+                    .or().like("reporter_id", search)
+                    .or().like( "type", search)
+                    .or().like("description", search))
+                    .or().like("status", search);
+        }
         wrapper.orderByDesc("create_time");
         return wrapper;
     }
 
     public QueryWrapper<T> countReport(Long reporterId) {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
-        wrapper.eq("reporter_id",reporterId);
-        wrapper.eq("status",1);
-        wrapper.groupBy("content_id");
+        wrapper.eq("reporter_id",reporterId)
+                .eq("status",1);
         return wrapper;
     }
 
@@ -101,5 +86,14 @@ public class WrapperUtil<T> {
         wrapper.select("user_id").eq("status",0).groupBy("user_id");
         return wrapper;
     }
-
+    public QueryWrapper<T> groupByReporterId(){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.select("reporter_id").eq("status",0).groupBy("reporter_id");
+        return wrapper;
+    }
+    public QueryWrapper<T> wrapperReporterId(Long reporterId){
+        QueryWrapper<T> wrapper = this.wrapperTimeDesc();
+        wrapper.eq("reporter_id",reporterId).eq("status",0);
+        return wrapper;
+    }
 }

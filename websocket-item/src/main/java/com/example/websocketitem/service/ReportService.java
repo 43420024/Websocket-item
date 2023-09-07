@@ -36,4 +36,8 @@ public interface ReportService extends IService<Report> {
      * 获取被举报人举报信息统计
      * */
     ResponseMap countReport(Long reporterId);
+
+    ResponseMap statReport();
+
+    ResponseMap pageListReport(Long reporterId,Integer page,Integer size);
 }
