@@ -33,6 +33,7 @@ public class RuleController {
     //添加和修改会员规则表
     @PostMapping("addAndEdit")
     public DataType addOrEdit(@RequestBody Rule rule){
+        System.out.println(rule.toString());
         return ruleService.addOrEditOne(rule);
     }
 

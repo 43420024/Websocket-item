@@ -95,6 +95,13 @@ public class TrendsController {
         return trendsService.deleteTrends(id);
     }
 
+    //查询用户单个动态
+    @GetMapping("/getOne/{id}/{userid}")
+    @ResponseBody
+    public DataType selectOneTrends(@PathVariable Long id,@PathVariable Long userid){
+        return trendsService.selectOneTrends(id,userid);
+    }
+
 
     //查询个人全部动态
     @GetMapping("{userid}")

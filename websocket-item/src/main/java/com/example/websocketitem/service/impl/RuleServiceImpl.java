@@ -35,7 +35,7 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
 
     @Override
     public DataType selectOneRule(Integer type) {
-        if (type>0){
+        if (type!=null){
             QueryWrapper<Rule> wrapper = new QueryWrapper<>();
             Rule rule=ruleMapper.selectOne(wrapper.eq("type",type));
             if (rule!=null){
@@ -57,7 +57,7 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
 
     @Override
     public DataType deleteRule(Integer id) {
-        if (id>0){
+        if (id!=null){
             if(ruleMapper.deleteById(id)>0){
                 dataType.setData(true);
                 dataType.setFlag(true);
@@ -77,7 +77,7 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
 
     @Override
     public DataType addOrEditOne(Rule rule) {
-        if (rule.getId()>0 && rule.getType()>0 && rule.getContent()!=null){
+        if (rule.getId()!=null && rule.getType()>0 && rule.getContent()!=null){
             rule.setEdittime(new Date());
             if(ruleMapper.updateById(rule)>0){
                 dataType.setData(rule);
