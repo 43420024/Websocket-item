@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.0.177:3306/websocket_item?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://192.168.0.200:3306/websocket_item?useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root
-    password: cd2023
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
   data:
     redis:

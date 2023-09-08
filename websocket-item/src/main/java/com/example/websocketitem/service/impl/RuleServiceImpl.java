@@ -34,10 +34,10 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
     PageUtil<Rule> pageUtil;
 
     @Override
-    public DataType selectOneRule(Integer type) {
-        if (type!=null){
+    public DataType selectOneRule(Integer id) {
+        if (id!=null){
             QueryWrapper<Rule> wrapper = new QueryWrapper<>();
-            Rule rule=ruleMapper.selectOne(wrapper.eq("type",type));
+            Rule rule=ruleMapper.selectOne(wrapper.eq("id",id));
             if (rule!=null){
                 dataType.setData(rule);
                 dataType.setFlag(true);

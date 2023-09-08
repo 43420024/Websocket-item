@@ -11,7 +11,7 @@ import com.example.websocketitem.utils.DataType;
 */
 public interface RuleService extends IService<Rule> {
 
-    DataType selectOneRule(Integer type);
+    DataType selectOneRule(Integer id);
 
     DataType deleteRule(Integer id);
 
