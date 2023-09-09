@@ -25,10 +25,10 @@ public class RuleController {
     }
 
     //删除单个会员规则表
-    @DeleteMapping("{id}")
-    public DataType deleteRule(@PathVariable Integer id){
-        return ruleService.deleteRule(id);
-    }
+//    @DeleteMapping("{id}")
+//    public DataType deleteRule(@PathVariable Integer id){
+//        return ruleService.deleteRule(id);
+//    }
 
     //添加和修改会员规则表
     @PostMapping("addAndEdit")
