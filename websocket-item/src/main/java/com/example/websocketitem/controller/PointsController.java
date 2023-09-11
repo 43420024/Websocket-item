@@ -38,6 +38,13 @@ public class PointsController<T> {
     public Result<T> deletePoints(@PathVariable Long id) {
         return pointsService.deleteByPrimaryKey(id);
     }
+
+    /**
+     * 修改总积分
+     * @param userId 用户id
+     * @param addPoints 积分增量
+     * @return Result
+     */
     @PutMapping("/addPoints")
     public Result<Object> addPoints(@RequestParam Long userId,@RequestParam Integer addPoints){
         return pointsService.updateTotalPointsByUserId(userId,addPoints);
