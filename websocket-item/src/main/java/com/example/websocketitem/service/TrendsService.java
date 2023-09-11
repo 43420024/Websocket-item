@@ -26,4 +26,5 @@ public interface TrendsService extends IService<Trends> {
 
     ResponseMap userListTrends(int page, int size, Long userid);
 
+    DataType selectOneTrends(Long id, Long userid);
 }

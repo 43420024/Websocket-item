@@ -72,4 +72,14 @@
             create_time =  #{createTime,jdbcType=TIMESTAMP}
         where   master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
     </update>
+    <update id="updateParentIdByUserId">
+        update tcd_master_slave_relationship
+        set parent_id = #{parentId,jdbcType=NUMERIC}
+        where user_id = #{userId,jdbcType=NUMERIC}
+    </update>
+    <delete id="deleteByUserId">
+        delete
+        from tcd_master_slave_relationship
+        where user_id = #{userId,jdbcType=NUMERIC}
+    </delete>
 </mapper>

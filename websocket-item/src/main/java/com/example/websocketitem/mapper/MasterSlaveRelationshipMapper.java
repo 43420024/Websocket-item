@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import com.example.websocketitem.model.MasterSlaveRelationship;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
 * @author ASUS
 * @description 针对表【tcd_master_slave_relationship(主从账号表)】的数据库操作Mapper
@@ -33,4 +35,10 @@ public interface MasterSlaveRelationshipMapper {
      */
     @Select("select parent_id from `tcd_master_slave_relationship` where user_id = #{userId}")
     Long selectParentIdByUserId(@Param("userId") Long userId);
+    @Select("select master_slave_id,user_id,parent_id,create_time from `tcd_master_slave_relationship` where parent_id = #{parentId}")
+    List<MasterSlaveRelationship> listMasterSlaves(Long parentId);
+
+    int updateParentIdByUserId(@Param("parentId") Long parentId, @Param("userId") Long userId);
+
+    int deleteByUserId(@Param("userId") Long userId);
 }

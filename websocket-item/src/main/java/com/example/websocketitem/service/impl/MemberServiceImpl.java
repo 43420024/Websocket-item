@@ -38,7 +38,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member>
 
     @Override
     public DataType selectOneMember(Integer id) {
-        if (id>0){
+        if (id!=null){
             Member member = memberMapper.selectById(id);
             if (member!=null){
                 dataType.setData(member);
@@ -84,7 +84,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member>
 
     @Override
     public DataType deleteMemberOne(Integer id) {
-        if (id>0){
+        if (id!=null){
             int i = memberMapper.deleteById(id);
             if (i>0){
                 dataType.setData(true);
