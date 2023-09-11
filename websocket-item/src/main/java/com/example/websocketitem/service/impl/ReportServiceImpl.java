@@ -16,6 +16,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +83,21 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     @Override
     public ResponseMap countReport(Long reporterId) {
         return responseMapUtil.countNumber(this.list(wrapperUtil.countReport(reporterId)).size());
+    }
+
+    @Override
+    public ResponseMap statReport() {
+        List<Report> reportList = this.list(wrapperUtil.groupByReporterId());
+        Map<Long,Integer> map = new HashMap<>();
+        reportList.forEach(report-> map.put(report.getReporterId(), (int) this.count(wrapperUtil.wrapperReporterId(report.getReporterId()))));
+        return responseMapUtil.returnMap(map);
+    }
+
+    @Override
+    public ResponseMap pageListReport(Long reporterId, Integer page, Integer size) {
+        Page<Report> pageList = this.page(pageUtil.getModelPage(page, size), wrapperUtil.wrapperReporterId(reporterId));
+        Map<String, Object> modelMap = pageUtil.getModelMap(pageList);
+        return responseMapUtil.getPageList(pageList,modelMap);
     }
 }
 

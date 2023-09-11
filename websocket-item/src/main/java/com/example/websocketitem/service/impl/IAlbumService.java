@@ -39,7 +39,7 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
     @Override
     public ResponseMap addAlbum(Album album) {
         album.setCreateTime(new Date());
-        album.setCapacity(21);
+        album.setCapacity(16);
         return responseMapUtil.addEntity(this.save(album));
     }
     /**
@@ -96,6 +96,22 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
         Map<Long,Integer> map = new HashMap<>();
         userIdList.forEach(album-> map.put(album.getUserId(), (int) this.count(wrapperUtil.wrapperUserId(album.getUserId()))));
         return responseMapUtil.returnMap(map);
+    }
+    /**
+     * 根据用户编号获取该用户全部未审核相册
+     * */
+    @Override
+    public ResponseMap listAllAlbum(Long userId) {
+        return responseMapUtil.getList(this.list(wrapperUtil.wrapperUserId(userId)));
+    }
+    /**
+     * APP首页获取随机公开相册
+     * */
+    @Override
+    public ResponseMap shuffleAlbum() {
+        List<Album> list = this.list(wrapperUtil.wrapperOpennessAlbum());
+        Collections.shuffle(list);
+        return responseMapUtil.getList(list.subList(0,5));
     }
 }
 

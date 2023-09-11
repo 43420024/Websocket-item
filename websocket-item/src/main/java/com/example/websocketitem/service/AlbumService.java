@@ -35,4 +35,12 @@ public interface AlbumService extends IService<Album> {
     Boolean capacityReduce(Long id);
 
     ResponseMap statAlbum();
+    /**
+     * 根据用户编号获取该用户全部未审核相册
+     * */
+    ResponseMap listAllAlbum(Long userId);
+    /**
+     * APP首页获取随机公开相册
+     * */
+    ResponseMap shuffleAlbum();
 }

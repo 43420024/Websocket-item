@@ -48,10 +48,26 @@ public class ReportController {
         return reportService.searchReport(searchModel);
     }
     /**
-     * 获取被举报人举报信息统计
+     * 获取被举报人审核确认违规信息统计
      * */
     @GetMapping("/countReporter/{reporterId}")
     public ResponseMap countReport(@PathVariable Long reporterId){
         return reportService.countReport(reporterId);
+    }
+    /**
+     * 获取举报未审核用户编号及未审核举报个数
+     * */
+    @GetMapping("/stat")
+    public ResponseMap statReport(){
+        return reportService.statReport();
+    }
+    /**
+     * 根据用户编号和分页信息获取未审核举报分页列表
+     * */
+    @GetMapping("/pageList/{reporterId}/{page}/{size}")
+    public ResponseMap pageListReport(@PathVariable Long reporterId,
+                                    @PathVariable Integer page,
+                                    @PathVariable Integer size){
+        return reportService.pageListReport(reporterId,page,size);
     }
 }

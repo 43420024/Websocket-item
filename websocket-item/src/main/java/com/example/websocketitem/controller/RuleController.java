@@ -19,20 +19,21 @@ public class RuleController {
     private RuleService ruleService;
 
     //查询单个会员规则表
-    @GetMapping("{type}")
-    public DataType selectRule(@PathVariable Integer type){
-        return ruleService.selectOneRule(type);
+    @GetMapping("{id}")
+    public DataType selectRule(@PathVariable Integer id){
+        return ruleService.selectOneRule(id);
     }
 
     //删除单个会员规则表
-    @DeleteMapping("{id}")
-    public DataType deleteRule(@PathVariable Integer id){
-        return ruleService.deleteRule(id);
-    }
+//    @DeleteMapping("{id}")
+//    public DataType deleteRule(@PathVariable Integer id){
+//        return ruleService.deleteRule(id);
+//    }
 
     //添加和修改会员规则表
     @PostMapping("addAndEdit")
     public DataType addOrEdit(@RequestBody Rule rule){
+        System.out.println(rule.toString());
         return ruleService.addOrEditOne(rule);
     }
 

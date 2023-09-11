@@ -34,10 +34,10 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
     PageUtil<Rule> pageUtil;
 
     @Override
-    public DataType selectOneRule(Integer type) {
-        if (type>0){
+    public DataType selectOneRule(Integer id) {
+        if (id!=null){
             QueryWrapper<Rule> wrapper = new QueryWrapper<>();
-            Rule rule=ruleMapper.selectOne(wrapper.eq("type",type));
+            Rule rule=ruleMapper.selectOne(wrapper.eq("id",id));
             if (rule!=null){
                 dataType.setData(rule);
                 dataType.setFlag(true);
@@ -57,7 +57,7 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
 
     @Override
     public DataType deleteRule(Integer id) {
-        if (id>0){
+        if (id!=null){
             if(ruleMapper.deleteById(id)>0){
                 dataType.setData(true);
                 dataType.setFlag(true);
@@ -77,7 +77,7 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
 
     @Override
     public DataType addOrEditOne(Rule rule) {
-        if (rule.getId()>0 && rule.getType()>0 && rule.getContent()!=null){
+        if (rule.getId()!=null && rule.getType()!=null && rule.getContent()!=null){
             rule.setEdittime(new Date());
             if(ruleMapper.updateById(rule)>0){
                 dataType.setData(rule);
@@ -88,17 +88,20 @@ public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
                 dataType.setFlag(false);
                 dataType.setMessage("修改失败，请确认参数是否有误后重试！！！");
             }
-        }else if(rule.getType()>0 && rule.getContent()!=null){
-            rule.setCreatetime(new Date());
-            if(ruleMapper.insert(rule)>0){
-                dataType.setData(rule);
-                dataType.setFlag(true);
-                dataType.setMessage("添加成功！！！");
-            }else {
-                dataType.setData(rule);
-                dataType.setFlag(false);
-                dataType.setMessage("添加失败，请确认参数是否有误后重试！！！");
-            }
+        }else if(rule.getType()!=null && rule.getContent()!=null){
+//            rule.setCreatetime(new Date());
+//            if(ruleMapper.insert(rule)>0){
+//                dataType.setData(rule);
+//                dataType.setFlag(true);
+//                dataType.setMessage("添加成功！！！");
+//            }else {
+//                dataType.setData(rule);
+//                dataType.setFlag(false);
+//                dataType.setMessage("添加失败，请确认参数是否有误后重试！！！");
+//            }
+            dataType.setData(null);
+            dataType.setFlag(false);
+            dataType.setMessage("操作失败，不能添加新的协议或规则，若必须添加，请联系系统管理人员，谢谢！！！");
         }else {
             dataType.setData(null);
             dataType.setFlag(false);

@@ -29,7 +29,7 @@ public class AlbumPictureController {
     //@RequestParam指向前端input file的name,加入HttpServletRequest请求
     public Map<String,Object> upload(@RequestParam("File") MultipartFile[] multipartFiles,@RequestParam("AlbumId") Long albumId, HttpServletRequest request) throws IOException {
         //设置当前日期
-        String uploaddate= new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        //String uploaddate= new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         //设置文件上传保存文件路径：保存在项目运行目录下的uploadFile文件夹+当前日期
         String savepath = "./images/";
         //创建文件夹,当文件夹不存在时，创建文件夹
@@ -92,9 +92,9 @@ public class AlbumPictureController {
         return albumPictureService.deleteAlbumPictureList(albumPictures);
     }
     /**
-     * 根据相册编号获取相册图片
+     * 根据相册编号获取全部相册图片
      * */
-    @GetMapping("/album/{albumId}")
+    @GetMapping("/{albumId}")
     public ResponseMap listAlbumPicture(@PathVariable Long albumId){
         return albumPictureService.getAlbumPicture(albumId);
     }

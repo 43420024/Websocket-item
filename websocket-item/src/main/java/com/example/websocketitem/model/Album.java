@@ -32,7 +32,7 @@ public class Album implements Serializable {
     private String name;
 
     /**
-     * 相册是否开放
+     * 相册是否开放0为不开放1为开放
      */
     private Integer openness;
 

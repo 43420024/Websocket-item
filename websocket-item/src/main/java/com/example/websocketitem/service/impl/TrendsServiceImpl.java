@@ -1,5 +1,6 @@
 package com.example.websocketitem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -63,6 +64,8 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
                 trends.setImgsrc(src);
             }
             trendsMapper.updateById(trends);
+            dataType.setData(trends);
+            dataType.setFlag(true);
             dataType.setMessage("修改成功");
         }else {
             //是新闻添加
@@ -73,7 +76,6 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
             trends.setContent(content);
             List<String> imgStr = ImageUtil.getImgStr(content);
             if (imgStr==null||imgStr.size()==0){
-
                 trends.setImgsrc("/images/white.jpg");
             }else {
                 //取第一张图片即可
@@ -83,7 +85,10 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
             trends.setCreatetime(new Date());
             trends.setUserid(trends.getUserid());
             trends.setCount(0L);
+            trends.setStatus(1);//动态待审核
             trendsMapper.insert(trends);
+            dataType.setData(trends);
+            dataType.setFlag(true);
             dataType.setMessage("添加成功");
         }
         return dataType;
@@ -136,9 +141,27 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
 
     @Override
     public ResponseMap userListTrends(int page, int size, Long userid) {
-        Page<Trends> trendsPage=this.page(pageUtil.getModelPage(page,size),wrapperUtil.wrapperUserId(userid));
+        Page<Trends> trendsPage=this.page(pageUtil.getModelPage(page,size), wrapperUtil.wrapperUserIdOne(userid));
         Map<String,Object> map=pageUtil.getModelMap(trendsPage);
         return responseMapUtil.getPageList(trendsPage,map);
+    }
+
+    @Override
+    public DataType selectOneTrends(Long id, Long userid) {
+        if (id!=null && userid!=null){
+            QueryWrapper<Trends> wrapper =new QueryWrapper<>();
+            wrapper.eq("id",id);
+            wrapper.eq("userid",userid);
+            Trends trends=trendsMapper.selectOne(wrapper);
+            dataType.setData(trends);
+            dataType.setMessage("查询成功！！！");
+            dataType.setFlag(true);
+        }else {
+            dataType.setData(null);
+            dataType.setMessage("参数有误，请确认后重试");
+            dataType.setFlag(false);
+        }
+        return dataType;
     }
 }
 
