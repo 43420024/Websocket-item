@@ -165,6 +165,9 @@ public class ResponseMapUtil<T>{
         }
         return responseMap;
     }
+    /**
+     * 获取统计结果
+     * */
     public ResponseMap returnMap(Map map){
         if (map.size()!=0){
             responseMap.setFlag(true);

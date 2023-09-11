@@ -31,9 +31,13 @@ public interface AlbumService extends IService<Album> {
      * 模糊全匹配+按时间相册查询
      * */
 //    ResponseMap searchAlbum(SearchModel searchModel);
-
+    /**
+     * 减少容量  暂时不用
+     * */
     Boolean capacityReduce(Long id);
-
+    /**
+     * 获取相册未审核用户编号及未审核相册个数
+     * */
     ResponseMap statAlbum();
     /**
      * 根据用户编号获取该用户全部未审核相册

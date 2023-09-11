@@ -36,4 +36,6 @@ public interface AlbumPictureService extends IService<AlbumPicture> {
      * 根据相册编号统计相册图片数量
      * */
     ResponseMap countAlbumPicture(Long albumId);
+
+    ResponseMap sixthAlbumPicture(Long albumId);
 }

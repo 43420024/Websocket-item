@@ -84,7 +84,9 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     public ResponseMap countReport(Long reporterId) {
         return responseMapUtil.countNumber(this.list(wrapperUtil.countReport(reporterId)).size());
     }
-
+    /**
+     * 获取未处理举报信息用户编号及该用户未处理举报信息个数
+     * */
     @Override
     public ResponseMap statReport() {
         List<Report> reportList = this.list(wrapperUtil.groupByReporterId());
@@ -92,12 +94,21 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         reportList.forEach(report-> map.put(report.getReporterId(), (int) this.count(wrapperUtil.wrapperReporterId(report.getReporterId()))));
         return responseMapUtil.returnMap(map);
     }
-
+    /**
+     * 根据用户编号和分页信息获取未审核举报分页列表
+     * */
     @Override
     public ResponseMap pageListReport(Long reporterId, Integer page, Integer size) {
         Page<Report> pageList = this.page(pageUtil.getModelPage(page, size), wrapperUtil.wrapperReporterId(reporterId));
         Map<String, Object> modelMap = pageUtil.getModelMap(pageList);
         return responseMapUtil.getPageList(pageList,modelMap);
+    }
+    /**
+     * 获取单一举报信息
+     * */
+    @Override
+    public ResponseMap getReport(Long id) {
+        return responseMapUtil.getEntity(this.getById(id));
     }
 }
 
