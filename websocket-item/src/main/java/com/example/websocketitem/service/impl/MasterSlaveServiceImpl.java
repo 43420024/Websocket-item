@@ -7,12 +7,13 @@ import com.example.websocketitem.model.User;
 import com.example.websocketitem.service.MasterSlaveService;
 import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-
+@Slf4j
 @Service
 public class MasterSlaveServiceImpl implements MasterSlaveService {
     @Resource
@@ -28,6 +29,9 @@ public class MasterSlaveServiceImpl implements MasterSlaveService {
     @Override
     public Result<List<MasterSlaveRelationship>> listMasterSlaves(Long parentId) {
         List<MasterSlaveRelationship> listMasterSlaves = masterSlaveRelationshipMapper.listMasterSlaves(parentId);
+        for (MasterSlaveRelationship slave : listMasterSlaves) {
+            log.info("查询信息 {}",slave.toString());
+        }
         return Result.ok("查询成功", listMasterSlaves);
     }
 
@@ -36,7 +40,7 @@ public class MasterSlaveServiceImpl implements MasterSlaveService {
         user.setCreateTime(new Date());
         int insert = userMapper.insert(user);
         if (insert > 0) {
-            MasterSlaveRelationship relationship = new MasterSlaveRelationship(null, user.getId(), parentId, LocalDateTime.now());
+            MasterSlaveRelationship relationship = new MasterSlaveRelationship(null, user.getId(), parentId, LocalDateTime.now(),null,null);
             int insertRelationShip = masterSlaveRelationshipMapper.insert(relationship);
             return insertRelationShip > 0 ? Result.ok() : Result.error();
         }
