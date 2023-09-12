@@ -89,7 +89,9 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
             return false;
         }
     }
-
+    /**
+     * 获取相册未审核用户编号及未审核相册个数
+     * */
     @Override
     public ResponseMap statAlbum() {
         List<Album> userIdList = this.list(wrapperUtil.groupById());

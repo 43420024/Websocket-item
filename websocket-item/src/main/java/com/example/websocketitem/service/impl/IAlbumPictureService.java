@@ -97,6 +97,13 @@ public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumP
     public ResponseMap countAlbumPicture(Long albumId) {
         return responseMapUtil.countNumber(this.list(wrapperUtil.wrapperAlbumId(albumId)).size());
     }
+    /**
+     * 获取相册最后添加的六张图片
+     * */
+    @Override
+    public ResponseMap sixthAlbumPicture(Long albumId) {
+        return responseMapUtil.getList(this.list(wrapperUtil.wrapperAlbumId(albumId)).subList(0,6));
+    }
 }
 
 
