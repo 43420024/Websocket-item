@@ -29,9 +29,6 @@ public class MasterSlaveServiceImpl implements MasterSlaveService {
     @Override
     public Result<List<MasterSlaveRelationship>> listMasterSlaves(Long parentId) {
         List<MasterSlaveRelationship> listMasterSlaves = masterSlaveRelationshipMapper.listMasterSlaves(parentId);
-        for (MasterSlaveRelationship slave : listMasterSlaves) {
-            log.info("查询信息 {}",slave.toString());
-        }
         return Result.ok("查询成功", listMasterSlaves);
     }
 
