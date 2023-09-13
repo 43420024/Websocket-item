@@ -10,6 +10,7 @@ import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.service.UserService;
 import com.example.websocketitem.mapper.UserMapper;
+import com.example.websocketitem.utils.DataType;
 import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private UserMapper userMapper;
+
+    DataType dataType=new DataType();
 
     @Override
     public Result updateStatus(User user) {
@@ -97,6 +102,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             save = userInfoService.save(data.getUserInfo());
         }
         return save ? Result.success() : Result.error();
+    }
+
+    @Override
+    public DataType addUserAndInfo(Long userId) {
+        Data data=new Data();
+        data.setUser(userMapper.selectById(userId));
+        data.setUserInfo(userInfoService.getById(userId));
+        if (data.getUser()!=null && data.getUserInfo()!=null){
+            dataType.setData(data);
+            dataType.setFlag(true);
+            dataType.setMessage("查询用户信息成功");
+        }else {
+            dataType.setData(null);
+            dataType.setFlag(false);
+            dataType.setMessage("查询失败，请检查后重试！！！");
+        }
+        return dataType;
     }
 
 
