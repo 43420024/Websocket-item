@@ -34,6 +34,14 @@ public class MasterSlaveRelationship implements Serializable {
      * 创建时间
      */
     private LocalDateTime createTime;
+    /**
+     * 昵称，级联查询
+     */
+    private String nickname;
+    /**
+     * 头像，级联查询
+     */
+    private String headPath;
 
     private static final long serialVersionUID = 1L;
 }

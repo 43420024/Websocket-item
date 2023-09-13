@@ -177,8 +177,8 @@ public class WebSocketServer {
 
             userTest.rightPush(messages);
 
-//            this.sendMessage(jsonObject.toString(), toSession);
-//            log.info("发送给用户username={}，消息：{}", toUsername, jsonObject.toString());
+            this.sendMessage(jsonObject.toString(), toSession);
+            log.info("发送给用户username={}，消息：{}", toUsername, jsonObject.toString());
         } else {
             BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("unread" + userId);
             userTest.rightPush(messages);
@@ -193,13 +193,13 @@ public class WebSocketServer {
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
         Long parentId = masterSlaveService.getParentIdByUserId(userId);
-//        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
-//            messages.setSender(parentId);
-//            messages.setRole(2);
-//        } else {
-//            messages.setRole(1);
-//            messages.setSender(userId);
-//        }
+        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
+            messages.setSender(parentId);
+            messages.setRole(2);
+        } else {
+            messages.setRole(1);
+            messages.setSender(userId);
+        }
         messages.setSender(userId);
         messages.setRole(2);
         JSONObject jsonObject = new JSONObject();

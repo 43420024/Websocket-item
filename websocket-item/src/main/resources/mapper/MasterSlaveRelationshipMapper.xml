@@ -9,6 +9,8 @@
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <association property="nickname" column="user_id" select="com.example.websocketitem.mapper.UserInfoMapper.selectNicknameByUserId"/>
+            <association property="headPath" column="user_id" select="com.example.websocketitem.mapper.UserInfoMapper.selectHeadPathByUserId"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -21,6 +23,12 @@
         <include refid="Base_Column_List" />
         from tcd_master_slave_relationship
         where  master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
+    </select>
+    <select id="listMasterSlaves" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from tcd_master_slave_relationship
+        where  parent_id = #{parent_id,jdbcType=BIGINT}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
