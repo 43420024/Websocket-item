@@ -5,7 +5,6 @@ import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.service.AlbumPictureService;
 import com.example.websocketitem.mapper.AlbumPictureMapper;
-import com.example.websocketitem.utils.PageUtil;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
@@ -26,8 +25,6 @@ public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumP
     implements AlbumPictureService{
     @Resource
     ResponseMapUtil<AlbumPicture> responseMapUtil;
-    @Resource
-    PageUtil<AlbumPicture> pageUtil;
     @Resource
     WrapperUtil<AlbumPicture> wrapperUtil;
 

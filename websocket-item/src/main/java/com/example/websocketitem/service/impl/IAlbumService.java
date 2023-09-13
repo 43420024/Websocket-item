@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.model.Album;
 import com.example.websocketitem.model.ResponseMap;
-import com.example.websocketitem.model.SearchModel;
 import com.example.websocketitem.service.AlbumPictureService;
 import com.example.websocketitem.service.AlbumService;
 import com.example.websocketitem.mapper.AlbumMapper;
@@ -33,6 +32,7 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
     WrapperUtil<Album> wrapperUtil;
     @Resource
     AlbumPictureService albumPictureService;
+
     /**
      * 添加相册
      * */

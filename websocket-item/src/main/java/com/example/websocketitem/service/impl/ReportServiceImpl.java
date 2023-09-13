@@ -2,11 +2,9 @@ package com.example.websocketitem.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.websocketitem.model.Album;
 import com.example.websocketitem.model.Report;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
-import com.example.websocketitem.service.AlbumPictureService;
 import com.example.websocketitem.service.ReportService;
 import com.example.websocketitem.mapper.ReportMapper;
 import com.example.websocketitem.utils.PageUtil;
@@ -34,7 +32,6 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     PageUtil<Report> pageUtil;
     @Resource
     WrapperUtil<Report> wrapperUtil;
-
     /**
      * 添加举报信息
      * */
