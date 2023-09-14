@@ -35,6 +35,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     PageUtil<Report> pageUtil;
     @Resource
     WrapperUtil<Report> wrapperUtil;
+    @Resource
+    private ReportMapper reportMapper;
     /**
      * 添加举报信息
      * */
