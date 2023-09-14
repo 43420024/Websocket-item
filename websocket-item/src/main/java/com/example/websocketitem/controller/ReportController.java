@@ -65,6 +65,7 @@ public class ReportController {
     }
     /**
      * 获取单一举报信息
+     *
      * */
     @GetMapping("/{id}")
     public ResponseMap getReport(@PathVariable Long id){

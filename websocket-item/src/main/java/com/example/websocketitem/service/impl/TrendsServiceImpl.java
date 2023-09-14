@@ -9,6 +9,7 @@ import com.example.websocketitem.factory.DateTypeFactory;
 import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.Trends;
+import com.example.websocketitem.model.TrendsList;
 import com.example.websocketitem.service.TrendsService;
 import com.example.websocketitem.mapper.TrendsMapper;
 import com.example.websocketitem.utils.*;
@@ -159,6 +160,24 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
         }else {
             dataType.setData(null);
             dataType.setMessage("参数有误，请确认后重试");
+            dataType.setFlag(false);
+        }
+        return dataType;
+    }
+
+    @Override
+    public DataType statusByTrendsList(TrendsList trendsList) {
+        if (trendsList.getUserid()!=null && trendsList.getStatus()!=null){
+            QueryWrapper<Trends> wrapper =new QueryWrapper<>();
+            wrapper.eq("userid",trendsList.getUserid());
+            wrapper.eq("status",trendsList.getStatus());
+            List<Trends> trendsLists = trendsMapper.selectList(wrapper);
+            dataType.setData(trendsLists);
+            dataType.setMessage("查询成功！！！");
+            dataType.setFlag(true);
+        }else {
+            dataType.setData(null);
+            dataType.setMessage("查询失败！！！");
             dataType.setFlag(false);
         }
         return dataType;
