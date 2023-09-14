@@ -5,18 +5,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.model.Report;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.ReportService;
 import com.example.websocketitem.mapper.ReportMapper;
+import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.utils.PageUtil;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
 * @author cd
@@ -28,6 +27,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     implements ReportService{
     @Resource
     ResponseMapUtil<Report> responseMapUtil;
+    @Resource
+    ResponseMapUtil<UserInfo> userInfoResponseMapUtil;
     @Resource
     PageUtil<Report> pageUtil;
     @Resource
@@ -81,16 +82,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     public ResponseMap countReport(Long reporterId) {
         return responseMapUtil.countNumber(this.list(wrapperUtil.countReport(reporterId)).size());
     }
-    /**
-     * 获取未处理举报信息用户编号及该用户未处理举报信息个数
-     * */
-    @Override
-    public ResponseMap statReport() {
-        List<Report> reportList = this.list(wrapperUtil.groupByReporterId());
-        Map<Long,Integer> map = new HashMap<>();
-        reportList.forEach(report-> map.put(report.getReporterId(), (int) this.count(wrapperUtil.wrapperReporterId(report.getReporterId()))));
-        return responseMapUtil.returnMap(map);
-    }
+
     /**
      * 根据用户编号和分页信息获取未审核举报分页列表
      * */
@@ -106,6 +98,13 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     @Override
     public ResponseMap getReport(Long id) {
         return responseMapUtil.getEntity(this.getById(id));
+    }
+    /**
+     * 获取被举报用户编号工具方法
+     * */
+    @Override
+    public List<Report> getReporterIdList() {
+        return this.list(wrapperUtil.groupByReporterId());
     }
 }
 

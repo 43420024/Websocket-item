@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
 
+import java.util.List;
+
 /**
 * @author cd
 * @description 针对表【tcd_album(相册)】的数据库操作Service
@@ -36,10 +38,6 @@ public interface AlbumService extends IService<Album> {
      * */
     Boolean capacityReduce(Long id);
     /**
-     * 获取相册未审核用户编号及未审核相册个数
-     * */
-    ResponseMap statAlbum();
-    /**
      * 根据用户编号获取该用户全部未审核相册
      * */
     ResponseMap listAllAlbum(Long userId);
@@ -47,4 +45,8 @@ public interface AlbumService extends IService<Album> {
      * APP首页获取随机公开相册
      * */
     ResponseMap shuffleAlbum();
+    /**
+     * 获取相册用户编号工具方法
+     * */
+    List<Album> getAlbumOwnerIdList();
 }

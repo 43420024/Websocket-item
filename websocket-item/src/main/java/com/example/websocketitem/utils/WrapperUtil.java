@@ -17,8 +17,6 @@ import java.util.Date;
 
 @Service
 public class WrapperUtil<T> {
-    private QueryWrapper<T> wrapper = new QueryWrapper<>();
-
     public QueryWrapper<T> wrapperTimeDesc(){
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc("create_time");
@@ -134,6 +132,12 @@ public class WrapperUtil<T> {
     public QueryWrapper<T> wrapperSixthPicture(Long albumId){
         QueryWrapper<T> wrapper = this.wrapperTimeDesc();
         wrapper.eq("album_id",albumId);
+        return wrapper;
+    }
+
+    public QueryWrapper<T> wrapperUserInfo(Long userId){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",userId);
         return wrapper;
     }
 }

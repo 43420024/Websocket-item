@@ -7,20 +7,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.factory.EntityFactory;
 import com.example.websocketitem.mapper.PointsMapper;
-import com.example.websocketitem.model.Album;
-import com.example.websocketitem.model.UserInfo;
-import com.example.websocketitem.model.Points;
-import com.example.websocketitem.model.Relationship;
-import com.example.websocketitem.service.AlbumService;
-import com.example.websocketitem.service.PointsService;
-import com.example.websocketitem.service.RelationshipService;
-import com.example.websocketitem.service.UserInfoService;
+import com.example.websocketitem.model.*;
+import com.example.websocketitem.service.*;
 import com.example.websocketitem.mapper.UserInfoMapper;
+import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.Result;
+import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +35,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     @Resource
     private PointsMapper pointsMapper;
     @Resource
-    RelationshipService relationshipService;
+    private RelationshipService relationshipService;
+    @Resource
+    ResponseMapUtil<UserInfo> responseMapUtil;
+    @Resource
+    private WrapperUtil<UserInfo> wrapperUtil;
+    @Resource
+    private WrapperUtil<Report> reportWrapperUtil;
+    @Resource
+    private WrapperUtil<Album> albumWrapperUtil;
+    @Resource
+    private ReportService reportService;
+
 
     Relationship relationship = EntityFactory.createRelationship();
 
@@ -86,6 +94,39 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
         int update = this.baseMapper.updateById(userInfo);
         return update > 0 ? Result.success() : Result.error();
+    }
+
+    @Override
+    public UserInfo getInfo(Long userId) {
+        return this.getOne(wrapperUtil.wrapperUserInfo(userId));
+    }
+    /**
+     * 获取未处理举报信息用户编号及该用户未处理举报信息个数
+     */
+    @Override
+    public ResponseMap getReportUserInfo() {
+        List<Report> reportList = reportService.getReporterIdList();
+        List<UserInfo> userInfoList = new ArrayList<>();
+        reportList.forEach(report -> {
+            UserInfo userInfo = this.getInfo(report.getReporterId());
+            userInfo.setReportCount((int) reportService.count(reportWrapperUtil.wrapperReporterId(report.getReporterId())));
+            userInfoList.add(userInfo);
+        });
+        return responseMapUtil.getList(userInfoList);
+    }
+    /**
+     * 获取相册未审核用户编号及未审核相册个数
+     * */
+    @Override
+    public ResponseMap getAlbumUserInfo() {
+        List<Album> albumList = albumService.getAlbumOwnerIdList();
+        List<UserInfo> userInfoList = new ArrayList<>();
+        albumList.forEach(album-> {
+            UserInfo userInfo = this.getInfo(album.getUserId());
+            userInfo.setAlbumCount((int) albumService.count(albumWrapperUtil.wrapperUserInfo(album.getUserId())));
+            userInfoList.add(userInfo);
+        });
+        return responseMapUtil.getList(userInfoList);
     }
 }
 
