@@ -1,10 +1,12 @@
 package com.example.websocketitem.controller;
 
 import com.example.websocketitem.model.Data;
+import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.User;
 import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.service.UserService;
+import com.example.websocketitem.utils.DataType;
 import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,4 +123,25 @@ public class UserController {
     }
 
 
+    @GetMapping("/getOneUserAndInfo/{userId}")
+    public DataType getUserAndInfo(@PathVariable Long userId){
+        return userService.addUserAndInfo(userId);
+    }
+
+
+
+    /**
+     * 获取未处理举报信息用户编号及该用户未处理举报信息个数
+     */
+    @GetMapping("/reportStat")
+    public ResponseMap getReportUserInfo(){
+        return userInfoService.getReportUserInfo();
+    }
+    /**
+     * 获取相册未审核用户编号及未审核相册个数
+     * */
+    @GetMapping("/albumStat")
+    public ResponseMap getAlbumUserInfo(){
+        return userInfoService.getAlbumUserInfo();
+    }
 }

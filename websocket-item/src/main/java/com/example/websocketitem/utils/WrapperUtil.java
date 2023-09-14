@@ -1,24 +1,10 @@
 package com.example.websocketitem.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.websocketitem.factory.EntityFactory;
-import com.example.websocketitem.factory.MapFactory;
 import com.example.websocketitem.model.Relationship;
-import com.example.websocketitem.model.ResponseMap;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import javax.print.DocFlavor;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
-
 @Service
 public class WrapperUtil<T> {
-    private QueryWrapper<T> wrapper = new QueryWrapper<>();
-
     public QueryWrapper<T> wrapperTimeDesc(){
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc("create_time");
@@ -134,6 +120,17 @@ public class WrapperUtil<T> {
     public QueryWrapper<T> wrapperSixthPicture(Long albumId){
         QueryWrapper<T> wrapper = this.wrapperTimeDesc();
         wrapper.eq("album_id",albumId);
+        return wrapper;
+    }
+
+    public QueryWrapper<T> wrapperUserInfo(Long userId){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",userId);
+        return wrapper;
+    }
+    public QueryWrapper<T> wrapperViolationUserInfo(Long userId){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",userId).eq("status",2);
         return wrapper;
     }
 }

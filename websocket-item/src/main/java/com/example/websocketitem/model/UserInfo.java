@@ -113,6 +113,12 @@ public class UserInfo implements Serializable {
     @TableField(exist = false)
     private Points points;
 
+    @TableField(exist = false)
+    private Integer reportCount;
+
+    @TableField(exist = false)
+    private Integer albumCount;
+
     //用于接收数组，在数据表中并不存在
     @TableField(exist = false)
     @JsonProperty(value ="labelsArray")

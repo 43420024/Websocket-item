@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.model.Album;
 import com.example.websocketitem.model.ResponseMap;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.AlbumPictureService;
 import com.example.websocketitem.service.AlbumService;
 import com.example.websocketitem.mapper.AlbumMapper;
+import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.utils.PageUtil;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
@@ -89,16 +91,7 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
             return false;
         }
     }
-    /**
-     * 获取相册未审核用户编号及未审核相册个数
-     * */
-    @Override
-    public ResponseMap statAlbum() {
-        List<Album> userIdList = this.list(wrapperUtil.groupById());
-        Map<Long,Integer> map = new HashMap<>();
-        userIdList.forEach(album-> map.put(album.getUserId(), (int) this.count(wrapperUtil.wrapperUserId(album.getUserId()))));
-        return responseMapUtil.returnMap(map);
-    }
+
     /**
      * 根据用户编号获取该用户全部未审核相册
      * */
@@ -114,6 +107,18 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
         List<Album> list = this.list(wrapperUtil.wrapperOpennessAlbum());
         Collections.shuffle(list);
         return responseMapUtil.getList(list.subList(0,5));
+    }
+    /**
+     * 获取相册用户编号工具方法
+     * */
+    @Override
+    public List<Album> getAlbumOwnerIdList() {
+        return this.list(wrapperUtil.groupById());
+    }
+
+    @Override
+    public ResponseMap getUserViolationAlbumList(Long userId) {
+        return responseMapUtil.getList(this.list(wrapperUtil.wrapperViolationUserInfo(userId)));
     }
 }
 
