@@ -126,6 +126,14 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         return dataType;
     }
 
+    /**
+     * 获取被举报用户编号工具方法
+     * */
+    @Override
+    public List<Report> getReporterIdList() {
+        return this.list(wrapperUtil.groupByReporterId());
+    }
+
 }
 
 

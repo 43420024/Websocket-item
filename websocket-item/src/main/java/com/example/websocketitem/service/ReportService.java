@@ -57,5 +57,5 @@ public interface ReportService extends IService<Report> {
     /**
      * 获取被举报用户编号工具方法
      * */
-    //List<Report> getReporterIdList();
+    List<Report> getReporterIdList();
 }
