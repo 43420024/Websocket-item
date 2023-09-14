@@ -1,5 +1,6 @@
 package com.example.websocketitem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.model.Report;
@@ -9,6 +10,7 @@ import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.ReportService;
 import com.example.websocketitem.mapper.ReportMapper;
 import com.example.websocketitem.service.UserInfoService;
+import com.example.websocketitem.utils.DataType;
 import com.example.websocketitem.utils.PageUtil;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
@@ -105,6 +107,24 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     @Override
     public List<Report> getReporterIdList() {
         return this.list(wrapperUtil.groupByReporterId());
+    }
+    @Override
+    public DataType typeByTrendsList(Long userid, Integer type) {
+        DataType dataType=new DataType();
+        if (userid!=null && type!=null){
+            QueryWrapper<Report> wrapper=new QueryWrapper<>();
+            wrapper.eq("reporter_id",userid);
+            wrapper.eq("type",type);
+            List<Report> reports = reportMapper.selectList(wrapper);
+            dataType.setData(reports);
+            dataType.setMessage("查询成功");
+            dataType.setFlag(true);
+        }else {
+            dataType.setData(null);
+            dataType.setMessage("查询失败");
+            dataType.setFlag(false);
+        }
+        return dataType;
     }
 }
 
