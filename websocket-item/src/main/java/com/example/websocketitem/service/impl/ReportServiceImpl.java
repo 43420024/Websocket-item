@@ -33,6 +33,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     @Resource
     ResponseMapUtil<Report> responseMapUtil;
     @Resource
+    ResponseMapUtil<UserInfo> userInfoResponseMapUtil;
+    @Resource
     PageUtil<Report> pageUtil;
     @Resource
     WrapperUtil<Report> wrapperUtil;
@@ -106,7 +108,13 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     public ResponseMap getReport(Long id) {
         return responseMapUtil.getEntity(this.getById(id));
     }
-
+    /**
+     * 获取被举报用户编号工具方法
+     * */
+    @Override
+    public List<Report> getReporterIdList() {
+        return this.list(wrapperUtil.groupByReporterId());
+    }
     @Override
     public DataType typeByTrendsList(Long userid, Integer type) {
         DataType dataType=new DataType();
@@ -125,15 +133,6 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         }
         return dataType;
     }
-
-    /**
-     * 获取被举报用户编号工具方法
-     * */
-    @Override
-    public List<Report> getReporterIdList() {
-        return this.list(wrapperUtil.groupByReporterId());
-    }
-
 }
 
 

@@ -51,11 +51,10 @@ public interface ReportService extends IService<Report> {
      * 获取单一举报信息
      * */
     ResponseMap getReport(Long id);
-
-    //查询举报信息未动态举报的用户列表
-    DataType typeByTrendsList(Long userid, Integer type);
     /**
      * 获取被举报用户编号工具方法
      * */
     List<Report> getReporterIdList();
+    //查询举报信息未动态举报的用户列表
+    DataType typeByTrendsList(Long userid, Integer type);
 }
