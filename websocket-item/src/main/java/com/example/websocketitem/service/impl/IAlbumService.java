@@ -29,8 +29,6 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
     @Resource
     ResponseMapUtil<Album> responseMapUtil;
     @Resource
-    ResponseMapUtil<UserInfo> userInfoResponseMapUtil;
-    @Resource
     PageUtil<Album> pageUtil;
     @Resource
     WrapperUtil<Album> wrapperUtil;
@@ -116,6 +114,11 @@ public class IAlbumService extends ServiceImpl<AlbumMapper, Album>
     @Override
     public List<Album> getAlbumOwnerIdList() {
         return this.list(wrapperUtil.groupById());
+    }
+
+    @Override
+    public ResponseMap getUserViolationAlbumList(Long userId) {
+        return responseMapUtil.getList(this.list(wrapperUtil.wrapperViolationUserInfo(userId)));
     }
 }
 

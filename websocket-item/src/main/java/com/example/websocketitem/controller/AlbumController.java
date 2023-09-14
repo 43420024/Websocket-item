@@ -63,4 +63,9 @@ public class AlbumController {
     public ResponseMap shuffleAlbum(){
         return albumService.shuffleAlbum();
     }
+
+    @GetMapping("/violation/{userId}")
+    public ResponseMap getUserViolationAlbumList(@PathVariable Long userId){
+        return albumService.getUserViolationAlbumList(userId);
+    }
 }

@@ -49,4 +49,6 @@ public interface AlbumService extends IService<Album> {
      * 获取相册用户编号工具方法
      * */
     List<Album> getAlbumOwnerIdList();
+
+    ResponseMap getUserViolationAlbumList(Long userId);
 }
