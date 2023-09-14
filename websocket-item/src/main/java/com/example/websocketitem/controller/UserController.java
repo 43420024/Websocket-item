@@ -6,6 +6,7 @@ import com.example.websocketitem.model.User;
 import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.service.UserService;
+import com.example.websocketitem.utils.DataType;
 import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,6 +121,14 @@ public class UserController {
     public Result add(@RequestBody Data data) {
         return userService.add(data);
     }
+
+
+    @GetMapping("/getOneUserAndInfo/{userId}")
+    public DataType getUserAndInfo(@PathVariable Long userId){
+        return userService.addUserAndInfo(userId);
+    }
+
+
 
     /**
      * 获取未处理举报信息用户编号及该用户未处理举报信息个数
