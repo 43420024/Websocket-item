@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.model.Message;
 import com.example.websocketitem.service.MasterSlaveService;
 import com.example.websocketitem.utils.ApplicationContextRegister;
@@ -56,9 +57,15 @@ public class WebSocketServer {
         JSONObject result = new JSONObject();
         JSONArray array = new JSONArray();
         result.set("users", array);
-        for (Object key : sessionMap.keySet()) {
+        UserInfoMapper userInfoMapper = ApplicationContextRegister.getApplicationContext().getBean(UserInfoMapper.class);
+        for (String key : sessionMap.keySet()) {
+            Long longValue = Long.parseLong(key);
+            String nicknameByUserId = userInfoMapper.selectNicknameByUserId(longValue);
+            String selectHeadPathByUserId = userInfoMapper.selectHeadPathByUserId(longValue);
             JSONObject jsonObject = new JSONObject();
             jsonObject.set("username", key);
+            jsonObject.set("nickname", nicknameByUserId);
+            jsonObject.set("headPath",selectHeadPathByUserId);
             // {"username": "zhang", "username": "admin"}
             array.add(jsonObject);
         }
@@ -101,11 +108,11 @@ public class WebSocketServer {
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
         Long parentId = masterSlaveService.getParentIdByUserId(userId);
-        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
-            String parentToUsername = parentId.toString();
-            Session parentToSession = sessionMap.get(parentToUsername);
-            sendTwoMessage(username, parentToSession, text, image, video, emo, audio, toUsername);
-        }
+//        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
+//            String parentToUsername = parentId.toString();
+//            Session parentToSession = sessionMap.get(parentToUsername);
+//            sendTwoMessage(username, parentToSession, text, image, video, emo, audio, toUsername);
+//        }
         if (ObjectUtil.isNotEmpty(fromUsername)) { // 当from字段不为空时（主号id通过from字段直接指定是哪个虚拟账号（10个账号中的）发给用户的），
             Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
             sendOneMessage(fromUsername, toSession, text, image, video, emo, audio, toUsername);
