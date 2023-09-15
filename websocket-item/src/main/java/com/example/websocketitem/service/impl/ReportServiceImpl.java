@@ -30,8 +30,6 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     @Resource
     ResponseMapUtil<Report> responseMapUtil;
     @Resource
-    ResponseMapUtil<UserInfo> userInfoResponseMapUtil;
-    @Resource
     PageUtil<Report> pageUtil;
     @Resource
     WrapperUtil<Report> wrapperUtil;

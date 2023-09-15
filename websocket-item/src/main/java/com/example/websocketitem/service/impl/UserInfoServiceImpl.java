@@ -115,6 +115,23 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         return responseMapUtil.getList(userInfoList);
     }
     /**
+     * 根据模糊查询昵称获取未处理举报信息用户编号及该用户未处理举报信息个数
+     */
+    @Override
+    public ResponseMap getSearchReportUserInfo(String value) {
+        List<Report> reportList = reportService.getReporterIdList();
+        List<UserInfo> userInfoList = new ArrayList<>();
+        reportList.forEach(report -> {
+            UserInfo userInfo = this.getInfo(report.getReporterId());
+            if (userInfo.getNickname().contains(value)){
+                userInfo.setReportCount((int) reportService.count(reportWrapperUtil.wrapperReporterId(report.getReporterId())));
+                userInfoList.add(userInfo);
+            }
+        });
+        return responseMapUtil.getList(userInfoList);
+    }
+
+    /**
      * 获取相册未审核用户编号及未审核相册个数
      * */
     @Override
@@ -125,6 +142,22 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             UserInfo userInfo = this.getInfo(album.getUserId());
             userInfo.setAlbumCount((int) albumService.count(albumWrapperUtil.wrapperUserInfo(album.getUserId())));
             userInfoList.add(userInfo);
+        });
+        return responseMapUtil.getList(userInfoList);
+    }
+    /**
+     * 根据模糊查询昵称获取相册未审核用户编号及未审核相册个数
+     */
+    @Override
+    public ResponseMap getSearchAlbumUserInfo(String value) {
+        List<Album> albumList = albumService.getAlbumOwnerIdList();
+        List<UserInfo> userInfoList = new ArrayList<>();
+        albumList.forEach(album-> {
+            UserInfo userInfo = this.getInfo(album.getUserId());
+            if (userInfo.getNickname().contains(value)){
+                userInfo.setAlbumCount((int) albumService.count(albumWrapperUtil.wrapperUserInfo(album.getUserId())));
+                userInfoList.add(userInfo);
+            }
         });
         return responseMapUtil.getList(userInfoList);
     }
