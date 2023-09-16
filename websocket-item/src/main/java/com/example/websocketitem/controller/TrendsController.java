@@ -132,19 +132,19 @@ public class TrendsController {
     }
 
 
-    //动态待审核列表查询
-    @GetMapping("/TrendsListByStatus")
+    //动态待审核列表分页查询
+    @PostMapping("/TrendsListByStatus")
     @ResponseBody
-    public DataType statusByTrends(@RequestBody TrendsList trendsList){
+    public ResponseMap statusByTrends(@RequestBody TrendsList trendsList){
         return trendsService.statusByTrendsList(trendsList);
     }
 
 
-    //动态被举报列表查询
-    @GetMapping("/TrendsListByType/{userid}/{type}")
+    //动态被举报列表分页查询
+    @GetMapping("/TrendsListByType/{userid}/{type}/{page}/{size}")
     @ResponseBody
-    public DataType TrendsListByType(@PathVariable Long userid,@PathVariable Integer type){
-        return reportService.typeByTrendsList(userid,type);
+    public ResponseMap TrendsListByType(@PathVariable Long userid,@PathVariable Integer type,@PathVariable Integer page,@PathVariable Integer size){
+        return reportService.typeByTrendsList(userid,type,page,size);
     }
 
 

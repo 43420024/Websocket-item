@@ -56,5 +56,5 @@ public interface ReportService extends IService<Report> {
      * */
     List<Report> getReporterIdList();
     //查询举报信息未动态举报的用户列表
-    DataType typeByTrendsList(Long userid, Integer type);
+    ResponseMap typeByTrendsList(Long userid, Integer type,Integer page,Integer size);
 }

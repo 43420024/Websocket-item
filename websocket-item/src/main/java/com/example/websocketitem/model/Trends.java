@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 用户动态表
@@ -49,11 +52,13 @@ public class Trends implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createtime;
 
     /**
      * 编辑时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date edittime;
 
     @TableField(exist = false)

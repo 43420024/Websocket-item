@@ -114,22 +114,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         return this.list(wrapperUtil.groupByReporterId());
     }
     @Override
-    public DataType typeByTrendsList(Long userid, Integer type) {
-        DataType dataType=new DataType();
-        if (userid!=null && type!=null){
-            QueryWrapper<Report> wrapper=new QueryWrapper<>();
-            wrapper.eq("reporter_id",userid);
-            wrapper.eq("type",type);
-            List<Report> reports = reportMapper.selectList(wrapper);
-            dataType.setData(reports);
-            dataType.setMessage("查询成功");
-            dataType.setFlag(true);
-        }else {
-            dataType.setData(null);
-            dataType.setMessage("查询失败");
-            dataType.setFlag(false);
-        }
-        return dataType;
+    public ResponseMap typeByTrendsList(Long userid, Integer type,Integer page,Integer size) {
+        Page<Report> pageList=this.page(pageUtil.getModelPage(page,size),wrapperUtil.wrapperUserIdByReport(userid,type));
+        Map<String,Object> modelMap=pageUtil.getModelMap(pageList);
+        return responseMapUtil.getPageList(pageList,modelMap);
     }
 }
 

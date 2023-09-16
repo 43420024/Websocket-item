@@ -44,6 +44,21 @@ public class WrapperUtil<T> {
         wrapper.eq("status",0);
         return wrapper;
     }
+
+    public QueryWrapper<T> wrapperUserIdByReport(Long userId,Integer type){
+        QueryWrapper<T> wrapper = this.wrapperTimeDesc();
+        wrapper.eq("reporter_id",userId);
+        wrapper.eq("type",type);
+        return wrapper;
+    }
+
+    public QueryWrapper<T> wrapperTrendsId(Long userId,Integer status){
+        QueryWrapper<T> wrapper = this.wrapperTimeDescTrends();
+        wrapper.eq("userid",userId);
+        wrapper.eq("status",status);
+        return wrapper;
+    }
+
     public QueryWrapper<T> wrapperUserIdOne(Long userId){
         QueryWrapper<T> wrapper = this.wrapperTimeDescTrends();
         wrapper.eq("userid",userId);
