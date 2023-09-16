@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("messages")
+@CrossOrigin
 public class MessageController {
 
 
@@ -60,6 +61,11 @@ public class MessageController {
     public Result query(@PathVariable Long userId) {
 
       return   messageService.selectMount(userId);
+    }
+
+    @GetMapping("/queryChatListUser/{userId}")
+    public Result queryChatListUser(@PathVariable Long userId) {
+        return   messageService.queryChatListUser(userId);
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.websocketitem.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.example.websocketitem.vo.UserInfoVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,11 +38,7 @@ public class MasterSlaveRelationship implements Serializable {
     /**
      * 昵称，级联查询
      */
-    private String nickname;
-    /**
-     * 头像，级联查询
-     */
-    private String headPath;
+    private UserInfoVO userInfoVO;
 
     private static final long serialVersionUID = 1L;
 }

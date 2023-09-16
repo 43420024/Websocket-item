@@ -9,6 +9,7 @@ import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.model.Message;
 import com.example.websocketitem.service.MasterSlaveService;
 import com.example.websocketitem.utils.ApplicationContextRegister;
+import com.example.websocketitem.vo.UserInfoVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
@@ -60,12 +61,11 @@ public class WebSocketServer {
         UserInfoMapper userInfoMapper = ApplicationContextRegister.getApplicationContext().getBean(UserInfoMapper.class);
         for (String key : sessionMap.keySet()) {
             Long longValue = Long.parseLong(key);
-            String nicknameByUserId = userInfoMapper.selectNicknameByUserId(longValue);
-            String selectHeadPathByUserId = userInfoMapper.selectHeadPathByUserId(longValue);
+            UserInfoVO userInfoVO = userInfoMapper.selectNicknameAndHeadPathByUserId(longValue);
             JSONObject jsonObject = new JSONObject();
             jsonObject.set("username", key);
-            jsonObject.set("nickname", nicknameByUserId);
-            jsonObject.set("headPath",selectHeadPathByUserId);
+            jsonObject.set("nickname", userInfoVO.getNickname());
+            jsonObject.set("headPath",userInfoVO.getHeadPath());
             // {"username": "zhang", "username": "admin"}
             array.add(jsonObject);
         }

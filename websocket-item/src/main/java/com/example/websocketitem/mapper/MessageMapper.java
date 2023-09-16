@@ -2,6 +2,10 @@ package com.example.websocketitem.mapper;
 
 import com.example.websocketitem.model.Message;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author cd
@@ -10,7 +14,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.example.websocketitem.model.Message
 */
 public interface MessageMapper extends BaseMapper<Message> {
-
+    @Select("SELECT DISTINCT `come_from` FROM `tcd_message` WHERE from_to = #{userId}")
+    List<Long> selectDistinctMessages(@Param("userId") Long userId);
 }
 
 

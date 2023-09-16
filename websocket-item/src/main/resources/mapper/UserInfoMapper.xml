@@ -26,13 +26,8 @@
         region,introduction,like_number,
         description,user_id,nickname,create_time
     </sql>
-    <select id="selectNicknameByUserId" resultType="String">
-        select nickname
-        from tcd_user_info
-        where user_id = #{userId,jdbcType=NUMERIC}
-    </select>
-    <select id="selectHeadPathByUserId" resultType="String">
-        select head_path
+    <select id="selectNicknameAndHeadPathByUserId" resultType="com.example.websocketitem.vo.UserInfoVO">
+        select nickname,head_path
         from tcd_user_info
         where user_id = #{userId,jdbcType=NUMERIC}
     </select>

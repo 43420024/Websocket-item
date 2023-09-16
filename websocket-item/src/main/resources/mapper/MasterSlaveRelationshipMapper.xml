@@ -9,8 +9,7 @@
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <association property="nickname" column="user_id" select="com.example.websocketitem.mapper.UserInfoMapper.selectNicknameByUserId"/>
-            <association property="headPath" column="user_id" select="com.example.websocketitem.mapper.UserInfoMapper.selectHeadPathByUserId"/>
+            <association property="userInfoVO" column="user_id" select="com.example.websocketitem.mapper.UserInfoMapper.selectNicknameAndHeadPathByUserId"/>
     </resultMap>
 
     <sql id="Base_Column_List">

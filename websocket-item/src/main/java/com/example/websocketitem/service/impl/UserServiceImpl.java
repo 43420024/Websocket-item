@@ -67,6 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             record.setUserInfo(userInfo);
         }
         return Result.success(userPage);
+
     }
 
     @Override

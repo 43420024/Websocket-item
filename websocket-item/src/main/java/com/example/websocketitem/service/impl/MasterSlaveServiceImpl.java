@@ -37,7 +37,7 @@ public class MasterSlaveServiceImpl implements MasterSlaveService {
         user.setCreateTime(new Date());
         int insert = userMapper.insert(user);
         if (insert > 0) {
-            MasterSlaveRelationship relationship = new MasterSlaveRelationship(null, user.getId(), parentId, LocalDateTime.now(),null,null);
+            MasterSlaveRelationship relationship = new MasterSlaveRelationship(null, user.getId(), parentId, LocalDateTime.now(),null);
             int insertRelationShip = masterSlaveRelationshipMapper.insert(relationship);
             return insertRelationShip > 0 ? Result.ok() : Result.error();
         }
