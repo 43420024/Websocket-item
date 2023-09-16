@@ -9,15 +9,18 @@ import com.example.websocketitem.model.SearchModel;
 import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.ReportService;
 import com.example.websocketitem.mapper.ReportMapper;
-import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.utils.DataType;
+import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.utils.PageUtil;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author cd
@@ -29,8 +32,6 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     implements ReportService{
     @Resource
     ResponseMapUtil<Report> responseMapUtil;
-    @Resource
-    ResponseMapUtil<UserInfo> userInfoResponseMapUtil;
     @Resource
     PageUtil<Report> pageUtil;
     @Resource
@@ -87,6 +88,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         return responseMapUtil.countNumber(this.list(wrapperUtil.countReport(reporterId)).size());
     }
 
+
+
     /**
      * 根据用户编号和分页信息获取未审核举报分页列表
      * */
@@ -111,22 +114,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         return this.list(wrapperUtil.groupByReporterId());
     }
     @Override
-    public DataType typeByTrendsList(Long userid, Integer type) {
-        DataType dataType=new DataType();
-        if (userid!=null && type!=null){
-            QueryWrapper<Report> wrapper=new QueryWrapper<>();
-            wrapper.eq("reporter_id",userid);
-            wrapper.eq("type",type);
-            List<Report> reports = reportMapper.selectList(wrapper);
-            dataType.setData(reports);
-            dataType.setMessage("查询成功");
-            dataType.setFlag(true);
-        }else {
-            dataType.setData(null);
-            dataType.setMessage("查询失败");
-            dataType.setFlag(false);
-        }
-        return dataType;
+    public ResponseMap typeByTrendsList(Long userid, Integer type,Integer page,Integer size) {
+        Page<Report> pageList=this.page(pageUtil.getModelPage(page,size),wrapperUtil.wrapperUserIdByReport(userid,type));
+        Map<String,Object> modelMap=pageUtil.getModelMap(pageList);
+        return responseMapUtil.getPageList(pageList,modelMap);
     }
 }
 

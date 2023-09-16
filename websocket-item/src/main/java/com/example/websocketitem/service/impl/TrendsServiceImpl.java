@@ -166,21 +166,10 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
     }
 
     @Override
-    public DataType statusByTrendsList(TrendsList trendsList) {
-        if (trendsList.getUserid()!=null && trendsList.getStatus()!=null){
-            QueryWrapper<Trends> wrapper =new QueryWrapper<>();
-            wrapper.eq("userid",trendsList.getUserid());
-            wrapper.eq("status",trendsList.getStatus());
-            List<Trends> trendsLists = trendsMapper.selectList(wrapper);
-            dataType.setData(trendsLists);
-            dataType.setMessage("查询成功！！！");
-            dataType.setFlag(true);
-        }else {
-            dataType.setData(null);
-            dataType.setMessage("查询失败！！！");
-            dataType.setFlag(false);
-        }
-        return dataType;
+    public ResponseMap statusByTrendsList(TrendsList trendsList) {
+            Page<Trends> pageList=this.page(pageUtil.getModelPage(trendsList.getPage(),trendsList.getSize()),wrapperUtil.wrapperTrendsId(trendsList.getUserid(),trendsList.getStatus()));
+            Map<String,Object> modelMap=pageUtil.getModelMap(pageList);
+            return responseMapUtil.getPageList(pageList,modelMap);
     }
 }
 

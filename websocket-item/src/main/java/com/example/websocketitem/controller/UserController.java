@@ -138,10 +138,24 @@ public class UserController {
         return userInfoService.getReportUserInfo();
     }
     /**
+     * 根据模糊查询昵称获取未处理举报信息用户编号及该用户未处理举报信息个数
+     */
+    @GetMapping("/reportStat/search")
+    public ResponseMap getSearchReportUserInfo(@RequestParam String value){
+        return userInfoService.getSearchReportUserInfo(value);
+    }
+    /**
      * 获取相册未审核用户编号及未审核相册个数
      * */
     @GetMapping("/albumStat")
     public ResponseMap getAlbumUserInfo(){
         return userInfoService.getAlbumUserInfo();
+    }
+    /**
+     * 根据模糊查询昵称获取相册未审核用户编号及未审核相册个数
+     */
+    @GetMapping("/albumStat/search")
+    public ResponseMap getSearchAlbumUserInfo(@RequestParam String value){
+        return userInfoService.getSearchAlbumUserInfo(value);
     }
 }

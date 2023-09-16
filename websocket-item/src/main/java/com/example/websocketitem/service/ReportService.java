@@ -40,6 +40,10 @@ public interface ReportService extends IService<Report> {
      * */
     ResponseMap countReport(Long reporterId);
     /**
+     * 获取未处理举报信息用户编号及该用户未处理举报信息个数
+     * */
+    //ResponseMap statReport();
+    /**
      * 根据用户编号和分页信息获取未审核举报分页列表
      * */
     ResponseMap pageListReport(Long reporterId,Integer page,Integer size);
@@ -52,5 +56,5 @@ public interface ReportService extends IService<Report> {
      * */
     List<Report> getReporterIdList();
     //查询举报信息未动态举报的用户列表
-    DataType typeByTrendsList(Long userid, Integer type);
+    ResponseMap typeByTrendsList(Long userid, Integer type,Integer page,Integer size);
 }
