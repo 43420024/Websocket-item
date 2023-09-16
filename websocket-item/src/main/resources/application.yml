@@ -20,6 +20,8 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.websocketitem.model
+  configuration:
+    lazy-loading-enabled: true # 开启懒加载 延迟加载
 # 分页类默认配置
 pagehelper:
   helperDialect: mysql
@@ -27,8 +29,6 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 # SQL日志打印
-    # ????
-
 logging:
   level:
     com.example.websocketitem: debug
