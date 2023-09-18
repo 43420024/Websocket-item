@@ -26,4 +26,9 @@
         region,introduction,like_number,
         description,user_id,nickname,create_time
     </sql>
+    <select id="selectNicknameAndHeadPathByUserId" resultType="com.example.websocketitem.vo.UserInfoVO">
+        select nickname,head_path
+        from tcd_user_info
+        where user_id = #{userId,jdbcType=NUMERIC}
+    </select>
 </mapper>

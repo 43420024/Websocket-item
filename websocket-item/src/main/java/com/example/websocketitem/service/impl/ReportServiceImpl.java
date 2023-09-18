@@ -1,14 +1,16 @@
 package com.example.websocketitem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.websocketitem.model.Album;
 import com.example.websocketitem.model.Report;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
-import com.example.websocketitem.service.AlbumPictureService;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.ReportService;
 import com.example.websocketitem.mapper.ReportMapper;
+import com.example.websocketitem.utils.DataType;
+import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.utils.PageUtil;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
@@ -34,7 +36,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
     PageUtil<Report> pageUtil;
     @Resource
     WrapperUtil<Report> wrapperUtil;
-
+    @Resource
+    private ReportMapper reportMapper;
     /**
      * 添加举报信息
      * */
@@ -85,18 +88,35 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report>
         return responseMapUtil.countNumber(this.list(wrapperUtil.countReport(reporterId)).size());
     }
 
-    @Override
-    public ResponseMap statReport() {
-        List<Report> reportList = this.list(wrapperUtil.groupByReporterId());
-        Map<Long,Integer> map = new HashMap<>();
-        reportList.forEach(report-> map.put(report.getReporterId(), (int) this.count(wrapperUtil.wrapperReporterId(report.getReporterId()))));
-        return responseMapUtil.returnMap(map);
-    }
 
+
+    /**
+     * 根据用户编号和分页信息获取未审核举报分页列表
+     * */
     @Override
     public ResponseMap pageListReport(Long reporterId, Integer page, Integer size) {
         Page<Report> pageList = this.page(pageUtil.getModelPage(page, size), wrapperUtil.wrapperReporterId(reporterId));
         Map<String, Object> modelMap = pageUtil.getModelMap(pageList);
+        return responseMapUtil.getPageList(pageList,modelMap);
+    }
+    /**
+     * 获取单一举报信息
+     * */
+    @Override
+    public ResponseMap getReport(Long id) {
+        return responseMapUtil.getEntity(this.getById(id));
+    }
+    /**
+     * 获取被举报用户编号工具方法
+     * */
+    @Override
+    public List<Report> getReporterIdList() {
+        return this.list(wrapperUtil.groupByReporterId());
+    }
+    @Override
+    public ResponseMap typeByTrendsList(Long userid, Integer type,Integer page,Integer size) {
+        Page<Report> pageList=this.page(pageUtil.getModelPage(page,size),wrapperUtil.wrapperUserIdByReport(userid,type));
+        Map<String,Object> modelMap=pageUtil.getModelMap(pageList);
         return responseMapUtil.getPageList(pageList,modelMap);
     }
 }

@@ -9,6 +9,7 @@
             <result property="userId" column="user_id" jdbcType="BIGINT"/>
             <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <association property="userInfoVO" column="user_id" select="com.example.websocketitem.mapper.UserInfoMapper.selectNicknameAndHeadPathByUserId"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -21,6 +22,12 @@
         <include refid="Base_Column_List" />
         from tcd_master_slave_relationship
         where  master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
+    </select>
+    <select id="listMasterSlaves" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from tcd_master_slave_relationship
+        where  parent_id = #{parent_id,jdbcType=BIGINT}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -72,4 +79,14 @@
             create_time =  #{createTime,jdbcType=TIMESTAMP}
         where   master_slave_id = #{masterSlaveId,jdbcType=BIGINT} 
     </update>
+    <update id="updateParentIdByUserId">
+        update tcd_master_slave_relationship
+        set parent_id = #{parentId,jdbcType=NUMERIC}
+        where user_id = #{userId,jdbcType=NUMERIC}
+    </update>
+    <delete id="deleteByUserId">
+        delete
+        from tcd_master_slave_relationship
+        where user_id = #{userId,jdbcType=NUMERIC}
+    </delete>
 </mapper>

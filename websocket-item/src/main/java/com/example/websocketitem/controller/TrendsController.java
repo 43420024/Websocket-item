@@ -3,9 +3,12 @@ package com.example.websocketitem.controller;
 
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.Trends;
+import com.example.websocketitem.model.TrendsList;
+import com.example.websocketitem.service.ReportService;
 import com.example.websocketitem.service.TrendsService;
 import com.example.websocketitem.utils.DataType;
 import jakarta.annotation.Resource;
+import jakarta.websocket.server.PathParam;
 import lombok.extern.log4j.Log4j;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,8 @@ import java.util.UUID;
 public class TrendsController {
     @Resource
     private TrendsService trendsService;
+    @Resource
+    private ReportService reportService;
 
 
     //上传图片等资源文件
@@ -125,6 +130,32 @@ public class TrendsController {
     public DataType LikesTrends(@PathVariable("id") Long id){
         return trendsService.addCount(id);
     }
+
+
+    //动态待审核列表分页查询
+    @PostMapping("/TrendsListByStatus")
+    @ResponseBody
+    public ResponseMap statusByTrends(@RequestBody TrendsList trendsList){
+        return trendsService.statusByTrendsList(trendsList);
+    }
+
+
+    //动态被举报列表分页查询
+    @GetMapping("/TrendsListByType/{userid}/{type}/{page}/{size}")
+    @ResponseBody
+    public ResponseMap TrendsListByType(@PathVariable Long userid,@PathVariable Integer type,@PathVariable Integer page,@PathVariable Integer size){
+        return reportService.typeByTrendsList(userid,type,page,size);
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 

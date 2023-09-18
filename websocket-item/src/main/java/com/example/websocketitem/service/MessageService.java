@@ -16,4 +16,6 @@ public interface MessageService extends IService<Message> {
     Result selectMessage(Long userId, Long fromUserId);
 
     Result selectMount(Long userId);
+
+    Result queryChatListUser(Long userId);
 }

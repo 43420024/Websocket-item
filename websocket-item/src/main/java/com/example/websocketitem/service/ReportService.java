@@ -5,6 +5,9 @@ import com.example.websocketitem.model.Report;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.SearchModel;
+import com.example.websocketitem.utils.DataType;
+
+import java.util.List;
 
 /**
 * @author cd
@@ -36,8 +39,22 @@ public interface ReportService extends IService<Report> {
      * 获取被举报人举报信息统计
      * */
     ResponseMap countReport(Long reporterId);
-
-    ResponseMap statReport();
-
+    /**
+     * 获取未处理举报信息用户编号及该用户未处理举报信息个数
+     * */
+    //ResponseMap statReport();
+    /**
+     * 根据用户编号和分页信息获取未审核举报分页列表
+     * */
     ResponseMap pageListReport(Long reporterId,Integer page,Integer size);
+    /**
+     * 获取单一举报信息
+     * */
+    ResponseMap getReport(Long id);
+    /**
+     * 获取被举报用户编号工具方法
+     * */
+    List<Report> getReporterIdList();
+    //查询举报信息未动态举报的用户列表
+    ResponseMap typeByTrendsList(Long userid, Integer type,Integer page,Integer size);
 }

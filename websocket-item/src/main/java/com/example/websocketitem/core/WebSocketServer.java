@@ -5,9 +5,11 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.model.Message;
 import com.example.websocketitem.service.MasterSlaveService;
 import com.example.websocketitem.utils.ApplicationContextRegister;
+import com.example.websocketitem.vo.UserInfoVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
@@ -56,9 +58,16 @@ public class WebSocketServer {
         JSONObject result = new JSONObject();
         JSONArray array = new JSONArray();
         result.set("users", array);
-        for (Object key : sessionMap.keySet()) {
+        UserInfoMapper userInfoMapper = ApplicationContextRegister.getApplicationContext().getBean(UserInfoMapper.class);
+        for (String key : sessionMap.keySet()) {
+            Long longValue = Long.parseLong(key);
+            UserInfoVO userInfoVO = userInfoMapper.selectNicknameAndHeadPathByUserId(longValue);
             JSONObject jsonObject = new JSONObject();
             jsonObject.set("username", key);
+            if(ObjectUtil.isNotNull(userInfoVO)){
+                jsonObject.set("nickname", userInfoVO.getNickname());
+                jsonObject.set("headPath",userInfoVO.getHeadPath());
+            }
             // {"username": "zhang", "username": "admin"}
             array.add(jsonObject);
         }
@@ -98,14 +107,15 @@ public class WebSocketServer {
         String fromUsername = obj.getStr("from"); // from表示消息来自哪。
 
         // {"to": "admin", "text": "聊天文本"}
-        Long userId = Long.valueOf(toUsername);
+        // TODO: 2023/9/18 此处消息不转发给主账号，只在具体虚拟登录账号查看 
+        /*Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
         Long parentId = masterSlaveService.getParentIdByUserId(userId);
         if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
             String parentToUsername = parentId.toString();
             Session parentToSession = sessionMap.get(parentToUsername);
             sendTwoMessage(username, parentToSession, text, image, video, emo, audio, toUsername);
-        }
+        }*/
         if (ObjectUtil.isNotEmpty(fromUsername)) { // 当from字段不为空时（主号id通过from字段直接指定是哪个虚拟账号（10个账号中的）发给用户的），
             Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
             sendOneMessage(fromUsername, toSession, text, image, video, emo, audio, toUsername);
@@ -114,7 +124,7 @@ public class WebSocketServer {
             Session toSession = sessionMap.get(toUsername); // 根据 to用户名来获取 session，再通过session发送消息文本
             sendOneMessage(username, toSession, text, image, video, emo, audio, toUsername);
         }
-        // TODO 聊天数据持久化存储
+        // TODO: 2023/9/18 聊天数据持久化存储 
         obj.set("from", username);
 
         // 插入一条string数据类型
@@ -177,8 +187,8 @@ public class WebSocketServer {
 
             userTest.rightPush(messages);
 
-//            this.sendMessage(jsonObject.toString(), toSession);
-//            log.info("发送给用户username={}，消息：{}", toUsername, jsonObject.toString());
+            this.sendMessage(jsonObject.toString(), toSession);
+            log.info("发送给用户username={}，消息：{}", toUsername, jsonObject.toString());
         } else {
             BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("unread" + userId);
             userTest.rightPush(messages);
@@ -193,13 +203,13 @@ public class WebSocketServer {
         Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
         Long parentId = masterSlaveService.getParentIdByUserId(userId);
-//        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
-//            messages.setSender(parentId);
-//            messages.setRole(2);
-//        } else {
-//            messages.setRole(1);
-//            messages.setSender(userId);
-//        }
+        if (ObjectUtil.isNotNull(parentId)) { // 当该用户的父级id（主号id）不为空时，就将别人发过来的消息一块转发给父级id账号
+            messages.setSender(parentId);
+            messages.setRole(2);
+        } else {
+            messages.setRole(1);
+            messages.setSender(userId);
+        }
         messages.setSender(userId);
         messages.setRole(2);
         JSONObject jsonObject = new JSONObject();

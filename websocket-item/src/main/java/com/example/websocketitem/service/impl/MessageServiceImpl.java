@@ -2,15 +2,20 @@ package com.example.websocketitem.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.core.WebSocketServer;
+import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.model.Data;
 import com.example.websocketitem.model.Message;
 import com.example.websocketitem.model.User;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.MessageService;
 import com.example.websocketitem.mapper.MessageMapper;
+import com.example.websocketitem.service.UserInfoService;
 import com.example.websocketitem.service.UserService;
 import com.example.websocketitem.utils.Result;
+import com.example.websocketitem.vo.UserInfoVO;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -33,6 +38,8 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     private WebSocketServer webSocketServer;
     @Resource
     private UserService userService;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
 
     @Override
@@ -52,6 +59,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         userTest.rightPush(message);
         webSocketServer.sendAllMessage(message);
         return Result.success("发送成功");
+
     }
 
     @Override
@@ -122,6 +130,18 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         }
 
         return Result.success(userList);
+    }
+
+    @Override
+    public Result queryChatListUser(Long userId) {
+        List<Long> comFormList = this.baseMapper.selectDistinctMessages(userId);
+        List<UserInfoVO> userInfoVOList = new ArrayList<>();
+        for (Long comFormId:comFormList) {
+            UserInfoVO userInfoVO = userInfoMapper.selectNicknameAndHeadPathByUserId(comFormId);
+            userInfoVO.setUserId(comFormId);
+            userInfoVOList.add(userInfoVO);
+        }
+        return Result.ok("查询成功",userInfoVOList);
     }
 }
 

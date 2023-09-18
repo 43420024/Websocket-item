@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.example.websocketitem.model.User
 */
 public interface UserMapper extends BaseMapper<User> {
-
 }
 
 

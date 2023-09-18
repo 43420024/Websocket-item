@@ -9,6 +9,7 @@ import com.example.websocketitem.factory.DateTypeFactory;
 import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.Trends;
+import com.example.websocketitem.model.TrendsList;
 import com.example.websocketitem.service.TrendsService;
 import com.example.websocketitem.mapper.TrendsMapper;
 import com.example.websocketitem.utils.*;
@@ -162,6 +163,13 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
             dataType.setFlag(false);
         }
         return dataType;
+    }
+
+    @Override
+    public ResponseMap statusByTrendsList(TrendsList trendsList) {
+            Page<Trends> pageList=this.page(pageUtil.getModelPage(trendsList.getPage(),trendsList.getSize()),wrapperUtil.wrapperTrendsId(trendsList.getUserid(),trendsList.getStatus()));
+            Map<String,Object> modelMap=pageUtil.getModelMap(pageList);
+            return responseMapUtil.getPageList(pageList,modelMap);
     }
 }
 

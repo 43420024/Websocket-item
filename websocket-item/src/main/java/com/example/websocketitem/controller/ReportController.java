@@ -55,13 +55,6 @@ public class ReportController {
         return reportService.countReport(reporterId);
     }
     /**
-     * 获取举报未审核用户编号及未审核举报个数
-     * */
-    @GetMapping("/stat")
-    public ResponseMap statReport(){
-        return reportService.statReport();
-    }
-    /**
      * 根据用户编号和分页信息获取未审核举报分页列表
      * */
     @GetMapping("/pageList/{reporterId}/{page}/{size}")
@@ -69,5 +62,13 @@ public class ReportController {
                                     @PathVariable Integer page,
                                     @PathVariable Integer size){
         return reportService.pageListReport(reporterId,page,size);
+    }
+    /**
+     * 获取单一举报信息
+     *
+     * */
+    @GetMapping("/{id}")
+    public ResponseMap getReport(@PathVariable Long id){
+        return reportService.getReport(id);
     }
 }

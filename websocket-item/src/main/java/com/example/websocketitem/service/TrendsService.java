@@ -3,6 +3,7 @@ package com.example.websocketitem.service;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.Trends;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.websocketitem.model.TrendsList;
 import com.example.websocketitem.utils.DataType;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -27,4 +28,6 @@ public interface TrendsService extends IService<Trends> {
     ResponseMap userListTrends(int page, int size, Long userid);
 
     DataType selectOneTrends(Long id, Long userid);
+
+    ResponseMap statusByTrendsList(TrendsList trendsList);
 }

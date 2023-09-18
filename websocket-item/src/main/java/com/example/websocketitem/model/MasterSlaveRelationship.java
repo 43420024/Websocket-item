@@ -2,13 +2,19 @@ package com.example.websocketitem.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.example.websocketitem.vo.UserInfoVO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 主从账号表
  * @TableName tcd_master_slave_relationship
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MasterSlaveRelationship implements Serializable {
     /**
      * 主从主键
@@ -29,6 +35,10 @@ public class MasterSlaveRelationship implements Serializable {
      * 创建时间
      */
     private LocalDateTime createTime;
+    /**
+     * 昵称，级联查询
+     */
+    private UserInfoVO userInfoVO;
 
     private static final long serialVersionUID = 1L;
 }

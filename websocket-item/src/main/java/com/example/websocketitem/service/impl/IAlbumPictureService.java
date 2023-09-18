@@ -5,7 +5,6 @@ import com.example.websocketitem.model.AlbumPicture;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.service.AlbumPictureService;
 import com.example.websocketitem.mapper.AlbumPictureMapper;
-import com.example.websocketitem.utils.PageUtil;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
@@ -26,8 +25,6 @@ public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumP
     implements AlbumPictureService{
     @Resource
     ResponseMapUtil<AlbumPicture> responseMapUtil;
-    @Resource
-    PageUtil<AlbumPicture> pageUtil;
     @Resource
     WrapperUtil<AlbumPicture> wrapperUtil;
 
@@ -96,6 +93,13 @@ public class IAlbumPictureService extends ServiceImpl<AlbumPictureMapper, AlbumP
     @Override
     public ResponseMap countAlbumPicture(Long albumId) {
         return responseMapUtil.countNumber(this.list(wrapperUtil.wrapperAlbumId(albumId)).size());
+    }
+    /**
+     * 获取相册最后添加的六张图片
+     * */
+    @Override
+    public ResponseMap sixthAlbumPicture(Long albumId) {
+        return responseMapUtil.getList(this.list(wrapperUtil.wrapperAlbumId(albumId)).subList(0,6));
     }
 }
 

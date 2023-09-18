@@ -1,23 +1,10 @@
 package com.example.websocketitem.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.websocketitem.factory.EntityFactory;
-import com.example.websocketitem.factory.MapFactory;
 import com.example.websocketitem.model.Relationship;
-import com.example.websocketitem.model.ResponseMap;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import javax.print.DocFlavor;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
-
 @Service
 public class WrapperUtil<T> {
-
     public QueryWrapper<T> wrapperTimeDesc(){
         QueryWrapper<T> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc("create_time");
@@ -57,6 +44,21 @@ public class WrapperUtil<T> {
         wrapper.eq("status",0);
         return wrapper;
     }
+
+    public QueryWrapper<T> wrapperUserIdByReport(Long userId,Integer type){
+        QueryWrapper<T> wrapper = this.wrapperTimeDesc();
+        wrapper.eq("reporter_id",userId);
+        wrapper.eq("type",type);
+        return wrapper;
+    }
+
+    public QueryWrapper<T> wrapperTrendsId(Long userId,Integer status){
+        QueryWrapper<T> wrapper = this.wrapperTimeDescTrends();
+        wrapper.eq("userid",userId);
+        wrapper.eq("status",status);
+        return wrapper;
+    }
+
     public QueryWrapper<T> wrapperUserIdOne(Long userId){
         QueryWrapper<T> wrapper = this.wrapperTimeDescTrends();
         wrapper.eq("userid",userId);
@@ -128,6 +130,22 @@ public class WrapperUtil<T> {
     public QueryWrapper<T> wrapperReporterId(Long reporterId){
         QueryWrapper<T> wrapper = this.wrapperTimeDesc();
         wrapper.eq("reporter_id",reporterId).eq("status",0);
+        return wrapper;
+    }
+    public QueryWrapper<T> wrapperSixthPicture(Long albumId){
+        QueryWrapper<T> wrapper = this.wrapperTimeDesc();
+        wrapper.eq("album_id",albumId);
+        return wrapper;
+    }
+
+    public QueryWrapper<T> wrapperUserInfo(Long userId){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",userId);
+        return wrapper;
+    }
+    public QueryWrapper<T> wrapperViolationUserInfo(Long userId){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id",userId).eq("status",2);
         return wrapper;
     }
 }

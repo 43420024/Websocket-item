@@ -55,18 +55,17 @@ public class AlbumController {
 //    public ResponseMap searchAlbum(@RequestBody SearchModel searchModel){
 //        return albumService.searchAlbum(searchModel);
 //    }
-    /**
-     * 获取相册未审核用户编号及未审核相册个数
-     * */
-    @GetMapping("/stat")
-    public ResponseMap statAlbum(){
-        return albumService.statAlbum();
-    }
+
     /**
      * APP首页获取随机公开相册
      * */
     @GetMapping("/shuffle")
     public ResponseMap shuffleAlbum(){
         return albumService.shuffleAlbum();
+    }
+
+    @GetMapping("/violation/{userId}")
+    public ResponseMap getUserViolationAlbumList(@PathVariable Long userId){
+        return albumService.getUserViolationAlbumList(userId);
     }
 }

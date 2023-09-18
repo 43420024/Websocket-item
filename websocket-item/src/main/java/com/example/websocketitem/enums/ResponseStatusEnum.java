@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum ResponseStatusEnum {
+    PARAM_NAME_BIND_ERROR(false,"参数名绑定异常"),
     ADD_SUCCESS(true,"添加成功"),
     DELETE_SUCCESS(true,"删除成功"),
     UPDATE_SUCCESS(true,"修改成功"),
