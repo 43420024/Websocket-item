@@ -4,6 +4,7 @@ package com.example.websocketitem.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.factory.EntityFactory;
 import com.example.websocketitem.mapper.PointsMapper;
@@ -16,7 +17,6 @@ import com.example.websocketitem.utils.Result;
 import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,9 +48,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     private WrapperUtil<Album> albumWrapperUtil;
     @Resource
     private ReportService reportService;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
 
     Relationship relationship = EntityFactory.createRelationship();
+
 
 
 
@@ -175,8 +178,22 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public DataType queryUserInfo(Long userId) {
-        return null;
+        DataType dataType=new DataType();
+        if (userId!=null){
+            UserInfo userInfo = userInfoMapper.selectById(userId);
+            userInfo.setLabelsArray(JSON.parseArray(userInfo.getLabels()));
+            dataType.setData(userInfo);
+            dataType.setFlag(true);
+            dataType.setMessage("查询成功");
+        }else {
+            dataType.setData(null);
+            dataType.setFlag(true);
+            dataType.setMessage("查询失败");
+        }
+        return dataType;
     }
+
+
 }
 
 
