@@ -158,4 +158,8 @@ public class UserController {
     public ResponseMap getSearchAlbumUserInfo(@RequestParam String value){
         return userInfoService.getSearchAlbumUserInfo(value);
     }
+    @GetMapping("/getInfo/{userId}")
+    public ResponseMap getInfo(@PathVariable Long userId){
+        return userInfoService.getUserInfo(userId);
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.websocketitem.service.impl;
 
 
-import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,7 +15,6 @@ import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,14 +54,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         userInfo.setLabels(JSON.toJSONString(userInfo.getLabelsArray()));
         userInfo.setCreateTime(new Date());
         int insert = this.baseMapper.insert(userInfo);
-        if (insert > 0) {
-            if (ObjectUtil.equals(1, userInfo.getGender())) {
-                Points points = new Points();
-                points.setUserId(userInfo.getUserId());
-                points.setCreateTime(LocalDateTime.now());
-                pointsMapper.insertSelective(points);
-            }
-        }
+//        if (insert > 0) {
+//            if (ObjectUtil.equals(1, userInfo.getGender())) {
+//                Points points = new Points();
+//                points.setUserId(userInfo.getUserId());
+//                points.setCreateTime(LocalDateTime.now());
+//                pointsMapper.insertSelective(points);
+//            }
+//        }
         relationship.setOwnerId(userInfo.getInfoId());
         relationship.setFriendId(1L);
         relationshipService.addRelationship(relationship);
@@ -73,9 +71,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     @Override
     public Result queryInfo(Long userId) {
         //用户基本信息
-        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", userId);
-        UserInfo userInfo = this.baseMapper.selectOne(queryWrapper);
+//        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("user_id", userId);
+        UserInfo userInfo = this.getById(userId);
         //string转json数组
         userInfo.setLabelsArray(JSON.parseArray(userInfo.getLabels()));
         //相册
@@ -108,10 +106,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Report> reportList = reportService.getReporterIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         reportList.forEach(report -> {
-            UserInfo userInfo = this.getInfo(report.getReporterId());
+            UserInfo userInfo = this.getById(report.getReporterId());
             userInfo.setReportCount((int) reportService.count(reportWrapperUtil.wrapperReporterId(report.getReporterId())));
             userInfoList.add(userInfo);
         });
+        userInfoList.sort((o1, o2) -> o2.getReportCount()-o1.getReportCount());
         return responseMapUtil.getList(userInfoList);
     }
     /**
@@ -122,12 +121,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Report> reportList = reportService.getReporterIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         reportList.forEach(report -> {
-            UserInfo userInfo = this.getInfo(report.getReporterId());
+            UserInfo userInfo = this.getById(report.getReporterId());
             if (userInfo.getNickname().contains(value)){
                 userInfo.setReportCount((int) reportService.count(reportWrapperUtil.wrapperReporterId(report.getReporterId())));
                 userInfoList.add(userInfo);
             }
         });
+        userInfoList.sort((o1, o2) -> o2.getReportCount()-o1.getReportCount());
         return responseMapUtil.getList(userInfoList);
     }
 
@@ -139,10 +139,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Album> albumList = albumService.getAlbumOwnerIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         albumList.forEach(album-> {
-            UserInfo userInfo = this.getInfo(album.getUserId());
+            UserInfo userInfo = this.getById(album.getUserId());
             userInfo.setAlbumCount((int) albumService.count(albumWrapperUtil.wrapperUserInfo(album.getUserId())));
             userInfoList.add(userInfo);
         });
+        userInfoList.sort((o1, o2) -> o2.getAlbumCount()-o1.getAlbumCount());
         return responseMapUtil.getList(userInfoList);
     }
     /**
@@ -153,13 +154,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Album> albumList = albumService.getAlbumOwnerIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         albumList.forEach(album-> {
-            UserInfo userInfo = this.getInfo(album.getUserId());
+            UserInfo userInfo = this.getById(album.getUserId());
             if (userInfo.getNickname().contains(value)){
                 userInfo.setAlbumCount((int) albumService.count(albumWrapperUtil.wrapperUserInfo(album.getUserId())));
                 userInfoList.add(userInfo);
             }
         });
+        userInfoList.sort((o1, o2) -> o2.getAlbumCount()-o1.getAlbumCount());
         return responseMapUtil.getList(userInfoList);
+    }
+
+    @Override
+    public ResponseMap getUserInfo(Long userId) {
+        return responseMapUtil.getEntity(this.getById(userId));
     }
 }
 

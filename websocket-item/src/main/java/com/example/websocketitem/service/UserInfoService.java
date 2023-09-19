@@ -36,4 +36,5 @@ public interface UserInfoService extends IService<UserInfo> {
      */
     ResponseMap getSearchAlbumUserInfo(String value);
 
+    ResponseMap getUserInfo(Long userId);
 }

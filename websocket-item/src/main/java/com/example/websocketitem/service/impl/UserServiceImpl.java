@@ -97,11 +97,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         data.getUserInfo().setCreateTime(new Date());
         int insert = this.baseMapper.insert(data.getUser());
         boolean save = false;
-        if (insert > 0) {
-            data.getUserInfo().setUserId(data.getUser().getId());
-            data.getUserInfo().setLabels(JSON.toJSONString(data.getUserInfo().getLabelsArray()));
-            save = userInfoService.save(data.getUserInfo());
-        }
+//        if (insert > 0) {
+//            data.getUserInfo().setUserId(data.getUser().getId());
+//            data.getUserInfo().setLabels(JSON.toJSONString(data.getUserInfo().getLabelsArray()));
+//            save = userInfoService.save(data.getUserInfo());
+//        }
         return save ? Result.success() : Result.error();
     }
 
