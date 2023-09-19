@@ -26,6 +26,10 @@ public class MessageController {
     public Result sendAll(@RequestParam("message") String message) {
         return messageService.mass(message);
     }
+    @GetMapping("/sendChatHistory")
+    public Result sendChatHistory(@RequestParam("current") String current,@RequestParam("opposite") String opposite) {
+        return messageService.chatHistoryBetweenTwoPeople(current,opposite);
+    }
 
     /**
      * 查询消息

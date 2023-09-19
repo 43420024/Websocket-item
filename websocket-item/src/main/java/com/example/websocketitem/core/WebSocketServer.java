@@ -273,6 +273,7 @@ public class WebSocketServer {
     private void sendMessage(String message, Session toSession) {
         try {
             log.info("服务端给客户端[{}]发送消息{}", toSession.getId(), message);
+            log.info("消息接收对象 {}", toSession.getId());
             toSession.getBasicRemote().sendText(message);
         } catch (Exception e) {
             log.error("服务端发送消息给客户端失败", e);
@@ -287,6 +288,22 @@ public class WebSocketServer {
             for (Session session : sessionMap.values()) {
                 log.info("服务端给客户端[{}]发送消息{}", session.getId(), message);
                 session.getBasicRemote().sendText(message);
+            }
+        } catch (Exception e) {
+            log.error("服务端发送消息给客户端失败", e);
+        }
+    }
+
+    public void historicalChatInformation(String to,String message) {
+        try {
+            for (Session session : sessionMap.values()) {
+                log.info("服务端给客户端[{}]发送消息{}", session.getId(), message);
+                log.info("存在的session用户 {}", session.getId());
+                log.info("消息发送对象 {}",to);
+//                if (to.equals(session.getId())){
+                    log.info("进来发消息了");
+                    session.getBasicRemote().sendText(message);
+//                }
             }
         } catch (Exception e) {
             log.error("服务端发送消息给客户端失败", e);

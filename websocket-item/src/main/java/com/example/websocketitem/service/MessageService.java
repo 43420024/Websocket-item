@@ -18,4 +18,6 @@ public interface MessageService extends IService<Message> {
     Result selectMount(Long userId);
 
     Result queryChatListUser(Long userId);
+
+    Result chatHistoryBetweenTwoPeople(String current, String opposite);
 }
