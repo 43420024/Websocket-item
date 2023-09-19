@@ -107,7 +107,7 @@ public class WebSocketServer {
         String fromUsername = obj.getStr("from"); // from表示消息来自哪。
 
         // {"to": "admin", "text": "聊天文本"}
-        // TODO: 2023/9/18 此处消息不转发给主账号，只在具体虚拟登录账号查看 
+        // TODO: 2023/9/18 需求：此处消息不转发给主账号，只在具体虚拟登录账号查看（注释：已完成）
         /*Long userId = Long.valueOf(toUsername);
         MasterSlaveService masterSlaveService = ApplicationContextRegister.getApplicationContext().getBean(MasterSlaveService.class);
         Long parentId = masterSlaveService.getParentIdByUserId(userId);
