@@ -70,10 +70,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Report> reportList = reportService.getReporterIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         reportList.forEach(report -> {
-            UserInfo userInfo = this.getInfo(report.getReporterId());
+            UserInfo userInfo = this.getById(report.getReporterId());
             userInfo.setReportCount((int) reportService.count(reportWrapperUtil.wrapperReporterId(report.getReporterId())));
             userInfoList.add(userInfo);
         });
+        userInfoList.sort((o1, o2) -> o2.getReportCount()-o1.getReportCount());
         return responseMapUtil.getList(userInfoList);
     }
     /**
@@ -84,12 +85,13 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Report> reportList = reportService.getReporterIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         reportList.forEach(report -> {
-            UserInfo userInfo = this.getInfo(report.getReporterId());
+            UserInfo userInfo = this.getById(report.getReporterId());
             if (userInfo.getNickname().contains(value)){
                 userInfo.setReportCount((int) reportService.count(reportWrapperUtil.wrapperReporterId(report.getReporterId())));
                 userInfoList.add(userInfo);
             }
         });
+        userInfoList.sort((o1, o2) -> o2.getReportCount()-o1.getReportCount());
         return responseMapUtil.getList(userInfoList);
     }
 
@@ -101,10 +103,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Album> albumList = albumService.getAlbumOwnerIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         albumList.forEach(album-> {
-            UserInfo userInfo = this.getInfo(album.getUserId());
+            UserInfo userInfo = this.getById(album.getUserId());
             userInfo.setAlbumCount((int) albumService.count(albumWrapperUtil.wrapperUserInfo(album.getUserId())));
             userInfoList.add(userInfo);
         });
+        userInfoList.sort((o1, o2) -> o2.getAlbumCount()-o1.getAlbumCount());
         return responseMapUtil.getList(userInfoList);
     }
     /**
@@ -115,15 +118,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         List<Album> albumList = albumService.getAlbumOwnerIdList();
         List<UserInfo> userInfoList = new ArrayList<>();
         albumList.forEach(album-> {
-            UserInfo userInfo = this.getInfo(album.getUserId());
+            UserInfo userInfo = this.getById(album.getUserId());
             if (userInfo.getNickname().contains(value)){
                 userInfo.setAlbumCount((int) albumService.count(albumWrapperUtil.wrapperUserInfo(album.getUserId())));
                 userInfoList.add(userInfo);
             }
         });
+        userInfoList.sort((o1, o2) -> o2.getAlbumCount()-o1.getAlbumCount());
         return responseMapUtil.getList(userInfoList);
     }
-
+    @Override
+    public ResponseMap getUserInfo(Long userId) {
+        return responseMapUtil.getEntity(this.getById(userId));
+    }
     /**
      * 解封 冻结
      * @param userInfo
@@ -174,6 +181,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         DataType dataType=new DataType();
         if (userId!=null){
             UserInfo userInfo = userInfoMapper.selectById(userId);
+            userInfo.setLabelsArray(JSON.parseArray(userInfo.getLabels()));
             dataType.setData(userInfo);
             dataType.setFlag(true);
             dataType.setMessage("查询成功");
