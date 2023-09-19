@@ -2,7 +2,6 @@ package com.example.websocketitem.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.websocketitem.core.WebSocketServer;
 import com.example.websocketitem.mapper.UserInfoMapper;
@@ -12,8 +11,6 @@ import com.example.websocketitem.model.User;
 import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.MessageService;
 import com.example.websocketitem.mapper.MessageMapper;
-import com.example.websocketitem.service.UserInfoService;
-import com.example.websocketitem.service.UserService;
 import com.example.websocketitem.utils.Result;
 import com.example.websocketitem.vo.UserInfoVO;
 import jakarta.annotation.Resource;
@@ -36,8 +33,8 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     private RedisTemplate<Object, Object> redisTemplate;
     @Resource
     private WebSocketServer webSocketServer;
-    @Resource
-    private UserService userService;
+//    @Resource
+//    private UserService userService;
     @Resource
     private UserInfoMapper userInfoMapper;
 
@@ -121,11 +118,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         //final Map<Long, Integer> collect = myReadMessage.stream().collect(Collectors.toMap(Message::getComeFrom, el -> 1, Integer::sum));
         final Map<Long, Long> collect = myReadMessage.stream().collect(Collectors.groupingBy(Message::getComeFrom, Collectors.counting()));
 
-        List<User> userList = new ArrayList<>();
+        List<UserInfo> userList = new ArrayList<>();
         for (Map.Entry<Long, Long> longLongEntry : collect.entrySet()) {
-            final User user = userService.getById(longLongEntry.getKey());
-            user.setUnreadMessageNumber(longLongEntry.getValue().intValue());
-            userList.add(user);
+            final UserInfo userInfo = userInfoMapper.selectById(longLongEntry.getKey());
+            userInfo.setUnreadMessageNumber(longLongEntry.getValue().intValue());
+            userList.add(userInfo);
             System.out.println("key:" + longLongEntry.getKey() + ",value:" + longLongEntry.getValue());
         }
 

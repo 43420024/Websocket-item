@@ -143,5 +143,8 @@ public class UserInfo implements Serializable {
     private JSONArray labelsArray;
 
     @TableField(exist = false)
+    private Integer unreadMessageNumber;
+
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
