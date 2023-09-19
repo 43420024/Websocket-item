@@ -10,11 +10,13 @@ import com.example.websocketitem.mapper.PointsMapper;
 import com.example.websocketitem.model.*;
 import com.example.websocketitem.service.*;
 import com.example.websocketitem.mapper.UserInfoMapper;
+import com.example.websocketitem.utils.DataType;
 import com.example.websocketitem.utils.ResponseMapUtil;
 import com.example.websocketitem.utils.Result;
 import com.example.websocketitem.utils.WrapperUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -49,7 +51,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
 
     Relationship relationship = EntityFactory.createRelationship();
-
 
 
 
@@ -123,12 +124,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         userInfoList.sort((o1, o2) -> o2.getAlbumCount()-o1.getAlbumCount());
         return responseMapUtil.getList(userInfoList);
     }
-
     @Override
     public ResponseMap getUserInfo(Long userId) {
         return responseMapUtil.getEntity(this.getById(userId));
     }
-
     /**
      * 解封 冻结
      * @param userInfo
@@ -176,21 +175,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public DataType queryUserInfo(Long userId) {
-        DataType dataType=new DataType();
-        if (userId!=null){
-            UserInfo userInfo = userInfoMapper.selectById(userId);
-            dataType.setData(userInfo);
-            dataType.setFlag(true);
-            dataType.setMessage("查询成功");
-        }else {
-            dataType.setData(null);
-            dataType.setFlag(true);
-            dataType.setMessage("查询失败");
-        }
-        return dataType;
+        return null;
     }
-
-
 }
 
 
