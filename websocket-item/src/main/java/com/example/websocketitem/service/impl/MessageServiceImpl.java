@@ -97,7 +97,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         messageList.addAll(collect);
 
         //排序
-        Collections.sort(messageList, (o1, o2) -> o1.getCreateTime().compareTo(o1.getCreateTime()));
+        Collections.sort(messageList,(Comparator.comparing(Message::getCreateTime)));
 
         //我发给对方未读消息
         List<Object> object = otherUnread.range(0, otherUnread.size());
