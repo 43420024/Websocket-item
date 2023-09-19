@@ -3,6 +3,7 @@ package com.example.websocketitem.service;
 import com.example.websocketitem.model.ResponseMap;
 import com.example.websocketitem.model.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.websocketitem.utils.DataType;
 import com.example.websocketitem.utils.Result;
 
 /**
@@ -12,11 +13,10 @@ import com.example.websocketitem.utils.Result;
 */
 public interface UserInfoService extends IService<UserInfo> {
 
-    Result addInfo(UserInfo userInfo);
 
-    Result queryInfo(Long userId);
 
-    Result updateInfo(UserInfo userInfo);
+
+
 
     UserInfo getInfo(Long userId);
     /**
@@ -36,4 +36,9 @@ public interface UserInfoService extends IService<UserInfo> {
      */
     ResponseMap getSearchAlbumUserInfo(String value);
 
+    Result updateStatus(UserInfo userInfo);
+
+    Result selectPage(Integer pageNum, Integer pageSize, Integer gender, Integer phoneNumber, Integer nickname);
+
+    DataType queryUserInfo(Long userId);
 }
