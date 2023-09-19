@@ -174,6 +174,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         DataType dataType=new DataType();
         if (userId!=null){
             UserInfo userInfo = userInfoMapper.selectById(userId);
+            userInfo.setLabelsArray(JSON.parseArray(userInfo.getLabels()));
             dataType.setData(userInfo);
             dataType.setFlag(true);
             dataType.setMessage("查询成功");
