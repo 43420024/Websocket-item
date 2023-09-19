@@ -48,6 +48,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     private WrapperUtil<Album> albumWrapperUtil;
     @Resource
     private ReportService reportService;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
 
     Relationship relationship = EntityFactory.createRelationship();
@@ -169,7 +171,18 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public DataType queryUserInfo(Long userId) {
-        return null;
+        DataType dataType=new DataType();
+        if (userId!=null){
+            UserInfo userInfo = userInfoMapper.selectById(userId);
+            dataType.setData(userInfo);
+            dataType.setFlag(true);
+            dataType.setMessage("查询成功");
+        }else {
+            dataType.setData(null);
+            dataType.setFlag(true);
+            dataType.setMessage("查询失败");
+        }
+        return dataType;
     }
 
 
