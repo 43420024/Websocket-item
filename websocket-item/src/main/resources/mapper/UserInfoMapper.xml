@@ -33,6 +33,6 @@
     <select id="selectNicknameAndHeadPathByUserId" resultType="com.example.websocketitem.vo.UserInfoVO">
         select nickname, head_path
         from tcd_user_info
-        where user_id = #{userId,jdbcType=NUMERIC}
+        where info_id = #{userId,jdbcType=NUMERIC}
     </select>
 </mapper>
