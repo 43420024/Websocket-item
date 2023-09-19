@@ -83,10 +83,28 @@ public class UserInfo implements Serializable {
     private String description;
 
     /**
-     * 用户编号
+     * 电话号码
      */
-    @TableField(value = "user_id")
-    private Long userId;
+    @TableField(value = "phone_number")
+    private String phoneNumber;
+
+    /**
+     * 微信登录
+     */
+    @TableField(value = "chat_login")
+    private String chatLogin;
+
+    /**
+     * 密码
+     */
+    @TableField(value = "password")
+    private String password;
+
+    /**
+     * 用户状态：0：冻结，1：解冻
+     */
+    @TableField(value = "status")
+    private Integer status;
 
     /**
      * 昵称

@@ -5,29 +5,33 @@
 <mapper namespace="com.example.websocketitem.mapper.UserInfoMapper">
 
     <resultMap id="BaseResultMap" type="com.example.websocketitem.model.UserInfo">
-            <id property="infoId" column="info_id" jdbcType="BIGINT"/>
-            <result property="gender" column="gender" jdbcType="INTEGER"/>
-            <result property="labels" column="labels" jdbcType="VARCHAR"/>
-            <result property="headPath" column="head_path" jdbcType="VARCHAR"/>
-            <result property="birthday" column="birthday" jdbcType="DATE"/>
-            <result property="jobTitle" column="job_title" jdbcType="VARCHAR"/>
-            <result property="region" column="region" jdbcType="VARCHAR"/>
-            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
-            <result property="likeNumber" column="like_number" jdbcType="INTEGER"/>
-            <result property="description" column="description" jdbcType="VARCHAR"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <id property="infoId" column="info_id" jdbcType="BIGINT"/>
+        <result property="gender" column="gender" jdbcType="INTEGER"/>
+        <result property="labels" column="labels" jdbcType="VARCHAR"/>
+        <result property="headPath" column="head_path" jdbcType="VARCHAR"/>
+        <result property="birthday" column="birthday" jdbcType="DATE"/>
+        <result property="jobTitle" column="job_title" jdbcType="VARCHAR"/>
+        <result property="region" column="region" jdbcType="VARCHAR"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="likeNumber" column="like_number" jdbcType="INTEGER"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR"/>
+        <result property="chatLogin" column="chat_login" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        info_id,gender,labels,
+        info_id
+        ,gender,labels,
         head_path,birthday,job_title,
         region,introduction,like_number,
-        description,user_id,nickname,create_time
+        description,user_id,nickname,create_time,phone_number,chat_login,password,status
     </sql>
     <select id="selectNicknameAndHeadPathByUserId" resultType="com.example.websocketitem.vo.UserInfoVO">
-        select nickname,head_path
+        select nickname, head_path
         from tcd_user_info
         where user_id = #{userId,jdbcType=NUMERIC}
     </select>
