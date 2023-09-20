@@ -1,5 +1,6 @@
 package com.example.websocketitem.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -130,7 +131,32 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
 
     @Override
     public Result queryChatListUser(Long userId) {
+        // 查数据库聊天列表
         List<Long> comFormList = this.baseMapper.selectDistinctMessages(userId);
+        // TODO: 2023/9/20 去查redis聊天用户列表
+        BoundListOperations<Object, Object> myUnread = redisTemplate.boundListOps("unread" + userId);
+        BoundListOperations<Object, Object> myRead = redisTemplate.boundListOps("read" + userId);
+        //未读
+        List<Object> object = myUnread.range(0, myUnread.size());
+        List<Message> unReadMessage = JSONObject.parseArray(JSON.toJSONString(object), Message.class);
+        //已读
+        List<Object> objects = myRead.range(0, myRead.size());
+        List<Message> readMessage = JSONObject.parseArray(JSON.toJSONString(objects), Message.class);
+        List<Message> messageList = new ArrayList();
+        messageList.addAll(unReadMessage);
+        messageList.addAll(readMessage);
+
+        List<Message> arrays = messageList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(()
+                -> new TreeSet<>(Comparator.comparing(Message :: getComeFrom))), ArrayList::new));
+
+        for (Message array : arrays) {
+            Long comeFrom = array.getComeFrom();
+            if(!ObjectUtil.contains(comFormList,comeFrom)){
+                comFormList.add(comeFrom);
+            }
+
+        }
+        // 返回数据给前端
         List<UserInfoVO> userInfoVOList = new ArrayList<>();
         for (Long comFormId:comFormList) {
             UserInfoVO userInfoVO = userInfoMapper.selectNicknameAndHeadPathByUserId(comFormId);
@@ -143,26 +169,56 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     @Override
     public Result chatHistoryBetweenTwoPeople(String current, String opposite) {
 
-        cn.hutool.json.JSONObject jsonObject = new cn.hutool.json.JSONObject();
-        jsonObject.set("from", current);
-        jsonObject.set("to", opposite);
-        jsonObject.set("text","这是"+current+"发给"+opposite+"的消息：内容为你好啊");
-        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject));
-        cn.hutool.json.JSONObject jsonObject2 = new cn.hutool.json.JSONObject();
-        jsonObject2.set("from", opposite);
-        jsonObject2.set("to", current);
-        jsonObject2.set("text","这是"+opposite+"发给"+current+"的消息：内容为我一点都不好");
-        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject2));
-        cn.hutool.json.JSONObject jsonObject3 = new cn.hutool.json.JSONObject();
-        jsonObject3.set("from", current);
-        jsonObject3.set("to", opposite);
-        jsonObject3.set("text","这是"+current+"发给"+opposite+"的消息：内容为你好啊");
-        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject3));
-        cn.hutool.json.JSONObject jsonObject4 = new cn.hutool.json.JSONObject();
-        jsonObject4.set("from", opposite);
-        jsonObject4.set("to", current);
-        jsonObject4.set("text","这是"+opposite+"发给"+current+"的消息：内容为我一点都不好");
-        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject4));
+         long userId = Long.valueOf(current).longValue();
+         long anotherId = Long.valueOf(opposite).longValue();
+        BoundListOperations<Object, Object> myUnread = redisTemplate.boundListOps("unread" + userId);
+        BoundListOperations<Object, Object> myRead = redisTemplate.boundListOps("read" + userId);
+        BoundListOperations<Object, Object> otherUnread = redisTemplate.boundListOps("unread" + anotherId);
+        BoundListOperations<Object, Object> otherRead = redisTemplate.boundListOps("read" + anotherId);
+        //发给我的未读消息处理
+        List<Object> range = myUnread.range(0, myUnread.size());
+        List<Message> messages = JSONObject.parseArray(JSON.toJSONString(range), Message.class);
+        for (Message message : messages) {
+            if (message.getComeFrom() == anotherId) {
+                myRead.rightPush(message);
+                myUnread.remove(1, message);
+            }
+        }
+
+        //发给我的已读消息
+        List<Object> objects = myRead.range(0, myRead.size());
+        List<Message> myReadMessage = JSONObject.parseArray(JSON.toJSONString(objects), Message.class);
+        List<Message> collect = myReadMessage.stream()
+                .filter((Message me) -> me.getComeFrom() == anotherId).collect(Collectors.toList());
+
+        //我发给他的已读消息
+        List<Object> objectList = otherRead.range(0, otherRead.size());
+        List<Message> otherReadMessage = JSONObject.parseArray(JSON.toJSONString(objectList), Message.class);
+        List<Message> collects = otherReadMessage.stream()
+                .filter((Message m) -> m.getComeFrom() == userId).collect(Collectors.toList());
+
+        //我发给对方未读消息
+        List<Object> object = otherUnread.range(0, otherUnread.size());
+        List<Message> otherUnReadMessage = JSONObject.parseArray(JSON.toJSONString(object), Message.class);
+        List<Message> collectList = otherUnReadMessage.stream()
+                .filter((Message m) -> m.getComeFrom() == userId).collect(Collectors.toList());
+
+        //所有消息
+        List<Message> messageList = new ArrayList();
+        messageList.addAll(collects);
+        messageList.addAll(collect);
+        messageList.addAll(collectList);
+
+        //排序
+        Collections.sort(messageList,(Comparator.comparing(Message::getCreateTime)));
+
+        for (Message message : messageList) {
+            cn.hutool.json.JSONObject jsonObject = new cn.hutool.json.JSONObject();
+            jsonObject.set("from", message.getComeFrom());
+            jsonObject.set("to", message.getFromTo());
+            jsonObject.set("text",message.getMessage());
+            webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject));
+        }
         return null;
     }
 }

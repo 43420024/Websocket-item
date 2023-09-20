@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -297,13 +298,12 @@ public class WebSocketServer {
     public void historicalChatInformation(String to,String message) {
         try {
             for (Session session : sessionMap.values()) {
-                log.info("服务端给客户端[{}]发送消息{}", session.getId(), message);
-                log.info("存在的session用户 {}", session.getId());
-                log.info("消息发送对象 {}",to);
-//                if (to.equals(session.getId())){
-                    log.info("进来发消息了");
+                Session toSession = sessionMap.get(to);
+                log.info("存在的session用户 {} 消息发送对象 {}", session.getId(),to);
+                if (Objects.equals(toSession.getId(), session.getId())){
+                    log.info("服务端给客户端[{}]发送消息{}", session.getId(), message);
                     session.getBasicRemote().sendText(message);
-//                }
+                }
             }
         } catch (Exception e) {
             log.error("服务端发送消息给客户端失败", e);
