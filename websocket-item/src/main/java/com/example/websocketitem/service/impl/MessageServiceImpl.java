@@ -7,7 +7,6 @@ import com.example.websocketitem.core.WebSocketServer;
 import com.example.websocketitem.mapper.UserInfoMapper;
 import com.example.websocketitem.model.Data;
 import com.example.websocketitem.model.Message;
-import com.example.websocketitem.model.User;
 import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.MessageService;
 import com.example.websocketitem.mapper.MessageMapper;
@@ -139,6 +138,31 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
             userInfoVOList.add(userInfoVO);
         }
         return Result.ok("查询成功",userInfoVOList);
+    }
+
+    @Override
+    public Result chatHistoryBetweenTwoPeople(String current, String opposite) {
+        cn.hutool.json.JSONObject jsonObject = new cn.hutool.json.JSONObject();
+        jsonObject.set("from", current);
+        jsonObject.set("to", opposite);
+        jsonObject.set("text","这是"+current+"发给"+opposite+"的消息：内容为你好啊");
+        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject));
+        cn.hutool.json.JSONObject jsonObject2 = new cn.hutool.json.JSONObject();
+        jsonObject2.set("from", opposite);
+        jsonObject2.set("to", current);
+        jsonObject2.set("text","这是"+opposite+"发给"+current+"的消息：内容为我一点都不好");
+        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject2));
+        cn.hutool.json.JSONObject jsonObject3 = new cn.hutool.json.JSONObject();
+        jsonObject3.set("from", current);
+        jsonObject3.set("to", opposite);
+        jsonObject3.set("text","这是"+current+"发给"+opposite+"的消息：内容为这是第三条消息");
+        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject3));
+        cn.hutool.json.JSONObject jsonObject4 = new cn.hutool.json.JSONObject();
+        jsonObject4.set("from", opposite);
+        jsonObject4.set("to", current);
+        jsonObject4.set("text","这是"+opposite+"发给"+current+"的消息：内容为这是第四条消息哦");
+        webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject4));
+        return null;
     }
 }
 

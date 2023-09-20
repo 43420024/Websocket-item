@@ -36,6 +36,7 @@ public interface UserInfoService extends IService<UserInfo> {
      */
     ResponseMap getSearchAlbumUserInfo(String value);
 
+    ResponseMap getUserInfo(Long userId);
     Result updateStatus(UserInfo userInfo);
 
     Result selectPage(Integer pageNum, Integer pageSize, Integer gender, Integer phoneNumber, Integer nickname);

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -273,6 +274,7 @@ public class WebSocketServer {
     private void sendMessage(String message, Session toSession) {
         try {
             log.info("服务端给客户端[{}]发送消息{}", toSession.getId(), message);
+            log.info("消息接收对象 {}", toSession.getId());
             toSession.getBasicRemote().sendText(message);
         } catch (Exception e) {
             log.error("服务端发送消息给客户端失败", e);
@@ -287,6 +289,21 @@ public class WebSocketServer {
             for (Session session : sessionMap.values()) {
                 log.info("服务端给客户端[{}]发送消息{}", session.getId(), message);
                 session.getBasicRemote().sendText(message);
+            }
+        } catch (Exception e) {
+            log.error("服务端发送消息给客户端失败", e);
+        }
+    }
+
+    public void historicalChatInformation(String to,String message) {
+        try {
+            for (Session session : sessionMap.values()) {
+                Session toSession = sessionMap.get(to);
+                log.info("存在的session用户 {} 消息发送对象 {}", session.getId(),to);
+                if (Objects.equals(toSession.getId(), session.getId())){
+                    log.info("服务端给客户端[{}]发送消息{}", session.getId(), message);
+                    session.getBasicRemote().sendText(message);
+                }
             }
         } catch (Exception e) {
             log.error("服务端发送消息给客户端失败", e);
