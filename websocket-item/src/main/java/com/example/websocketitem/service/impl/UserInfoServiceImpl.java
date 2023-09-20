@@ -165,6 +165,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
             wrapper.eq("gender", gender);
         }
         Page<UserInfo> userPage = this.baseMapper.selectPage(page, wrapper);
+        for (UserInfo record : userPage.getRecords()) {
+            record.setLabelsArray(JSON.parseArray(record.getLabels()));
+        }
         return Result.success(userPage);
 
     }
