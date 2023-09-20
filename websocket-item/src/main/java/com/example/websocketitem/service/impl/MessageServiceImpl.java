@@ -1,5 +1,6 @@
 package com.example.websocketitem.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -133,7 +134,28 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         // 查数据库聊天列表
         List<Long> comFormList = this.baseMapper.selectDistinctMessages(userId);
         // TODO: 2023/9/20 去查redis聊天用户列表
+        BoundListOperations<Object, Object> myUnread = redisTemplate.boundListOps("unread" + userId);
+        BoundListOperations<Object, Object> myRead = redisTemplate.boundListOps("read" + userId);
+        //未读
+        List<Object> object = myUnread.range(0, myUnread.size());
+        List<Message> unReadMessage = JSONObject.parseArray(JSON.toJSONString(object), Message.class);
+        //已读
+        List<Object> objects = myRead.range(0, myRead.size());
+        List<Message> readMessage = JSONObject.parseArray(JSON.toJSONString(objects), Message.class);
+        List<Message> messageList = new ArrayList();
+        messageList.addAll(unReadMessage);
+        messageList.addAll(readMessage);
 
+        List<Message> arrays = messageList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(()
+                -> new TreeSet<>(Comparator.comparing(Message :: getComeFrom))), ArrayList::new));
+
+        for (Message array : arrays) {
+            Long comeFrom = array.getComeFrom();
+            if(!ObjectUtil.contains(comFormList,comeFrom)){
+                comFormList.add(comeFrom);
+            }
+
+        }
         // 返回数据给前端
         List<UserInfoVO> userInfoVOList = new ArrayList<>();
         for (Long comFormId:comFormList) {
