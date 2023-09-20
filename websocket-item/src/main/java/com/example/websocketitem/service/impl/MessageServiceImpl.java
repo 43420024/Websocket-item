@@ -130,7 +130,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
 
     @Override
     public Result queryChatListUser(Long userId) {
+        // 查数据库聊天列表
         List<Long> comFormList = this.baseMapper.selectDistinctMessages(userId);
+        // TODO: 2023/9/20 去查redis聊天用户列表
+
+        // 返回数据给前端
         List<UserInfoVO> userInfoVOList = new ArrayList<>();
         for (Long comFormId:comFormList) {
             UserInfoVO userInfoVO = userInfoMapper.selectNicknameAndHeadPathByUserId(comFormId);
