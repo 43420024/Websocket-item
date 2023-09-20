@@ -32,4 +32,8 @@ public class RelationshipController {
     public ResponseMap addRelationship(@RequestBody Relationship relationship){
         return relationshipService.addRelationship(relationship);
     }
+    @DeleteMapping("/{userId}")
+    public ResponseMap userLogOff(@PathVariable Long userId){
+        return relationshipService.userLogOff(userId);
+    }
 }

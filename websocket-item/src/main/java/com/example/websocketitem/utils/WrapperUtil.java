@@ -148,4 +148,9 @@ public class WrapperUtil<T> {
         wrapper.eq("user_id",userId).eq("status",2);
         return wrapper;
     }
+    public QueryWrapper<T> wrapperAllRelationship(Long ownerId){
+        QueryWrapper<T> wrapper = new QueryWrapper<>();
+        wrapper.eq("owner_id",ownerId).or().eq("friend_id",ownerId);
+        return wrapper;
+    }
 }

@@ -55,13 +55,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     Relationship relationship = EntityFactory.createRelationship();
 
 
-
-
-
-    @Override
-    public UserInfo getInfo(Long userId) {
-        return this.getOne(wrapperUtil.wrapperUserInfo(userId));
-    }
     /**
      * 获取未处理举报信息用户编号及该用户未处理举报信息个数
      */
@@ -127,6 +120,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         userInfoList.sort((o1, o2) -> o2.getAlbumCount()-o1.getAlbumCount());
         return responseMapUtil.getList(userInfoList);
     }
+    /**
+     * 根据编号获取用户信息
+     */
     @Override
     public ResponseMap getUserInfo(Long userId) {
         return responseMapUtil.getEntity(this.getById(userId));
@@ -193,6 +189,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         return dataType;
     }
 
+    private Boolean addSystemRelationship(Long userId){
+        relationship.setOwnerId(userId);
+        relationship.setFriendId(1L);
+        return relationshipService.addRelationship(relationship).getFlag();
+    }
 
 }
 
