@@ -23,7 +23,7 @@ public interface TrendsService extends IService<Trends> {
 
     DataType allQueryTrends(Long id);
 
-    DataType addCount(Long id);
+    DataType addCount(Long id,Long userid);
 
     ResponseMap userListTrends(int page, int size, Long userid);
 

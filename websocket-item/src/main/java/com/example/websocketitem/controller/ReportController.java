@@ -71,4 +71,12 @@ public class ReportController {
     public ResponseMap getReport(@PathVariable Long id){
         return reportService.getReport(id);
     }
+
+
+    //查询举报信息为动态举报的列表
+    @GetMapping("/list/{infoId}/{type}/{page}/{size}")
+    public ResponseMap listReport(@PathVariable Long infoId, @PathVariable Integer type,@PathVariable Integer page,@PathVariable Integer size){
+        return reportService.typeByTrendsList(infoId,type,page,size);
+    }
+
 }

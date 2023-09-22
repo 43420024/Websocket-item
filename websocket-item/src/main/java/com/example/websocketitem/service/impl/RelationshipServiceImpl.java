@@ -56,6 +56,12 @@ public class RelationshipServiceImpl extends ServiceImpl<RelationshipMapper, Rel
     public ResponseMap listRelationship(Long ownerId) {
         return responseMapUtil.getList(this.list(wrapperUtil.listRelationship(ownerId)));
     }
+
+    @Override
+    public ResponseMap userLogOff(Long ownerId) {
+        List<Relationship> list = this.list(wrapperUtil.wrapperAllRelationship(ownerId));
+        return responseMapUtil.deleteEntity(this.removeByIds(list));
+    }
 }
 
 
