@@ -125,10 +125,10 @@ public class TrendsController {
 
 
     //动态点赞（一人点赞一次还是可以点赞多次）
-    @GetMapping("/Likes/{id}")
+    @GetMapping("/Likes/{id}/userid")
     @ResponseBody
-    public DataType LikesTrends(@PathVariable("id") Long id){
-        return trendsService.addCount(id);
+    public DataType LikesTrends(@PathVariable("id") Long id,@PathVariable("userid") Long userid){
+        return trendsService.addCount(id,userid);
     }
 
 

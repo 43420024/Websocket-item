@@ -22,4 +22,6 @@ public interface RelationshipService extends IService<Relationship> {
      * 根据用户编号获取好友列表
      * */
     ResponseMap listRelationship(Long ownerId);
+
+    ResponseMap userLogOff(Long ownerId);
 }

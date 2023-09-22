@@ -86,6 +86,9 @@ public class UserController {
     public ResponseMap getSearchAlbumUserInfo(@RequestParam String value){
         return userInfoService.getSearchAlbumUserInfo(value);
     }
+    /**
+     * 根据编号获取用户信息
+     */
     @GetMapping("/getInfo/{userId}")
     public ResponseMap getInfo(@PathVariable Long userId){
         return userInfoService.getUserInfo(userId);

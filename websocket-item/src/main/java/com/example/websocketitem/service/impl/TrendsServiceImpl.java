@@ -43,9 +43,9 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
     @Override
     public DataType savaTrends(Trends trends) {
 //        log.info("{}",article);
-//        判断是修改新闻还是保存
+//        判断是修改还是保存
         if (trends.getId()!=null){
-            //进行新闻的修改
+            //进行修改
             Trends trends1 = trendsMapper.selectOne(new QueryWrapper<Trends>().eq("id", trends.getId()));
             trends.setId(trends1.getId());
             trends.setCreatetime(trends1.getCreatetime());
@@ -69,7 +69,7 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
             dataType.setFlag(true);
             dataType.setMessage("修改成功");
         }else {
-            //是新闻添加
+            //是添加
             //设置文章图片
             String content = trends.getContent();
             //进行内容和标题过滤
@@ -119,11 +119,11 @@ public class TrendsServiceImpl extends ServiceImpl<TrendsMapper, Trends>
     }
 
     @Override
-    public DataType addCount(Long id) {
+    public DataType addCount(Long id,Long userid) {
         if (id!=null && id>0){
             Trends trends1 = trendsMapper.selectOne(new QueryWrapper<Trends>().eq("id", id));
             if (trends1==null){
-                dataType.setMessage("该用户不存在");
+                dataType.setMessage("该动态不存在");
                 dataType.setFlag(false);
                 return dataType;
             }

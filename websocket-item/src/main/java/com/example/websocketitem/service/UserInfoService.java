@@ -14,11 +14,6 @@ import com.example.websocketitem.utils.Result;
 public interface UserInfoService extends IService<UserInfo> {
 
 
-
-
-
-
-    UserInfo getInfo(Long userId);
     /**
      * 获取未处理举报信息用户编号及该用户未处理举报信息个数
      */
@@ -35,8 +30,11 @@ public interface UserInfoService extends IService<UserInfo> {
      * 根据模糊查询昵称获取相册未审核用户编号及未审核相册个数
      */
     ResponseMap getSearchAlbumUserInfo(String value);
-
+    /**
+     * 根据编号获取用户信息
+     */
     ResponseMap getUserInfo(Long userId);
+
     Result updateStatus(UserInfo userInfo);
 
     Result selectPage(Integer pageNum, Integer pageSize, Integer gender, Integer phoneNumber, Integer nickname);

@@ -22,18 +22,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
-* @author cd
-* @description 针对表【tcd_message(信息表)】的数据库操作Service实现
-* @createDate 2023-08-30 10:00:31
-*/
+ * @author cd
+ * @description 针对表【tcd_message(信息表)】的数据库操作Service实现
+ * @createDate 2023-08-30 10:00:31
+ */
 @Service
 public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
-    implements MessageService{
+        implements MessageService {
     @Resource
     private RedisTemplate<Object, Object> redisTemplate;
     @Resource
     private WebSocketServer webSocketServer;
-//    @Resource
+    //    @Resource
 //    private UserService userService;
     @Resource
     private UserInfoMapper userInfoMapper;
@@ -41,7 +41,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
 
     @Override
     public Result mass(String message) {
-        BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("messages" );
+        BoundListOperations<Object, Object> userTest = redisTemplate.boundListOps("messages");
         Message messages = new Message();
         messages.setMessage(message);
         //发给所有人
@@ -94,7 +94,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         messageList.addAll(collect);
 
         //排序
-        Collections.sort(messageList,(Comparator.comparing(Message::getCreateTime)));
+        Collections.sort(messageList, (Comparator.comparing(Message::getCreateTime)));
 
         //我发给对方未读消息
         List<Object> object = otherUnread.range(0, otherUnread.size());
@@ -147,30 +147,47 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         messageList.addAll(readMessage);
 
         List<Message> arrays = messageList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(()
-                -> new TreeSet<>(Comparator.comparing(Message :: getComeFrom))), ArrayList::new));
+                -> new TreeSet<>(Comparator.comparing(Message::getComeFrom))), ArrayList::new));
 
         for (Message array : arrays) {
             Long comeFrom = array.getComeFrom();
-            if(!ObjectUtil.contains(comFormList,comeFrom)){
+            if (!ObjectUtil.contains(comFormList, comeFrom)) {
                 comFormList.add(comeFrom);
             }
 
         }
         // 返回数据给前端
         List<UserInfoVO> userInfoVOList = new ArrayList<>();
-        for (Long comFormId:comFormList) {
+        for (Long comFormId : comFormList) {
             UserInfoVO userInfoVO = userInfoMapper.selectNicknameAndHeadPathByUserId(comFormId);
             userInfoVO.setUserId(comFormId);
             userInfoVOList.add(userInfoVO);
         }
-        return Result.ok("查询成功",userInfoVOList);
+        return Result.ok("查询成功", userInfoVOList);
     }
 
     @Override
     public Result chatHistoryBetweenTwoPeople(String current, String opposite) {
 
-         long userId = Long.valueOf(current).longValue();
-         long anotherId = Long.valueOf(opposite).longValue();
+        long userId = Long.valueOf(current).longValue();
+        long anotherId = Long.valueOf(opposite).longValue();
+        List<Message> messageList = information(userId, anotherId);
+
+        //排序
+        Collections.sort(messageList, (Comparator.comparing(Message::getCreateTime)));
+
+        for (Message message : messageList) {
+            cn.hutool.json.JSONObject jsonObject = new cn.hutool.json.JSONObject();
+            jsonObject.set("from", message.getComeFrom());
+            jsonObject.set("to", message.getFromTo());
+            jsonObject.set("text", message.getMessage());
+            webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject));
+        }
+        return null;
+    }
+
+
+    public List<Message> information(long userId, long anotherId) {
         BoundListOperations<Object, Object> myUnread = redisTemplate.boundListOps("unread" + userId);
         BoundListOperations<Object, Object> myRead = redisTemplate.boundListOps("read" + userId);
         BoundListOperations<Object, Object> otherUnread = redisTemplate.boundListOps("unread" + anotherId);
@@ -208,18 +225,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         messageList.addAll(collects);
         messageList.addAll(collect);
         messageList.addAll(collectList);
-
-        //排序
-        Collections.sort(messageList,(Comparator.comparing(Message::getCreateTime)));
-
-        for (Message message : messageList) {
-            cn.hutool.json.JSONObject jsonObject = new cn.hutool.json.JSONObject();
-            jsonObject.set("from", message.getComeFrom());
-            jsonObject.set("to", message.getFromTo());
-            jsonObject.set("text",message.getMessage());
-            webSocketServer.historicalChatInformation(current, String.valueOf(jsonObject));
-        }
-        return null;
+        return messageList;
     }
 }
 
