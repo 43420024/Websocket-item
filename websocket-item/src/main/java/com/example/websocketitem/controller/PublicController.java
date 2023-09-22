@@ -2,6 +2,7 @@ package com.example.websocketitem.controller;
 
 import com.example.websocketitem.model.MasterSlaveRelationship;
 import com.example.websocketitem.model.User;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.service.MasterSlaveService;
 import com.example.websocketitem.utils.Result;
 import jakarta.annotation.Resource;
@@ -19,7 +20,7 @@ public class PublicController {
         return masterSlaveService.listMasterSlaves(userId);
     }
     @PostMapping("addVirtualAccountRelationship")
-    public Result addMasterSlave(@RequestBody User user,Long parentId){
+    public Result addMasterSlave(@RequestBody UserInfo user, Long parentId){
         return masterSlaveService.addUserAndMasterSlave(user, parentId);
     }
     @PutMapping("modifyVirtualAccountRelationship")

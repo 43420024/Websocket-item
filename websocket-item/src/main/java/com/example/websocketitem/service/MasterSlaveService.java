@@ -2,6 +2,7 @@ package com.example.websocketitem.service;
 
 import com.example.websocketitem.model.MasterSlaveRelationship;
 import com.example.websocketitem.model.User;
+import com.example.websocketitem.model.UserInfo;
 import com.example.websocketitem.utils.Result;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface MasterSlaveService {
 
     Result<List<MasterSlaveRelationship>> listMasterSlaves(Long parentId);
 
-    Result addUserAndMasterSlave(User user, Long parentId);
+    Result addUserAndMasterSlave(UserInfo user, Long parentId);
 
     Result updateRelation(Long userId, Long parentId);
 
